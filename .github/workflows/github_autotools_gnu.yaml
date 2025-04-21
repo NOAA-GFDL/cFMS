@@ -1,6 +1,6 @@
 name: Build libFMS test with autotools
 
-on: [push]
+on: [push, pull_request]
 
 # cancel running jobs if theres a newer push
 concurrency:
