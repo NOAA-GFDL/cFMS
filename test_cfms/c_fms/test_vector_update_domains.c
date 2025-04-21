@@ -19,7 +19,7 @@ C  0 1 | 2 3 4 5 6 7 8 9 | 10 11
 #define NHALO 2
 #define SHALO 2
 
-void define_domain(int *domain_id);
+int define_domain();
 void test_vector_double2d(int *domain_id);
 
 int main()
@@ -28,7 +28,7 @@ int main()
 
   cFMS_init(NULL,NULL,NULL,NULL,NULL);
 
-  define_domain(&domain_id);
+  domain_id = define_domain(&domain_id);
   cFMS_set_current_pelist(NULL,NULL);
 
   test_vector_double2d(&domain_id);
@@ -38,7 +38,7 @@ int main()
 
 }
 
-void define_domain(int *domain_id)
+int define_domain()
 {
   int global_indices[4] = {0, NX-1, 0, NY-1};
   int npes = NPES;
@@ -57,7 +57,6 @@ void define_domain(int *domain_id)
   cFMS_define_layout(global_indices, &npes, cdomain.layout);
 
   cdomain.global_indices = global_indices;
-  cdomain.domain_id = domain_id;
   cdomain.whalo = &whalo;
   cdomain.ehalo = &ehalo;
   cdomain.shalo = &shalo;
@@ -65,7 +64,7 @@ void define_domain(int *domain_id)
   cdomain.xflags = &cyclic_global_domain;
   cdomain.yflags = &fold_north_edge;
 
-  cFMS_define_domains_easy(cdomain);
+  return cFMS_define_domains_easy(cdomain);
 }
 
 void test_vector_double2d(int *domain_id)
