@@ -40,7 +40,6 @@ void define_domain(int *domain_id)
   cFMS_define_layout(global_indices, &npes, cdomain.layout);
 
   cdomain.global_indices = global_indices;
-  cdomain.domain_id = domain_id;
   cdomain.whalo = &whalo;
   cdomain.ehalo = &ehalo;
   cdomain.shalo = &shalo;
