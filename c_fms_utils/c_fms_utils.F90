@@ -39,6 +39,10 @@ module c_fms_utils_mod
      module procedure cFMS_array_to_pointer_3d_cdouble
      module procedure cFMS_array_to_pointer_4d_cdouble
      module procedure cFMS_array_to_pointer_5d_cdouble
+     module procedure cFMS_array_to_pointer_2d_logical
+     module procedure cFMS_array_to_pointer_3d_logical
+     module procedure cFMS_array_to_pointer_4d_logical
+     module procedure cFMS_array_to_pointer_5d_logical
   end interface cFMS_array_to_pointer
   
 contains

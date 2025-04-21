@@ -20,23 +20,28 @@
 
 # Find the needed mod and .inc files.
 AM_CPPFLAGS = -I. -I$(MODDIR) -I${top_builddir}/c_constants -I${top_builddir}/c_grid_utils \
-              -I${top_builddir}/c_horiz_interp
+              -I${top_builddir}/c_horiz_interp -I${top_builddir}/c_fms \
+              -I${top_builddir}/test_cfms/c_fms
 
 # Link to the FMS library.
 LDADD = ${top_builddir}/libcFMS/libcFMS.la
 
-check_PROGRAMS = test_create_xgrid
+check_PROGRAMS = test_create_xgrid \
+  test_horiz_interp_new
 
-TESTS = test_create_xgrid.sh
+TESTS = test_create_xgrid.sh \
+  test_horiz_interp_new.sh
 
 test_create_xgrid_SOURCES = test_create_xgrid.c
+test_horiz_interp_new_SOURCES = ../c_fms/c_mpp_domains_helper.c test_horiz_interp_new.c
 
 TEST_EXTENSIONS = .sh
 SH_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \
                   $(abs_top_srcdir)/test_cfms/tap-driver.sh
 
 # Include these files with the distribution.
-EXTRA_DIST = test_create_xgrid.sh
+EXTRA_DIST = test_create_xgrid.sh \
+  test_horiz_interp_new.sh
 
 # Clean up
 CLEANFILES = input.nml *.nc* *.out *.dpi *.spi *.dyn *.spl *_table* input* *trs

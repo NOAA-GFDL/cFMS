@@ -1,0 +1,21 @@
+! cdouble 2d
+#undef  CFMS_HORIZ_INTERP_NEW_2D_ 
+#undef  CFMS_HORIZ_INTERP_NEW_2D_BINDC_ 
+#undef  CFMS_HORIZ_INTERP_NEW_2D_DATA_TYPE_ 
+#undef  CFMS_HORIZ_INTERP_NEW_2D_KIND_ 
+#define CFMS_HORIZ_INTERP_NEW_2D_ cFMS_horiz_interp_2d_cdouble
+#define CFMS_HORIZ_INTERP_NEW_2D_BINDC_ "cFMS_horiz_interp_2d_cdouble"
+#define CFMS_HORIZ_INTERP_NEW_2D_DATA_TYPE_ real(c_double)
+#define CFMS_HORIZ_INTERP_NEW_2D_KIND_ 8
+#include "c_horiz_interp_new.inc"
+
+! cfloat 2d
+#undef  CFMS_HORIZ_INTERP_NEW_2D_ 
+#undef  CFMS_HORIZ_INTERP_NEW_2D_BINDC_ 
+#undef  CFMS_HORIZ_INTERP_NEW_2D_DATA_TYPE_ 
+#undef  CFMS_HORIZ_INTERP_NEW_2D_KIND_ 
+#define CFMS_HORIZ_INTERP_NEW_2D_ cFMS_horiz_interp_2d_cfloat
+#define CFMS_HORIZ_INTERP_NEW_2D_BINDC_ "cFMS_horiz_interp_2d_cfloat"
+#define CFMS_HORIZ_INTERP_NEW_2D_DATA_TYPE_ real(c_float)
+#define CFMS_HORIZ_INTERP_NEW_2D_KIND_ 4
+#include "c_horiz_interp_new.inc"

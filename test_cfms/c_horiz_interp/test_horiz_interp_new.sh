@@ -1,3 +1,4 @@
+#!/bin/sh
 #***********************************************************************
 #*                   GNU Lesser General Public License
 #*
@@ -16,29 +17,14 @@
 #* You should have received a copy of the GNU Lesser General Public
 #* License along with FMS.  If not, see <http://www.gnu.org/licenses/>.
 #***********************************************************************
+# This is part of the GFDL FMS package. This is a shell script to
+# execute tests in the test_fms/coupler directory.
 
-# This is an automake file for the fms directory of the FMS
-# package.
+# Set common test settings.
+. ../test-lib.sh
 
-# Ed Hartnett 2/22/19
+if [ -f "input.nml" ] ; then rm -f input.nml ; fi
+touch input.nml
 
-# Include .h and .mod files.
-AM_CPPFLAGS = -I. -I$(top_srcdir)/FMS/horiz_interp/include -I./include
-AM_FCFLAGS = $(FC_MODINC). $(FC_MODOUT)$(MODDIR)
-
-# Build these uninstalled convenience libraries.
-noinst_LTLIBRARIES = lib_c_horiz_interp.la
-
-# Each convenience library depends on its source.
-lib_c_horiz_interp_la_SOURCES = c_horiz_interp.F90
-
-c_horiz_interp_mod.mod : c_horiz_interp.F90
-
-# Mod files are built and then installed as headers.
-MODFILES = c_horiz_interp_mod.$(FC_MODEXT)
-BUILT_SOURCES = $(MODFILES)
-nodist_include_HEADERS =  $(FMS_INC_FILES) $(MODFILES)
-
-include_HEADERS = c_horiz_interp.h
-
-include $(top_srcdir)/mkmods.mk
+test_expect_success "test horiz_interp_new" 'mpirun -n 4 ./test_horiz_interp_new'
+test_done

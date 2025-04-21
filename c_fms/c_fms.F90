@@ -85,6 +85,7 @@ module c_fms_mod
   integer, public, bind(C, name="DGRID_NE") :: DGRID_NE_C = DGRID_NE
   integer, public, bind(C, name="AGRID") :: AGRID_C = AGRID
   integer, public, bind(C, name="FOLD_SOUTH_EDGE") :: FOLD_SOUTH_EDGE_C = FOLD_SOUTH_EDGE
+  integer, public, bind(C, name="FOLD_NORTH_EDGE") :: FOLD_NORTH_EDGE_C = FOLD_NORTH_EDGE
   integer, public, bind(C, name="FOLD_WEST_EDGE")  :: FOLD_WEST_EDGE_C = FOLD_WEST_EDGE
   integer, public, bind(C, name="FOLD_EAST_EDGE")  :: FOLD_EAST_EDGE_C = FOLD_EAST_EDGE
   integer, public, bind(C, name="CYCLIC_GLOBAL_DOMAIN") :: CYCLIC_GLOBAL_DOMAIN_C = CYCLIC_GLOBAL_DOMAIN
@@ -707,5 +708,6 @@ contains
   
   !> cFMS_update_domains
 #include "c_update_domains.fh"
+#include "c_vector_update_domains.fh"
   
 end module c_fms_mod
