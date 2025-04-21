@@ -201,10 +201,7 @@ void test_float2d(int *domain_id)
   int ipe = cFMS_pe();  
   for(int ix=WHALO ; ix<xsize_d-WHALO; ix++) {
     for(int iy=SHALO ; iy<ysize_d-SHALO; iy++) {
-      if( ipe == 1 ) {
-        printf("HERE %lf %lf\n", idata[ysize_d*ix+iy], answers_t[ipe][ix][iy]);
-        //if( idata[ysize_d*ix+iy] != answers_t[ipe][ix][iy] ) cFMS_error(FATAL, "data domain did not update correctly!");
-      }
+      if( idata[ysize_d*ix+iy] != answers_t[ipe][ix][iy] ) cFMS_error(FATAL, "data domain did not update correctly!");
     }
   }
   
