@@ -12,7 +12,7 @@
 typedef struct {
   int* global_indices;
   int* layout;
-  int* domain_id;
+  int* npelist;
   int* pelist;
   int* xflags;
   int* yflags;
@@ -50,15 +50,14 @@ typedef struct {
   int *npes_nest_tile;
   int *x_refine;
   int *y_refine;
-  int *nest_domain_id;
   int *domain_id;
   int *extra_halo;
   char *name;
 } cNestDomainStruct;
 
 
-void cFMS_define_domains_easy(cDomainStruct cdomain);
-void cFMS_define_nest_domains_easy(cNestDomainStruct cnestdomain);
+int cFMS_define_domains_easy(cDomainStruct cdomain);
+int cFMS_define_nest_domains_easy(cNestDomainStruct cnestdomain);
 void cFMS_null_cdomain(cDomainStruct *cdomain);
 void cFMS_null_cnest_domain(cNestDomainStruct *cnest_domain);
 int any(int n, int* array, int value);

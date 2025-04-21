@@ -170,3 +170,60 @@
 #define CFMS_POINTER_TO_ARRAY_ROW_MAJOR_      (/5,4,3,2,1/)
 #include "pointer_to_array.inc"
 
+!c_bool
+#undef  CFMS_POINTER_TO_ARRAY_
+#undef  CFMS_POINTER_TO_ARRAY_TYPE_
+#undef  CFMS_POINTER_TO_ARRAY_ASSUMED_SHAPE_
+#undef  CFMS_POINTER_TO_ARRAY_SHAPE_
+#undef  CFMS_POINTER_TO_ARRAY_REVERSED_SHAPE_
+#undef  CFMS_POINTER_TO_ARRAY_ROW_MAJOR_
+#define CFMS_POINTER_TO_ARRAY_                cFMS_pointer_to_array_2d_cbool
+#define CFMS_POINTER_TO_ARRAY_TYPE_           logical(c_bool)
+#define CFMS_POINTER_TO_ARRAY_ASSUMED_SHAPE_  :,:
+#define CFMS_POINTER_TO_ARRAY_SHAPE_ (/c_shape(1), c_shape(2)/)
+#define CFMS_POINTER_TO_ARRAY_REVERSED_SHAPE_ (/c_shape(2),c_shape(1)/)
+#define CFMS_POINTER_TO_ARRAY_ROW_MAJOR_      (/2,1/)
+#include "pointer_to_array.inc"
+
+#undef  CFMS_POINTER_TO_ARRAY_
+#undef  CFMS_POINTER_TO_ARRAY_TYPE_
+#undef  CFMS_POINTER_TO_ARRAY_ASSUMED_SHAPE_
+#undef  CFMS_POINTER_TO_ARRAY_SHAPE_
+#undef  CFMS_POINTER_TO_ARRAY_REVERSED_SHAPE_
+#undef  CFMS_POINTER_TO_ARRAY_ROW_MAJOR_
+#define CFMS_POINTER_TO_ARRAY_                cFMS_pointer_to_array_3d_cbool
+#define CFMS_POINTER_TO_ARRAY_TYPE_           logical(c_bool)
+#define CFMS_POINTER_TO_ARRAY_ASSUMED_SHAPE_  :,:,:
+#define CFMS_POINTER_TO_ARRAY_SHAPE_ (/c_shape(1), c_shape(2), c_shape(3)/)
+#define CFMS_POINTER_TO_ARRAY_REVERSED_SHAPE_ (/c_shape(3),c_shape(2),c_shape(1)/)
+#define CFMS_POINTER_TO_ARRAY_ROW_MAJOR_      (/3,2,1/)
+#include "pointer_to_array.inc"
+
+#undef  CFMS_POINTER_TO_ARRAY_
+#undef  CFMS_POINTER_TO_ARRAY_TYPE_
+#undef  CFMS_POINTER_TO_ARRAY_ASSUMED_SHAPE_
+#undef  CFMS_POINTER_TO_ARRAY_SHAPE_
+#undef  CFMS_POINTER_TO_ARRAY_REVERSED_SHAPE_
+#undef  CFMS_POINTER_TO_ARRAY_ROW_MAJOR_
+#define CFMS_POINTER_TO_ARRAY_                cFMS_pointer_to_array_4d_cbool
+#define CFMS_POINTER_TO_ARRAY_TYPE_           logical(c_bool)
+#define CFMS_POINTER_TO_ARRAY_ASSUMED_SHAPE_  :,:,:,:
+#define CFMS_POINTER_TO_ARRAY_SHAPE_ (/c_shape(1), c_shape(2), c_shape(3), c_shape(4)/)
+#define CFMS_POINTER_TO_ARRAY_REVERSED_SHAPE_ (/c_shape(4),c_shape(3),c_shape(2),c_shape(1)/)
+#define CFMS_POINTER_TO_ARRAY_ROW_MAJOR_      (/4,3,2,1/)
+#include "pointer_to_array.inc"
+
+#undef  CFMS_POINTER_TO_ARRAY_
+#undef  CFMS_POINTER_TO_ARRAY_TYPE_
+#undef  CFMS_POINTER_TO_ARRAY_ASSUMED_SHAPE_
+#undef  CFMS_POINTER_TO_ARRAY_SHAPE_
+#undef  CFMS_POINTER_TO_ARRAY_REVERSED_SHAPE_
+#undef  CFMS_POINTER_TO_ARRAY_ROW_MAJOR_
+#define CFMS_POINTER_TO_ARRAY_                cFMS_pointer_to_array_5d_cbool
+#define CFMS_POINTER_TO_ARRAY_TYPE_           logical(c_bool)
+#define CFMS_POINTER_TO_ARRAY_ASSUMED_SHAPE_  :,:,:,:,:
+#define CFMS_POINTER_TO_ARRAY_SHAPE_ (/c_shape(1), c_shape(2), c_shape(3), c_shape(4), c_shape(5)/)
+#define CFMS_POINTER_TO_ARRAY_REVERSED_SHAPE_ (/c_shape(5),c_shape(4),c_shape(3),c_shape(2),c_shape(1)/)
+#define CFMS_POINTER_TO_ARRAY_ROW_MAJOR_      (/5,4,3,2,1/)
+#include "pointer_to_array.inc"
+

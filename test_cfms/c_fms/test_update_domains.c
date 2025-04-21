@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <c_fms.h>
 #include <c_mpp_domains_helper.h>
 
@@ -23,16 +24,16 @@
 // d1 d2 | d1 d2 | d1 d2 |
 //-------|-------|-------|
 
-void define_domain(int *domain_id);
+int define_domain();
 void test_float2d(int *domain_id);
 
 int main()
 {
-  int domain_id = 0;
+  int domain_id = -99;
 
   cFMS_init(NULL,NULL,NULL,NULL,NULL);
 
-  define_domain(&domain_id);
+  domain_id = define_domain();
   cFMS_set_current_pelist(NULL,NULL);
 
   test_float2d(&domain_id);
@@ -42,7 +43,7 @@ int main()
 
 }
 
-void define_domain(int *domain_id)
+int define_domain()
 {
   int global_indices[4] = {0, NX-1, 0, NY-1};
   int npes = NPES;
@@ -60,7 +61,6 @@ void define_domain(int *domain_id)
   cFMS_define_layout(global_indices, &npes, cdomain.layout);
 
   cdomain.global_indices = global_indices;
-  cdomain.domain_id = domain_id;
   cdomain.whalo = &whalo;
   cdomain.ehalo = &ehalo;
   cdomain.shalo = &shalo;
@@ -68,7 +68,7 @@ void define_domain(int *domain_id)
   cdomain.xflags = &cyclic_global_domain;
   cdomain.yflags = &cyclic_global_domain;
 
-  cFMS_define_domains_easy(cdomain);
+  return cFMS_define_domains_easy(cdomain);
 }
 
 void test_float2d(int *domain_id)
@@ -146,7 +146,7 @@ void test_float2d(int *domain_id)
                                 {43, 53, 63, 73, 83, 93, 23, 33}} };
 
   
-  double **global, *idata, *blob_global, *blob_idata;
+  double *global, *idata;
 
   int xdatasize=(WHALO+NX+EHALO);
   int ydatasize=(SHALO+NY+NHALO);
@@ -171,23 +171,23 @@ void test_float2d(int *domain_id)
 
   // get compute domain indices
   cFMS_get_compute_domain(domain_id, &isc, &iec, &jsc, &jec, &xsize_c, xmax_size, &ysize_c, ymax_size,
-                          x_is_global, y_is_global, tile_count, position, &whalo, &shalo);
+                          x_is_global, y_is_global, tile_count, position, NULL, NULL);
 
   // get data domain sizes
   cFMS_get_data_domain(domain_id, &isd, &ied, &jsd, &jed, &xsize_d, xmax_size, &ysize_d, ymax_size,
                        x_is_global, y_is_global, tile_count, position, &whalo, &shalo);
 
   //allocate global array
-  blob_global = (double *)calloc(xdatasize*ydatasize, sizeof(double));
-  global = (double **)calloc(ydatasize, sizeof(double *));
-  for(int i=0; i<ydatasize; i++) global[i] = blob_global+i*NX; 
-  
+  int xsize = NX+WHALO+EHALO;
+  int ysize = NY+SHALO+NHALO;
+  global = (double *)calloc(xsize*ysize, sizeof(double));
+  for(int ix=WHALO ; ix<NX+WHALO; ix++) for(int iy=SHALO ; iy<NY+SHALO; iy++) global[ysize*ix+iy] = (double)iy*10 + ix;
+                                                            
   // allocate array for the ith data domain
   idata = (double *)calloc(xsize_d*ysize_d,sizeof(double));
-
-  for(int ix=0 ; ix<NX; ix++) for(int iy=0 ; iy<NY; iy++) global[WHALO+ix][SHALO+iy] = (iy+SHALO)*10+(ix+WHALO);
-
-  for(int ix=0; ix<xsize_c; ix++) for(int iy=0; iy<ysize_c; iy++) idata[ysize_d*(ix + WHALO) + iy + SHALO] = global[isc+ix][jsc+iy];
+  for(int ix=WHALO; ix<xsize_c+WHALO; ix++) for(int iy=SHALO; iy<ysize_c+SHALO; iy++) {
+      idata[ix*ysize_d+iy] = global[(ix+jsc)*ysize+iy+isc];
+  }
 
   int field_shape[2] = {xsize_d, ysize_d};
   int *flags = NULL;
@@ -198,11 +198,9 @@ void test_float2d(int *domain_id)
                                &whalo, &ehalo, &shalo, &nhalo, name, tile_count);
 
   int ipe = cFMS_pe();  
-  for(int ix=0 ; ix<xsize_d; ix++) {
-    for(int iy=0 ; iy<ysize_d; iy++) {
-      if( ipe == 0 ) {
-        if( idata[ysize_d*ix+iy] != answers_t[ipe][ix][iy] ) cFMS_error(FATAL, "data domain did not update correctly!");
-      }
+  for(int ix=WHALO ; ix<xsize_d-WHALO; ix++) {
+    for(int iy=SHALO ; iy<ysize_d-SHALO; iy++) {
+      if( idata[ysize_d*ix+iy] != answers_t[ipe][ix][iy] ) cFMS_error(FATAL, "data domain did not update correctly!");
     }
   }
   

@@ -11,12 +11,13 @@ module c_diag_manager_mod
   
   use FMS, only : FmsTime_type, Operator(+)
   use FMS, only : fms_time_manager_set_date, fms_time_manager_set_time
-  
+
+  use FMS, only : fms_mpp_error, FATAL
   use FMS, only : fms_time_manager_get_date
   
   use FMS, only : FmsMppDomain2D
 
-  use c_fms_mod, only : cFMS_get_current_domain
+  use c_fms_mod, only : cFMS_get_domain
   use c_fms_mod, only : NAME_LENGTH, MESSAGE_LENGTH
   use c_fms_utils_mod, only : cFMS_pointer_to_array
 

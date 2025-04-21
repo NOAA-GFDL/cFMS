@@ -10,12 +10,12 @@ extern const int DIAG_ALL;
 extern void cFMS_diag_init(int *diag_model_subset, int *time_init, char *err_msg);
 
 extern int cFMS_diag_axis_init_cfloat(char *name, int *naxis_data, float *axis_data, char *units, char *cart_name,
-                                      char *long_name, int *direction, char *set_name, int *edges, char *aux,
-                                      char *req, int *tile_count, int *domain_position, bool *not_xy);
+                                      int *domain_id, char *long_name, int *direction, char *set_name, int *edges,
+                                      char *aux, char *req, int *tile_count, int *domain_position, bool *not_xy);
 
 extern int cFMS_diag_axis_init_cdouble(char *name, int *naxis_data, double *axis_data, char *units, char *cart_name,
-                                       char *long_name, int *direction, char *set_name, int *edges, char *aux,
-                                       char *req, int *tile_count, int *domain_position, bool *not_xy);
+                                       int *domain_id, char *long_name, int *direction, char *set_name, int *edges,
+                                       char *aux, char *req, int *tile_count, int *domain_position, bool *not_xy);
 
 extern void cFMS_diag_end();
 

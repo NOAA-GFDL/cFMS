@@ -20,6 +20,10 @@ module c_fms_utils_mod
      module procedure cFMS_pointer_to_array_3d_cdouble
      module procedure cFMS_pointer_to_array_4d_cdouble
      module procedure cFMS_pointer_to_array_5d_cdouble
+     module procedure cFMS_pointer_to_array_2d_cbool
+     module procedure cFMS_pointer_to_array_3d_cbool
+     module procedure cFMS_pointer_to_array_4d_cbool
+     module procedure cFMS_pointer_to_array_5d_cbool
   end interface cFMS_pointer_to_array
 
   interface cFMS_array_to_pointer

@@ -9,14 +9,12 @@
 #define NY 8
 #define NZ 2
 
-void set_domain(int *domain_id);
-
 //TODO:  add reading in the outputted file for correctness
 //Currently, answers have been checked separately/manually for correctness
 int main() 
 {
   
-  int domain_id = 0;
+  int domain_id = -99;
   int id_x, id_y, id_z;
   
   int id_var3;
@@ -56,10 +54,9 @@ int main()
     int layout[2] = {1,1};
     int io_layout[2] = {1,1};
     cFMS_null_cdomain(&cdomain);  
-    cdomain.domain_id = &domain_id;
     cdomain.global_indices = global_indices;
     cdomain.layout = layout;
-    cFMS_define_domains_easy(cdomain);
+    domain_id = cFMS_define_domains_easy(cdomain);
     cFMS_define_io_domain(io_layout,&domain_id);
   }
   
@@ -91,7 +88,7 @@ int main()
 
     for(int i=0; i<NX; i++) x[i] = i;
     
-    id_x = cFMS_diag_axis_init_cdouble(name, &naxis_data, x, units, cart_name, long_name, direction, 
+    id_x = cFMS_diag_axis_init_cdouble(name, &naxis_data, x, units, cart_name, &domain_id, long_name, direction, 
                                        set_name, edges, aux, req, tile_count, domain_position, NULL);
   }
 
@@ -113,7 +110,7 @@ int main()
 
     for(int j=0; j<NY; j++) y[j] = j;
     
-    id_y = cFMS_diag_axis_init_cdouble(name, &naxis_data, y, units, cart_name, long_name, direction, 
+    id_y = cFMS_diag_axis_init_cdouble(name, &naxis_data, y, units, cart_name, &domain_id, long_name, direction, 
                                        set_name, edges, aux, req, tile_count, domain_position, NULL);
   }
 
@@ -136,7 +133,7 @@ int main()
 
     for(int k=0; k<NZ; k++) z[k] = k;
     
-    id_z = cFMS_diag_axis_init_cdouble(name, &naxis_data, z, units, cart_name, long_name, direction, 
+    id_z = cFMS_diag_axis_init_cdouble(name, &naxis_data, z, units, cart_name, NULL, long_name, direction, 
                                        set_name, edges, aux, req, tile_count, domain_position, &not_xy);
   }
   

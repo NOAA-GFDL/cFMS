@@ -35,14 +35,13 @@ int main()
     domain.layout = (int *)malloc(2*sizeof(int));    
     cFMS_define_layout(global_indices, &ndivs, domain.layout);
     
-    domain.domain_id = &domain_id;
     domain.global_indices = global_indices;
     domain.ehalo = &ehalo;
     domain.whalo = &whalo;
     domain.shalo = &shalo;
     domain.nhalo = &nhalo;
     
-    cFMS_define_domains_easy(domain);
+    domain_id = cFMS_define_domains_easy(domain);
   }
 
   //data override init

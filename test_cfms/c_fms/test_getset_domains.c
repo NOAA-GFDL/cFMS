@@ -17,7 +17,7 @@ int main()
   //      *      *     *     *
 
   cDomainStruct domain;  
-  int domain_id = 0;
+  int domain_id = -99;
   int ndiv = 4;
   int global_indices[] = {0,3,0,3};
   int whalo = 2;
@@ -32,7 +32,6 @@ int main()
   //set domain 
   { 
     domain.global_indices = global_indices;
-    domain.domain_id = &domain_id;
     domain.whalo = &whalo;
     domain.ehalo = &ehalo;
     domain.shalo = &shalo;
@@ -42,7 +41,7 @@ int main()
     domain.layout = (int *)malloc(2*sizeof(int));
     cFMS_define_layout(global_indices, &ndiv, domain.layout);
     
-    cFMS_define_domains_easy(domain);
+    domain_id = cFMS_define_domains_easy(domain);
     if( !cFMS_domain_is_initialized(&domain_id) ) cFMS_error(FATAL, "error in setting domain");
   }
 

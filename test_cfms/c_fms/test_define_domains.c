@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <c_fms.h>
 #include <c_mpp_domains_helper.h>
 
@@ -40,7 +41,7 @@ int main() {
 
   int ndomain=2;
   int nnest_domain=2;
-  int domain_id=1;
+  int domain_id=-99;
   int nest_domain_id=1;
   cDomainStruct cdomain;
   cNestDomainStruct cnest_domain;  
@@ -72,6 +73,16 @@ int main() {
   cFMS_null_cdomain(&cdomain);
   cFMS_null_cnest_domain(&cnest_domain);
 
+  if(cFMS_get_domain_count()!=0){
+    cFMS_error(FATAL, "domain_count not initialized correctly");
+    exit(EXIT_FAILURE);
+  }
+
+  if(cFMS_get_nest_domain_count()!=0){
+    cFMS_error(FATAL, "nest_domain_count not initialized correctly");
+    exit(EXIT_FAILURE);
+  }
+  
   //get global pelist
   {
   int npes = cFMS_npes();
@@ -79,13 +90,13 @@ int main() {
   cFMS_set_pelist_npes(&npes);
   cFMS_get_current_pelist(global_pelist, NULL, NULL);
   }
-
+  
   //set coarse domain as tile=0
   {
     for(int i=0 ; i<coarse_npes; i++) coarse_pelist[i] = global_pelist[i];
     char name_coarse[NAME_LENGTH] = "test coarse pelist";
     cFMS_set_pelist_npes(&coarse_npes);
-    cFMS_declare_pelist(coarse_pelist, name_coarse, NULL);    
+    cFMS_declare_pelist(coarse_pelist, name_coarse, NULL);
 
     if(any(coarse_npes, coarse_pelist, cFMS_pe())) {
 
@@ -94,17 +105,22 @@ int main() {
       
       char name[NAME_LENGTH] = "test coarse domain"; 
 
-      cdomain.maskmap = (bool *)calloc(8,sizeof(bool));
-      for(int i=0; i<8; i++) cdomain.maskmap[i] = true;
+      cdomain.maskmap = (bool *)malloc(4*sizeof(bool));
+      int ij = 0;
+      for(int i=0; i<2 ; i++) {
+        for (int j=0; j<2; j++) {
+          cdomain.maskmap[ij++] = true;
+        }
+      }      
       
       int xextent[2] = {0,0};
       int yextent[2] = {0,0};
       bool is_mosaic = false;
       
-      cdomain.domain_id = &domain_id; //test to make sure domain is set correctly in cFMS;
       cdomain.name   = name;
+      cdomain.npelist = &coarse_npes;
       cdomain.pelist = coarse_pelist;
-      cdomain.global_indices = coarse_global_indices;      
+      cdomain.global_indices = coarse_global_indices;
       cdomain.whalo = &coarse_whalo;
       cdomain.ehalo = &coarse_ehalo;
       cdomain.shalo = &coarse_shalo;
@@ -120,14 +136,19 @@ int main() {
       cdomain.layout = (int *)malloc(2*sizeof(int));
       int ndivs = coarse_npes; cFMS_define_layout(coarse_global_indices, &ndivs, cdomain.layout);      
 
-      cFMS_define_domains_easy(cdomain);
+      domain_id = cFMS_define_domains_easy(cdomain);
 
-      free(cdomain.maskmap);
+      if(domain_id != 0) {
+        cFMS_error(FATAL, "domain did not set up correctly");
+        exit(EXIT_FAILURE);
+      }
+
       free(cdomain.layout);
+      free(cdomain.maskmap);
       cFMS_null_cdomain(&cdomain);
     }
   }
-  
+
   cFMS_set_current_pelist(NULL, NULL);
 
   //set fine domain as tile=1
@@ -144,16 +165,21 @@ int main() {
       
       char name[NAME_LENGTH] = "test fine domain" ; cdomain.name = name;
       cdomain.global_indices = fine_global_indices;
+      cdomain.npelist = &fine_npes;
       cdomain.tile_id = &fine_tile_id;
       cdomain.whalo = &fine_whalo;
       cdomain.ehalo = &fine_ehalo;
       cdomain.shalo = &fine_shalo;
       cdomain.nhalo = &fine_nhalo;
-      cdomain.domain_id = &domain_id;
       cdomain.layout = (int *)malloc(2*sizeof(int));
       int ndivs = FINE_NPES; cFMS_define_layout(fine_global_indices, &ndivs, cdomain.layout);
 
-      cFMS_define_domains_easy(cdomain);
+      domain_id = cFMS_define_domains_easy(cdomain);
+
+      if(domain_id != 0) {
+        cFMS_error(FATAL, "TILE IN domain did not set up correctly");
+        exit(EXIT_FAILURE);
+      }      
       
       free(cdomain.layout);
       cFMS_null_cdomain(&cdomain);
@@ -179,16 +205,29 @@ int main() {
     int y_refine = Y_REFINE; cnest_domain.y_refine = &y_refine;
     cnest_domain.tile_fine = &fine_tile_id;
     cnest_domain.tile_coarse = &coarse_tile_id;
-    cnest_domain.nest_domain_id = &nest_domain_id;
     cnest_domain.domain_id = &domain_id;
     
-    cFMS_define_nest_domains_easy(cnest_domain);
+    nest_domain_id = cFMS_define_nest_domains_easy(cnest_domain);
+    if(nest_domain_id != 0) {
+      cFMS_error(FATAL, "nest domain did not set up correctly");
+      exit(EXIT_FAILURE);
+    }
     cFMS_null_cnest_domain(&cnest_domain);
   }
 
   cFMS_set_current_pelist(NULL, NULL);
+
+  if(cFMS_get_domain_count() != 1) {
+    cFMS_error(FATAL, "error in setting domain");
+    exit(EXIT_FAILURE);
+  }
+
+  if(cFMS_get_nest_domain_count() != 1){
+    cFMS_error(FATAL, "error in setting nest domain");
+    exit(EXIT_FAILURE);
+  }
+
   cFMS_end();
-  
   return EXIT_SUCCESS;
   
 }

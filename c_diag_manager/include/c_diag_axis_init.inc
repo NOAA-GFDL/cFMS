@@ -1,5 +1,6 @@
-function CFMS_DIAG_AXIS_INIT_(name, naxis_data, axis_data, units, cart_name, long_name, direction, &
-       set_name, edges, aux, req, tile_count, domain_position, not_xy) bind(C, name=CFMS_DIAG_AXIS_INIT_BINDC_)
+function CFMS_DIAG_AXIS_INIT_(name, naxis_data, axis_data, units, cart_name, domain_id,    &
+     long_name, direction, set_name, edges, aux, req, tile_count, domain_position, not_xy) &
+     bind(C, name=CFMS_DIAG_AXIS_INIT_BINDC_)
     
     implicit none
     character(c_char), intent(in) :: name(NAME_LENGTH)
@@ -7,6 +8,7 @@ function CFMS_DIAG_AXIS_INIT_(name, naxis_data, axis_data, units, cart_name, lon
     real(CFMS_AXIS_DATA_KIND_), intent(in)  :: axis_data(naxis_data)
     character(c_char), intent(in)           :: units(NAME_LENGTH)
     character(c_char), intent(in)           :: cart_name(NAME_LENGTH)
+    integer,           intent(in), optional :: domain_id
     character(c_char), intent(in), optional :: long_name(NAME_LENGTH)
     character(c_char), intent(in), optional :: set_name(NAME_LENGTH)
     integer,           intent(in), optional :: direction
@@ -41,39 +43,28 @@ function CFMS_DIAG_AXIS_INIT_(name, naxis_data, axis_data, units, cart_name, lon
     if(present(set_name))  set_name_f  = fms_string_utils_c2f_string(set_name)
     if(present(long_name)) long_name_f = fms_string_utils_c2f_string(long_name)
 
-    domain => cFMS_get_current_domain()
-
+    nullify(domain)
     not_xy_f = .False.
-    if(present(not_xy)) not_xy_f = logical(not_xy)
-
-    if(not_xy_f) then
-       CFMS_DIAG_AXIS_INIT_ = fms_diag_axis_init(name = name_f,           &
-                                                 array_data = axis_data,  &
-                                                 units = units_f,         &
-                                                 cart_name = cart_name_f, &
-                                                 long_name = long_name_f, &
-                                                 direction = direction,   &
-                                                 set_name = set_name_f,   &
-                                                 edges = edges,           &
-                                                 aux = aux,               &
-                                                 req = req,               &
-                                                 tile_count = tile_count, &
-                                                 domain_position = domain_position)
+    if(present(not_xy)) then
+       not_xy_f = logical(not_xy)
     else
-       CFMS_DIAG_AXIS_INIT_ = fms_diag_axis_init(name = name_f,           &
-                                                 array_data = axis_data,  &
-                                                 units = units_f,         &
-                                                 cart_name = cart_name_f, &
-                                                 long_name = long_name_f, &
-                                                 direction = direction,   &
-                                                 set_name = set_name_f,   &
-                                                 edges = edges,           &
-                                                 Domain2 = domain,        &
-                                                 aux = aux,               &
-                                                 req = req,               &
-                                                 tile_count = tile_count, &
-                                                 domain_position = domain_position)
+       if(.not.present(domain_id)) call fms_mpp_error(FATAL, "must provide domain_id")
+       domain => cFMS_get_domain(domain_id)
     end if
+
+    CFMS_DIAG_AXIS_INIT_ = fms_diag_axis_init(name = name_f,           &
+                                              array_data = axis_data,  &
+                                              units = units_f,         &
+                                              cart_name = cart_name_f, &
+                                              long_name = long_name_f, &
+                                              direction = direction,   &
+                                              set_name = set_name_f,   &
+                                              edges = edges,           &
+                                              Domain2 = domain,        &
+                                              aux = aux,               &
+                                              req = req,               &
+                                              tile_count = tile_count, &
+                                              domain_position = domain_position)
     nullify(domain)
     
   end function CFMS_DIAG_AXIS_INIT_

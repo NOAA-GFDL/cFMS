@@ -21,46 +21,45 @@
 #include <c_fms.h>
 #include <c_mpp_domains_helper.h>
 
-void cFMS_define_domains_easy(cDomainStruct cdomain)
+int cFMS_define_domains_easy(cDomainStruct cdomain)
 {
-  cFMS_define_domains(cdomain.global_indices,
-                      cdomain.layout,
-                      cdomain.domain_id,
-                      cdomain.pelist,
-                      cdomain.xflags, cdomain.yflags,
-                      cdomain.xhalo, cdomain.yhalo,
-                      cdomain.xextent, cdomain.yextent,
-                      cdomain.maskmap,
-                      cdomain.name,
-                      cdomain.symmetry,
-                      cdomain.memory_size,
-                      cdomain.whalo, cdomain.ehalo, cdomain.shalo, cdomain.nhalo,
-                      cdomain.is_mosaic,
-                      cdomain.tile_count, cdomain.tile_id,
-                      cdomain.complete,
-                      cdomain.x_cyclic_offset, cdomain.y_cyclic_offset);
+  return cFMS_define_domains(cdomain.global_indices,
+                             cdomain.layout,
+                             cdomain.npelist,
+                             cdomain.pelist,
+                             cdomain.xflags, cdomain.yflags,
+                             cdomain.xhalo, cdomain.yhalo,
+                             cdomain.xextent, cdomain.yextent,
+                             cdomain.maskmap,
+                             cdomain.name,
+                             cdomain.symmetry,
+                             cdomain.memory_size,
+                             cdomain.whalo, cdomain.ehalo, cdomain.shalo, cdomain.nhalo,
+                             cdomain.is_mosaic,
+                             cdomain.tile_count, cdomain.tile_id,
+                             cdomain.complete,
+                             cdomain.x_cyclic_offset, cdomain.y_cyclic_offset);
 }
 
 
-void cFMS_define_nest_domains_easy(cNestDomainStruct cnestdomain)
+int cFMS_define_nest_domains_easy(cNestDomainStruct cnestdomain)
 {
 
-  cFMS_define_nest_domains(cnestdomain.num_nest,
-                           cnestdomain.ntiles,
-                           cnestdomain.nest_level,
-                           cnestdomain.tile_fine,
-                           cnestdomain.tile_coarse,
-                           cnestdomain.istart_coarse,
-                           cnestdomain.icount_coarse,
-                           cnestdomain.jstart_coarse,
-                           cnestdomain.jcount_coarse,
-                           cnestdomain.npes_nest_tile,
-                           cnestdomain.x_refine,
-                           cnestdomain.y_refine,
-                           cnestdomain.nest_domain_id,
-                           cnestdomain.domain_id,
-                           cnestdomain.extra_halo,
-                           cnestdomain.name);
+  return cFMS_define_nest_domains(cnestdomain.num_nest,
+                                  cnestdomain.ntiles,
+                                  cnestdomain.nest_level,
+                                  cnestdomain.tile_fine,
+                                  cnestdomain.tile_coarse,
+                                  cnestdomain.istart_coarse,
+                                  cnestdomain.icount_coarse,
+                                  cnestdomain.jstart_coarse,
+                                  cnestdomain.jcount_coarse,
+                                  cnestdomain.npes_nest_tile,
+                                  cnestdomain.x_refine,
+                                  cnestdomain.y_refine,
+                                  cnestdomain.domain_id,
+                                  cnestdomain.extra_halo,
+                                  cnestdomain.name);
 }
 
 
@@ -68,7 +67,7 @@ void cFMS_null_cdomain(cDomainStruct *cdomain)
 {
   cdomain->global_indices = NULL;
   cdomain->layout = NULL;
-  cdomain->domain_id = NULL;
+  cdomain->npelist = NULL;
   cdomain->pelist = NULL;
   cdomain->xflags = NULL;
   cdomain->yflags = NULL;
@@ -107,7 +106,6 @@ void cFMS_null_cnest_domain(cNestDomainStruct *cnest_domain)
   cnest_domain->npes_nest_tile = NULL;
   cnest_domain->x_refine = NULL;
   cnest_domain->y_refine = NULL;
-  cnest_domain->nest_domain_id = NULL;
   cnest_domain->domain_id = NULL;
   cnest_domain->extra_halo = NULL;
   cnest_domain->name = NULL;

@@ -37,14 +37,13 @@ int main()
     domain.layout[0] = 2;
     domain.layout[1] = 2;
     
-    domain.domain_id = &domain_id;
     domain.global_indices = global_indices;
     domain.ehalo = &ehalo;
     domain.whalo = &whalo;
     domain.shalo = &shalo;
     domain.nhalo = &nhalo;
 
-    cFMS_define_domains_easy(domain);
+    domain_id = cFMS_define_domains_easy(domain);
   }
 
   //get_compute_domain

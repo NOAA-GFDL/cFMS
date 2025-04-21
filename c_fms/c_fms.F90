@@ -36,7 +36,6 @@ module c_fms_mod
   use FMS, only : THIRTY_DAY_MONTHS, GREGORIAN, JULIAN, NOLEAP
   use FMS, only : fms_time_manager_init, fms_time_manager_set_calendar_type
 
-
   use FMS, only : GLOBAL_DATA_DOMAIN, BGRID_NE, CGRID_NE, DGRID_NE, AGRID
   use FMS, only : FOLD_SOUTH_EDGE, FOLD_NORTH_EDGE, FOLD_WEST_EDGE, FOLD_EAST_EDGE
 
@@ -53,6 +52,7 @@ module c_fms_mod
 
   public :: cFMS_init
   public :: cFMS_end, cFMS_error, cFMS_set_pelist_npes
+  public :: cFMS_get_domain_count, cFMS_get_nest_domain_count
   public :: cFMS_declare_pelist, cFMS_get_current_pelist, cFMS_npes, cFMS_pe, cFMS_set_current_pelist
   public :: cFMS_define_domains
   public :: cFMS_define_io_domain
@@ -60,7 +60,7 @@ module c_fms_mod
   public :: cFMS_define_nest_domains
   public :: cFMS_domain_is_initialized  
   public :: cFMS_get_compute_domain
-  public :: cFMS_get_current_domain
+  public :: cFMS_get_domain
   public :: cFMS_get_data_domain
   public :: cFMS_get_domain_from_id
   public :: cFMS_get_domain_name
@@ -109,11 +109,13 @@ module c_fms_mod
   integer, public, bind(C, name="JULIAN")            :: JULIAN_C    = JULIAN
   integer, public, bind(C, name="NOLEAP")            :: NOLEAP_C    = NOLEAP
 
-  type(FmsMppDomain2D), allocatable, target, public :: domain(:)
-  type(FmsMppDomain2D), pointer  :: current_domain  
+  type(FmsMppDomain2D), allocatable, target, public :: domain(:)  
+  type(FmsMppDomain2D), pointer  :: current_domain
+  integer :: domain_count
 
   type(FmsMppDomainsNestDomain_type), allocatable, target, public :: nest_domain(:)
   type(FmsMppDomainsNestDomain_type), pointer :: current_nest_domain
+  integer :: nest_domain_count
 
 contains
 
@@ -123,6 +125,18 @@ contains
     call fms_end()
   end subroutine cFMS_end
 
+  !> cFMS_get_domain_count
+  function cFMS_get_domain_count() bind(C, name="cFMS_get_domain_count")
+    integer :: cFMS_get_domain_count
+    cFMS_get_domain_count = domain_count    
+  end function cFMS_get_domain_count
+
+  !> cFMS_get_nest_domain_count
+  function cFMS_get_nest_domain_count() bind(C, name="cFMS_get_nest_domain_count")
+    integer :: cFMS_get_nest_domain_count
+    cFMS_get_nest_domain_count = nest_domain_count    
+  end function cFMS_get_nest_domain_count
+  
   !> cfms_init
   subroutine cFMS_init(localcomm, alt_input_nml_path, ndomain, nnest_domain, calendar_type) bind(C,  name="cFMS_init")
     
@@ -159,6 +173,9 @@ contains
     else
        allocate(nest_domain(0:0))
     end if
+
+    domain_count = 0
+    nest_domain_count = 0
     
   end subroutine cfms_init
 
@@ -242,22 +259,20 @@ contains
     
   end subroutine cFMS_set_current_pelist
   
-  !> cFMS_calls mpp_define_domains2D to define the domain with id=domain_id.  Domain_id must be
-  !! an integer.  This wrapper assumes C indexing convention where array indexing starts from 0
-  subroutine cFMS_define_domains(global_indices, layout, domain_id, pelist, &
-       xflags, yflags, xhalo, yhalo, xextent, yextent, maskmap, name,              &
-       symmetry, memory_size, whalo, ehalo, shalo, nhalo, is_mosaic, tile_count,   &
+  function cFMS_define_domains(global_indices, layout, npelist, pelist,         &
+       xflags, yflags, xhalo, yhalo, xextent, yextent, maskmap, name,           &
+       symmetry, memory_size, whalo, ehalo, shalo, nhalo, is_mosaic, tile_count,&
        tile_id, complete, x_cyclic_offset, y_cyclic_offset) bind(C, name="cFMS_define_domains")
 
     implicit none   
     integer, intent(inout) :: global_indices(4) 
     integer, intent(in) :: layout(2)
-    integer, intent(in), optional :: domain_id
-    integer, intent(in), optional :: pelist(npes) 
+    integer, intent(in) :: npelist
+    integer, intent(in), optional :: pelist(npelist)
     integer, intent(in), optional :: xflags, yflags
     integer, intent(in), optional :: xhalo, yhalo
     integer, intent(in), optional :: xextent(layout(1)), yextent(layout(2))
-    type(c_ptr), intent(in), value :: maskmap
+    logical(c_bool), intent(in), optional :: maskmap(layout(1)*layout(2))
     character(c_char), intent(in), optional :: name(NAME_LENGTH)
     logical(c_bool), intent(in), optional :: symmetry
     integer, intent(in), optional :: memory_size(2)
@@ -271,12 +286,12 @@ contains
     
     character(len=NAME_LENGTH) :: name_f = "cdomain"
     integer :: global_indices_f(4)
-    logical(c_bool), allocatable :: maskmap_f(:,:)
-    logical(c_bool), pointer :: maskmap_fp(:,:)
+    logical(c_bool) :: maskmap_f(layout(1),layout(2))
     logical :: symmetry_f  = .False.
     logical :: is_mosaic_f = .False.
     logical :: complete_f  = .True.
-    logical :: dealloc_maskmap = .False.
+
+    integer :: cFMS_define_domains
     
     global_indices_f = global_indices + 1
 
@@ -287,19 +302,16 @@ contains
     if(present(is_mosaic))  is_mosaic_f = logical(is_mosaic)
     if(present(complete))   complete_f = logical(complete)
 
-    nullify(maskmap_fp)
-
-    if(c_associated(maskmap)) then
-      allocate(maskmap_f(layout(1), layout(2)))
-      call c_f_pointer(maskmap, maskmap_fp, (/layout(2), layout(1)/))
-      maskmap_f = reshape(maskmap_fp, shape=(/layout(1), layout(2)/))
+    if(present(maskmap)) then
+       maskmap_f = reshape(maskmap, layout)
     else
-       allocate(maskmap_f(layout(1), layout(2)))
        maskmap_f = .True.
     end if
 
-    call cFMS_set_current_domain(domain_id)
-    call fms_mpp_domains_define_domains(global_indices_f, layout, current_domain, pelist=pelist,  &
+    cFMS_define_domains = domain_count
+    
+    call cFMS_set_current_domain(cFMS_define_domains)
+    call fms_mpp_domains_define_domains(global_indices_f, layout, current_domain, pelist=pelist,  & 
          xflags=xflags, yflags=yflags, xhalo=xhalo, yhalo=yhalo, xextent=xextent, yextent=yextent,&
          maskmap=logical(maskmap_f), name=name_f, symmetry=symmetry_f, memory_size=memory_size,            &
          whalo=whalo, ehalo=ehalo, shalo=shalo, nhalo=nhalo, is_mosaic=is_mosaic_f, tile_count=tile_count, &
@@ -308,10 +320,9 @@ contains
     if(present(tile_id))    tile_id = tile_id - 1;
     if(present(tile_count)) tile_count = tile_count - 1;
 
-    nullify(maskmap_fp)
-    deallocate(maskmap_f)
+    domain_count = domain_count + 1
     
-  end subroutine cFMS_define_domains
+  end function cFMS_define_domains
 
 
   !> cFMS_define_io_domain
@@ -319,7 +330,7 @@ contains
     
     implicit none
     integer, intent(in) :: io_layout(2)
-    integer, intent(in), optional :: domain_id
+    integer, intent(in) :: domain_id
     
     call cFMS_set_current_domain(domain_id)
     call fms_mpp_domains_define_io_domain(current_domain, io_layout)
@@ -342,10 +353,9 @@ contains
 
   !> cFMS_define_nest_domain calls mpp_define_nest_domains to define the nest domain with id=nest_domain_id.
   !! Nest_domain_id must be an integer.  This wrapper assumes C indexing convention where array indexing starts from 0  
-  subroutine cFMS_define_nest_domains(num_nest, ntiles, nest_level, tile_fine, tile_coarse,               &
-                                     istart_coarse, icount_coarse, jstart_coarse, jcount_coarse, npes_nest_tile, &
-                                     x_refine, y_refine, nest_domain_id, domain_id, extra_halo, name)            &
-                                                                            bind(C, name="cFMS_define_nest_domains")
+  function cFMS_define_nest_domains(num_nest, ntiles, nest_level, tile_fine, tile_coarse, &
+       istart_coarse, icount_coarse, jstart_coarse, jcount_coarse, npes_nest_tile,        &
+       x_refine, y_refine, domain_id, extra_halo, name) bind(C, name="cFMS_define_nest_domains")
 
     implicit none
     integer, intent(in) :: num_nest
@@ -360,7 +370,7 @@ contains
     integer, intent(in) :: npes_nest_tile(ntiles)
     integer, intent(in) :: x_refine(num_nest)
     integer, intent(in) :: y_refine(num_nest)
-    integer, intent(in),  optional :: nest_domain_id, domain_id
+    integer, intent(in) :: domain_id
     integer, intent(in),  optional :: extra_halo
     character(c_char), intent(in), optional :: name(NAME_LENGTH)
 
@@ -368,25 +378,31 @@ contains
     integer :: tile_fine_f(num_nest), tile_coarse_f(num_nest)
     character(100) :: name_f = "cnest_domain"    
 
+    integer :: cFMS_define_nest_domains
+    
     istart_coarse_f = istart_coarse + 1
     jstart_coarse_f = jstart_coarse + 1
     tile_fine_f     = tile_fine + 1
     tile_coarse_f   = tile_coarse + 1
     if(present(name)) name_f = fms_string_utils_c2f_string(name)
+
+    cFMS_define_nest_domains = nest_domain_count
     
-    call cFMS_set_current_nest_domain(nest_domain_id)
+    call cFMS_set_current_nest_domain(cFMS_define_nest_domains)
     call cFMS_set_current_domain(domain_id)
     call fms_mpp_domains_define_nest_domains(current_nest_domain, current_domain, num_nest, nest_level,             &
          tile_fine_f, tile_coarse_f, istart_coarse_f, icount_coarse, jstart_coarse_f, jcount_coarse, npes_nest_tile,&
          x_refine, y_refine, extra_halo=extra_halo, name=name_f)
+
+    nest_domain_count = nest_domain_count + 1
     
-  end subroutine cFMS_define_nest_domains
+  end function cFMS_define_nest_domains
 
 
   function cFMS_domain_is_initialized(domain_id) bind(C, name="cFMS_domain_is_initialized")
 
     implicit none
-    integer, intent(in), optional :: domain_id
+    integer, intent(in) :: domain_id
     logical(c_bool) :: cFMS_domain_is_initialized
 
     call cFMS_set_current_domain(domain_id)
@@ -400,7 +416,7 @@ contains
        x_is_global, y_is_global, tile_count, position, whalo, shalo) bind(C, name="cFMS_get_compute_domain")
     
     implicit none
-    integer, intent(in),  optional :: domain_id
+    integer, intent(in) :: domain_id
     integer, intent(out), optional :: xbegin, xend, ybegin, yend
     integer, intent(out), optional :: xsize, xmax_size, ysize, ymax_size
     logical(c_bool), intent(out), optional :: x_is_global, y_is_global
@@ -432,18 +448,24 @@ contains
   end subroutine cFMS_get_compute_domain
 
 
-  function cFMS_get_current_domain()
+  function cFMS_get_domain(domain_id)
     implicit none
-    type(FmsMppDomain2D), pointer :: cFMS_get_current_domain
-    cFMS_get_current_domain => current_domain
-  end function cFMS_get_current_domain
+    integer, intent(in), optional :: domain_id
+    type(FmsMppDomain2D), pointer :: cFMS_get_domain
+
+    if(present(domain_id)) then
+       cFMS_get_domain => domain(domain_id)
+    else
+       cFMS_get_domain => current_domain
+    end if
+  end function cFMS_get_domain
     
   !> cFMS_get_data_domain
   subroutine cFMS_get_data_domain(domain_id, xbegin, xend, ybegin, yend, xsize, xmax_size, ysize, ymax_size, &
        x_is_global, y_is_global, tile_count, position, whalo, shalo) bind(C, name="cFMS_get_data_domain")
     
     implicit none
-    integer, intent(in),  optional :: domain_id
+    integer, intent(in) :: domain_id
     integer, intent(out), optional :: xbegin, xend, ybegin, yend
     integer, intent(out), optional :: xsize, xmax_size, ysize, ymax_size
     logical(c_bool), intent(out), optional :: x_is_global, y_is_global
@@ -487,7 +509,7 @@ contains
     
     implicit none
     character(c_char), intent(out) :: domain_name_c(NAME_LENGTH)
-    integer, intent(in),  optional :: domain_id
+    integer, intent(in) :: domain_id
     character(len=NAME_LENGTH) :: domain_name_f
     
     call cFMS_set_current_domain(domain_id)
@@ -502,7 +524,7 @@ contains
     
     implicit none
     integer, intent(out) :: layout(2)
-    integer, intent(in),  optional :: domain_id
+    integer, intent(in)  :: domain_id
 
     call cFMS_set_current_domain(domain_id)
     call fms_mpp_domains_get_layout(current_domain, layout)
@@ -515,7 +537,7 @@ contains
     
     implicit none
     integer, intent(out) :: pelist(npes)
-    integer, intent(in),  optional :: domain_id
+    integer, intent(in)  :: domain_id
     
     call cFMS_set_current_domain(domain_id)
     call fms_mpp_domains_get_pelist(current_domain, pelist)
@@ -528,7 +550,7 @@ contains
        x_is_global, y_is_global, tile_count, whalo, shalo) bind(C, name="cFMS_set_compute_domain")
     
     implicit none
-    integer, intent(in),    optional :: domain_id
+    integer, intent(in) :: domain_id
     integer, intent(inout), optional :: xbegin, xend, ybegin, yend, xsize, ysize
     logical(c_bool), intent(inout), optional :: x_is_global, y_is_global
     integer, intent(inout), optional :: tile_count
@@ -581,13 +603,9 @@ contains
   subroutine cFMS_set_current_domain(domain_id) bind(C, name="cFMS_set_current_domain")
 
     implicit none
-    integer, intent(in), optional :: domain_id
+    integer, intent(in) :: domain_id
     
-    if(present(domain_id)) then
-       current_domain => domain(domain_id)
-    else
-       current_domain => domain(0)
-    end if
+    current_domain => domain(domain_id)
     
   end subroutine cFMS_set_current_domain
 
@@ -597,13 +615,9 @@ contains
   subroutine cFMS_set_current_nest_domain(nest_domain_id)
 
     implicit none
-    integer, intent(in), optional :: nest_domain_id
+    integer, intent(in) :: nest_domain_id
     
-    if(present(nest_domain_id)) then
-       current_nest_domain => nest_domain(nest_domain_id)
-    else
-       current_nest_domain => nest_domain(0)
-    end if
+    current_nest_domain => nest_domain(nest_domain_id)
     
   end subroutine cFMS_set_current_nest_domain
 
@@ -613,7 +627,7 @@ contains
        x_is_global, y_is_global, tile_count, whalo, shalo) bind(C, name="cFMS_set_data_domain")
     
     implicit none
-    integer, intent(in),    optional :: domain_id
+    integer, intent(in) :: domain_id
     integer, intent(inout), optional :: xbegin, xend, ybegin, yend, xsize, ysize
     logical(c_bool), intent(in),    optional :: x_is_global, y_is_global
     integer, intent(inout), optional :: tile_count
@@ -664,7 +678,7 @@ contains
   subroutine cFMS_set_global_domain(domain_id, xbegin, xend, ybegin, yend, xsize, ysize, tile_count, &
        whalo, shalo) bind(C, name="cFMS_set_global_domain")
     implicit none
-    integer, intent(in),    optional :: domain_id
+    integer, intent(in) :: domain_id
     integer, intent(inout), optional :: xbegin, xend, ybegin, yend, xsize, ysize
     integer, intent(inout), optional :: tile_count
     integer, intent(in),    optional :: whalo, shalo
