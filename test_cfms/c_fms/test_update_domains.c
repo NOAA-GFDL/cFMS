@@ -185,7 +185,6 @@ void test_float2d(int *domain_id)
                                                             
   // allocate array for the ith data domain
   idata = (double *)calloc(xsize_d*ysize_d,sizeof(double));
-  printf("HERE %d %d %d\n", cFMS_pe(), isc, jsc);
   for(int ix=WHALO; ix<xsize_c+WHALO; ix++) for(int iy=SHALO; iy<ysize_c+SHALO; iy++) {
       idata[ix*ysize_d+iy] = global[(ix+jsc)*ysize+iy+isc];
   }
