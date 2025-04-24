@@ -23,8 +23,9 @@
 # Ed Hartnett 2/22/19
 
 # Include .h and .mod files.
-AM_CPPFLAGS = -I.
-AM_FCFLAGS = $(FC_MODINC). $(FC_MODOUT)$(MODDIR)
+AM_CPPFLAGS = -I$(top_abs_srcdir)/.
+AM_FCFLAGS = $(FC_MODINC). $(FC_MODOUT)$(MODDIR) $(LIBFMS_FCFLAGS)
+AM_LDFLAGS = $(LIBFMS_LIBS)
 
 # Build these uninstalled convenience libraries.
 noinst_LTLIBRARIES = lib_c_constants.la
