@@ -32,6 +32,7 @@ module c_fms_mod
   use FMS, only : fms_mpp_domains_get_layout, fms_mpp_domains_get_pelist
   use FMS, only : fms_mpp_domains_set_compute_domain, fms_mpp_domains_set_data_domain, fms_mpp_domains_set_global_domain
   use FMS, only : fms_mpp_domains_update_domains
+  use FMS, only : fms_mpp_domains_define_mosaic
 
   use FMS, only : THIRTY_DAY_MONTHS, GREGORIAN, JULIAN, NOLEAP
   use FMS, only : fms_time_manager_init, fms_time_manager_set_calendar_type
@@ -69,6 +70,7 @@ module c_fms_mod
   public :: cFMS_set_current_domain
   public :: cFMS_set_data_domain
   public :: cFMS_set_global_domain
+  public :: cFMS_define_cubic_mosaic
   
   integer, public, parameter :: NAME_LENGTH = 64 !< value taken from mpp_domains
   integer, public, parameter :: MESSAGE_LENGTH=128
@@ -709,7 +711,7 @@ contains
   function cFMS_define_cubic_mosaic(type, ni, nj, global_indices, layout, ntiles, halo, use_memsize) &
        bind(C, name="cFMS_define_cubic_mosaic")
     implicit none
-    character(c_char), intent(in) :: type
+    character(c_char), intent(in) :: type(NAME_LENGTH)
     integer, intent(in) :: ni(6)
     integer, intent(in) :: nj(6)
     integer, intent(in) :: global_indices(4)
@@ -718,8 +720,9 @@ contains
     integer, intent(in), optional :: halo
     logical(c_bool), intent(in), optional :: use_memsize
 
-    character(len=NAME_LENGTH) :: type_f
+    character(len=NAME_LENGTH) :: type_f = " "
     logical :: use_memsize_f = .False.
+    integer :: n
     integer :: npes_per_tile
     integer :: pe_start(ntiles)
     integer :: pe_end(ntiles)
@@ -733,7 +736,7 @@ contains
     integer :: whalo = 2, shalo = 2, ehalo = 2, nhalo = 2
     integer :: cFMS_define_cubic_mosaic
 
-    if(present(type)) type_f = fms_string_utils_c2f_string(type)
+    type_f = fms_string_utils_c2f_string(type)
     if(present(use_memsize)) then
       use_memsize_f = logical(use_memsize)
       use_memsize_local = use_memsize_f
@@ -753,7 +756,7 @@ contains
 
     cFMS_define_cubic_mosaic = domain_count
 
-    call cFMS_set_current_domain(cFMS_define_domains)
+    call cFMS_set_current_domain(cFMS_define_cubic_mosaic)
 
     !--- Contact line 1, between tile 1 (EAST) and tile 2 (WEST)
     tile1(1) = 1; tile2(1) = 2
@@ -803,8 +806,8 @@ contains
     tile1(12) = 5; tile2(12) = 6
     istart1(12) = ni(5); iend1(12) = ni(5); jstart1(12) = 1;     jend1(12) = nj(5)
     istart2(12) = 1;     iend2(12) = 1;     jstart2(12) = 1;     jend2(12) = nj(6)
-    msize(1) = maxval(ni(:)/layout(1,:)) + whalo + ehalo + 1 ! make sure memory domain size is no smaller than
-    msize(2) = maxval(nj(:)/layout(2,:)) + shalo + nhalo + 1 ! data domain size
+    msize(1) = maxval(ni(:)/layout2d(1,:)) + whalo + ehalo + 1 ! make sure memory domain size is no smaller than
+    msize(2) = maxval(nj(:)/layout2d(2,:)) + shalo + nhalo + 1 ! data domain size
 
     if(use_memsize_local) then
       call fms_mpp_domains_define_mosaic(global_indices2d, layout2d, &
