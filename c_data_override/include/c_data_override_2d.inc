@@ -36,6 +36,6 @@ subroutine CFMS_DATA_OVERRIDE_2D_(gridname, fieldname, data_shape, data, overrid
   call cfms_array_to_pointer(data_f, data_shape, data)  
   deallocate(data_f)
   
-  if(present(override)) override = logical(override, c_bool)
+  if(present(override)) override = logical(override_f, c_bool)
 
 end subroutine CFMS_DATA_OVERRIDE_2D_
