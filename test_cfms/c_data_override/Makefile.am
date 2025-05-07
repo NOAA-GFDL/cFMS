@@ -21,6 +21,9 @@
 # Find the needed mod and .inc files.
 AM_CPPFLAGS = -I. -I$(MODDIR) -I${top_builddir}/c_data_override \
               -I${top_builddir}/c_fms -I${top_builddir}/test_cfms/c_fms
+AM_FCFLAGS = $(LIBFMS_FCFLAGS)
+AM_LDFLAGS = $(LIBFMS_LIBS)
+
 
 # Link to the FMS library.
 LDADD = ${top_builddir}/libcFMS/libcFMS.la
@@ -38,7 +41,7 @@ test_data_override_2d_SOURCES = ../c_fms/c_mpp_domains_helper.c test_data_overri
 test_data_override_3d_SOURCES = ../c_fms/c_mpp_domains_helper.c test_data_override_3d.c
 
 test_data_override_ongrid : test_data_override_ongrid.F90
-	$(FC) $(FCFLAGS) $(LDFLAGS) test_data_override_ongrid.F90 -o test_data_override_ongrid
+	$(FC) $(FCFLAGS) $(LDFLAGS) $(LIBFMS_FCFLAGS) $(LIBFMS_LIBS) test_data_override_ongrid.F90 -o test_data_override_ongrid
 
 
 TEST_EXTENSIONS = .sh

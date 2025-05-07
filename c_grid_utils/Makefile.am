@@ -24,7 +24,8 @@
 
 # Include .h and .mod files.
 AM_CPPFLAGS = -I. -I$(top_srcdir)/FMS/grid_utils
-AM_FCFLAGS = $(FC_MODINC). $(FC_MODOUT)$(MODDIR)
+AM_FCFLAGS = $(FC_MODINC). $(FC_MODOUT)$(MODDIR) $(LIBFMS_FCFLAGS)
+AM_LDFLAGS = $(LIBFMS_LIBS)
 
 # Build these uninstalled convenience libraries.
 noinst_LTLIBRARIES = lib_c_grid_utils.la

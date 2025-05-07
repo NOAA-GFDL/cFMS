@@ -23,8 +23,9 @@
 # Ed Hartnett 2/22/19
 
 # Include .h and .mod files.
-AM_CPPFLAGS = -I. -I./include
-AM_FCFLAGS = $(FC_MODINC). $(FC_MODOUT)$(MODDIR)
+AM_CPPFLAGS = -I${abs_top_srcdir}/c_data_override/include
+AM_FCFLAGS = $(FC_MODINC). $(FC_MODOUT)$(MODDIR) $(LIBFMS_FCFLAGS)
+AM_LDFLAGS = $(LIBFMS_LIBS)
 
 # Build these uninstalled convenience libraries.
 noinst_LTLIBRARIES = lib_c_data_override.la
