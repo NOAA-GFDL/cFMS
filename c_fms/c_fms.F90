@@ -708,10 +708,9 @@ contains
    
   end subroutine cFMS_set_global_domain
 
-  function cFMS_define_cubic_mosaic(type, ni, nj, global_indices, layout, ntiles, halo, use_memsize) &
+  function cFMS_define_cubic_mosaic(ni, nj, global_indices, layout, ntiles, halo, use_memsize) &
        bind(C, name="cFMS_define_cubic_mosaic")
     implicit none
-    character(c_char), intent(in) :: type(NAME_LENGTH)
     integer, intent(in) :: ni(6)
     integer, intent(in) :: nj(6)
     integer, intent(in) :: global_indices(4)
@@ -720,7 +719,7 @@ contains
     integer, intent(in), optional :: halo
     logical(c_bool), intent(in), optional :: use_memsize
 
-    character(len=NAME_LENGTH) :: type_f = " "
+    character(len=NAME_LENGTH) :: type = "Cubic: cubed-sphere"
     logical :: use_memsize_f = .False.
     integer :: n
     integer :: npes_per_tile
@@ -736,7 +735,6 @@ contains
     integer :: whalo = 2, shalo = 2, ehalo = 2, nhalo = 2
     integer :: cFMS_define_cubic_mosaic
 
-    type_f = fms_string_utils_c2f_string(type)
     if(present(use_memsize)) then
       use_memsize_f = logical(use_memsize)
       use_memsize_local = use_memsize_f
@@ -745,7 +743,7 @@ contains
       nhalo = halo; shalo = halo; whalo = halo; ehalo = halo
     end if
 
-    npes_per_tile = npes/ntiles
+    npes_per_tile = cFMS_npes()/ntiles
 
     do n = 1, ntiles
       pe_start(n)           = (n-1)*npes_per_tile
@@ -814,13 +812,13 @@ contains
          current_domain, ntiles, num_contact, tile1, tile2, istart1, &
          iend1, jstart1, jend1, istart2, iend2, jstart2, jend2, pe_start, &
          pe_end, symmetry = .true., whalo=whalo, ehalo=ehalo, shalo=shalo, &
-         nhalo=nhalo, name=trim(type_f), memory_size=msize)
+         nhalo=nhalo, name=trim(type), memory_size=msize)
     else
       call fms_mpp_domains_define_mosaic(global_indices2d, layout2d, &
       current_domain, ntiles, num_contact, tile1, tile2, istart1, &
       iend1, jstart1, jend1, istart2, iend2, jstart2, jend2, pe_start, &
       pe_end, symmetry = .true., whalo=whalo, ehalo=ehalo, shalo=shalo, &
-      nhalo=nhalo, name=trim(type_f))
+      nhalo=nhalo, name=trim(type))
     end if
     
     domain_count = domain_count + 1
