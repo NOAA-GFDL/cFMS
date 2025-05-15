@@ -725,6 +725,7 @@ contains
     integer :: npes_per_tile
     integer :: pe_start(ntiles)
     integer :: pe_end(ntiles)
+    integer :: global_indices_f(4)
     integer :: global_indices2d(4,ntiles)
     integer :: layout2d(2,ntiles)
     integer, dimension(12) :: istart1, iend1, jstart1, jend1, tile1
@@ -734,6 +735,8 @@ contains
     logical :: use_memsize_local = .True.
     integer :: whalo = 2, shalo = 2, ehalo = 2, nhalo = 2
     integer :: cFMS_define_cubic_mosaic
+
+    global_indices_f = global_indices + 1
 
     if(present(use_memsize)) then
       use_memsize_f = logical(use_memsize)
@@ -748,7 +751,7 @@ contains
     do n = 1, ntiles
       pe_start(n)           = (n-1)*npes_per_tile
       pe_end(n)             = n*npes_per_tile-1
-      global_indices2d(:,n) = global_indices
+      global_indices2d(:,n) = global_indices_f
       layout2d(:,n)         = layout
     end do
 
