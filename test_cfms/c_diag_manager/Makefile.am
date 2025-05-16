@@ -21,6 +21,8 @@
 # Find the needed mod and .inc files.
 AM_CPPFLAGS = -I. -I$(MODDIR) -I${top_builddir}/c_diag_manager \
               -I${top_builddir}/c_fms -I${top_builddir}/test_cfms/c_fms
+AM_FCFLAGS = $(LIBFMS_FCFLAGS)
+AM_LDFLAGS = $(LIBFMS_LIBS)
 
 # Link to the FMS library.
 LDADD = ${top_builddir}/libcFMS/libcFMS.la
