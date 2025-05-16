@@ -26,5 +26,5 @@
 if [ -f "input.nml" ] ; then rm -f input.nml ; fi
 touch input.nml
 
-test_expect_success "test define cubic mosaic" 'mpirun -n 6 ./test_define_cubic_mosaic'
+test_expect_success "test define cubic mosaic" 'mpirun -n 30 ./test_define_cubic_mosaic'
 test_done
