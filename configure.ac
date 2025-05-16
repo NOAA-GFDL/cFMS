@@ -75,30 +75,6 @@ AS_IF([test ${enable_8byte_int:-no} = yes],
   [enable_8byte_int=yes],
   [enable_8byte_int=no])
 
-# user enabled testing with input files
-AC_MSG_CHECKING([whether to enable tests with input files])
-AC_ARG_ENABLE([test-input],
-            [AS_HELP_STRING([--enable-test-input="path/to/input"],
-            [Enable tests using input netcdf files, if present in the given full directory.])])
-AC_MSG_RESULT([$enable_test_input])
-
-# require path to be given
-AS_IF([test "x$enable_test_input" = "xyes"],
-    [AC_MSG_ERROR([Test input enabled, but no directory given with --enable-test-input=/path])],
-    [AS_IF([test "x$enable_test_input" != "xno"],
-        [TEST_INPUT_PATH="$enable_test_input"],[])]
-)
-
-# if set, check directory exists
-AS_IF([test "$TEST_INPUT_PATH" = ""],
-  [],
-  [AS_IF([test -d $TEST_INPUT_PATH],[],
-    [AC_MSG_ERROR([Test input enabled, but directory $TEST_INPUT_PATH not found]) ]
-  )])
-
-# substitute path for input
-AC_SUBST([TEST_INPUT_PATH])
-
 # Does the user want to build documentation?
 AC_MSG_CHECKING([whether documentation should be built (requires doxygen)])
 AC_ARG_ENABLE([docs],
@@ -213,6 +189,16 @@ if test $hdf5_fpe_bug = yes; then
 NetCDF must be built with a HDF5 version other than 1.14.3 to support floating point exception traps.])
 fi
 
+# check if we have FMS!
+# TODO change m4 macro to default to on
+# currently the script will always fail if --with-fms is omitted
+AC_MSG_CHECKING([if FMS library is available])
+GX_LIB_FMS()
+AC_MSG_RESULT([$with_fms])
+if test "x$with_fms" = xno; then
+  AC_MSG_ERROR([No FMS library found. FMS install path should be specified via --with-fms=<path> option when configuring.])
+fi
+
 
 # Check if Fortran compiler has Cray pointer support
 GX_FC_CRAY_POINTER_FLAG()
@@ -235,7 +221,7 @@ fi
 
 # Set any required compile flags.  This will not be done if the user wants to
 # define all their own flags.
-if test $enable_setting_flags = yes; then
+if test "$enable_setting_flags" = yes; then
   # Make sure the compiler is seeing this as free-formatted, not
   # fixed-formatted, fortran code.
   AC_FC_FREEFORM()
@@ -249,7 +235,7 @@ if test $enable_setting_flags = yes; then
   fi
 
   # Builds with C data types
-  if test $enable_portable_kinds = yes; then
+  if test "$enable_portable_kinds" = yes; then
     AC_DEFINE([PORTABLE_KINDS], [1], [Set to define KIND parameters to iso_c_binding KIND parameters])
   fi
 
@@ -268,7 +254,7 @@ if test $enable_setting_flags = yes; then
   fi
 
   # Add code coverage flags
-  if test $enable_code_coverage = yes; then
+  if test "$enable_code_coverage" = yes; then
     FCFLAGS="$FCFLAGS -prof-gen=srcpos"
     CFLAGS="$CFLAGS -prof-gen=srcpos"
   fi
