@@ -39,6 +39,10 @@ libcFMS_la_LIBADD += $(top_builddir)/c_horiz_interp/lib_c_horiz_interp.la
 libcFMS_la_LIBADD += $(top_builddir)/c_grid_utils/lib_c_grid_utils.la
 libcFMS_la_LIBADD += $(top_builddir)/c_fms_utils/lib_c_fms_utils.la
 
+libcFMS_la_LIBADD += $(abs_top_builddir)/FMS/libFMS/libFMS.la
+
+libcFMS_la_LDFLAGS += -L$(abs_top_builddir)/FMS/libFMS/
+
 libcFMS_la_SOURCES =
 
 nodist_EXTRA_libcFMS_la_SOURCES = dummy.f90
