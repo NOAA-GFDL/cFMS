@@ -19,8 +19,8 @@
 #
 
 # Find the needed mod and .inc files.
-AM_CPPFLAGS = -I. -I$(MODDIR) -I${top_builddir}/c_data_override \
-              -I${top_builddir}/c_fms -I${top_builddir}/test_cfms/c_fms
+AM_CPPFLAGS = -I. -I$(MODDIR) -I${abs_top_srcdir}/c_data_override \
+              -I${abs_top_srcdir}/c_fms -I${abs_top_srcdir}/test_cfms/c_fms
 AM_FCFLAGS = $(LIBFMS_FCFLAGS)
 AM_LDFLAGS = $(LIBFMS_LIBS)
 
