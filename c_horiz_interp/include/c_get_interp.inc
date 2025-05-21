@@ -2,7 +2,7 @@ subroutine CFMS_GET_INTERP_NAME_(interp_id, i_src, j_src, i_dst, j_dst, &
     area_frac_dst, version, nxgrid, nlon_src, nlat_src, nlon_dst, nlat_dst, &
     is_allocated, interp_method) bind(C, name=CFMS_GET_INTERP_BINDC_)
 
-    ! Current interface only supports CONSERVATIVE interp method
+    ! Current interface only supports CONSERVATIVE + BILINEAR interp methods
 
     integer, intent(in), optional :: interp_id
     type(c_ptr), intent(in), value :: i_src
