@@ -22,27 +22,36 @@
 Adapted from test_horiz_interp :: test_assign
 */
 
+void define_domain(int* domain_id);
+
+int test_conservative_new(int domain_id);
+
+int test_bilinear_new(int domain_id);
+
 // run both tests and also check their return statuses
 int main(){
   int test_conserve, test_bilinear;
 
-  printf("starting test...\n");
   int domain_id = 0;
 
   define_domain(&domain_id);
 
   printf("domains defined.\n");
 
-  //test_conserve = test_conservative_new(domain_id);
+  printf("starting conservative test...");
+  test_conserve = test_conservative_new(domain_id);
+  printf("done.\n");
 
-  //cFMS_horiz_interp_dealloc();
+  cFMS_horiz_interp_dealloc();
 
+  printf("starting bilinear test...");
   test_bilinear = test_bilinear_new(domain_id);
-  return test_conserve && test_bilinear;
+  printf("done.\n");
 
   cFMS_end();
 
-  return 0;
+  return test_conserve && test_bilinear;
+
 }
 
 void define_domain(int *domain_id)
@@ -306,16 +315,16 @@ int test_bilinear_new(int domain_id)
     int lat_out_1d_size = jec+1-jsc;
 
     lon_in_1D = (double *)malloc(lon_in_1d_size*sizeof(double));
-    for(int i=0; i<lon_in_1d_size; i++) lon_in_1D[i] = (lon_src_beg + (i-1)*dlon_src)*D2R;
+    for(int i=1; i<lon_in_1d_size+1; i++) lon_in_1D[i-1] = (lon_src_beg + (i-1)*dlon_src)*D2R;
 
     lat_in_1D = (double *)malloc(lat_in_1d_size*sizeof(double));
-    for(int j=0; j<lat_in_1d_size; j++) lat_in_1D[j] = (lat_src_beg + (j-1)*dlat_src)*D2R;
+    for(int j=1; j<lat_in_1d_size+1; j++) lat_in_1D[j-1] = (lat_src_beg + (j-1)*dlat_src)*D2R;
 
     lon_out_1D = (double *)malloc(lon_out_1d_size*sizeof(double));
-    for(int i=0; i<lon_out_1d_size; i++) lon_out_1D[i] = (lon_dst_beg + (i-1)*dlon_dst)*D2R;
+    for(int i=1; i<lon_out_1d_size+1; i++) lon_out_1D[i-1] = (lon_dst_beg + (i-1)*dlon_dst)*D2R;
 
     lat_out_1D = (double *)malloc(lat_out_1d_size*sizeof(double));
-    for(int j=0; j<lat_out_1d_size; j++) lat_out_1D[j] = (lat_dst_beg + (j-1)*dlat_dst)*D2R;
+    for(int j=1; j<lat_out_1d_size+1; j++) lat_out_1D[j-1] = (lat_dst_beg + (j-1)*dlat_dst)*D2R;
 
 
     int in_2d_size = lon_in_1d_size*lat_in_1d_size;
@@ -341,30 +350,36 @@ int test_bilinear_new(int domain_id)
     }
     int lat_in_shape[2] = {lon_in_1d_size, lat_in_1d_size};
 
+    printf("out_2d_size: %d, lon_out_1d_size: %d, lat_out_1d_size: %d", out_2d_size, lon_out_1d_size, lat_out_1d_size);
+
     // for the destination, we take the midpoints between 1d source points
     lon_out_2D = (double *)malloc(out_2d_size*sizeof(double));
     for(int i=0; i<lon_out_1d_size; i++)
     {
+        double midpoint = (lon_out_1D[i] + lon_out_1D[i+1]) * 0.5; 
         for(int j=0; j<lat_out_1d_size; j++)
         {
-            int index = lon_out_1d_size * i + j;
-            lon_out_2D[index] = (lon_src_1d[i] + lon_src_1d[i+1]) * 0.5; 
+            lon_out_2D[lat_out_1d_size*i + j] = midpoint; 
         }
     }
     int lon_out_shape[2] = {lon_out_1d_size, lat_out_1d_size};
 
     lat_out_2D = (double *)malloc(out_2d_size*sizeof(double));
-    for(int i=0; i<lon_out_1d_size; i++)
+
+    for(int i=0; i<lat_out_1d_size; i++)
     {
-        for(int j=0; j<lat_out_1d_size; j++)
+        double midpoint = (lat_out_1D[i] + lat_out_1D[i+1]) * 0.5; 
+        for(int j=0; j<lon_out_1d_size; j++)
         {
-            int index = lon_out_1d_size * i + j;
-            lat_out_2D[index] = (lat_src_1d[j] + lat_src_1d[j+1]) * 0.5; 
+            lat_out_2D[lat_out_1d_size*j + i] = midpoint; 
         }
     }
     int lat_out_shape[2] = {lon_out_1d_size, lat_out_1d_size};
 
+
     cFMS_horiz_interp_init(NULL);
+
+    printf("horiz_interp initialized\n");
 
     int interp_id = 0;
     int test_interp_id;
@@ -376,41 +391,29 @@ int test_bilinear_new(int domain_id)
                                     interp_method, NULL, NULL, NULL, NULL,
                                     NULL, NULL, NULL);
 
-    int nxgrid;
-
-    cFMS_get_interp_cdouble(NULL, NULL, NULL, NULL, NULL, 
-        NULL, NULL, &nxgrid, 
-        NULL, NULL, NULL, NULL, 
-        NULL, NULL);
-    
-    printf("nxgrid: %d\n", nxgrid);
+    printf("horiz_interp initialized, interp id: %d\n", test_interp_id);
 
     int nlon_src;
     int nlat_src;
     int nlon_dst;
     int nlat_dst;
-    int *i_src = (int *)malloc(nxgrid*sizeof(int));
-    int *j_src = (int *)malloc(nxgrid*sizeof(int));
-    int *i_dst = (int *)malloc(nxgrid*sizeof(int));
-    int *j_dst = (int *)malloc(nxgrid*sizeof(int));
-    double *area_frac_dst = (double *)malloc(nxgrid*sizeof(double));
 
-    cFMS_get_interp_cdouble(NULL, i_src, j_src, i_dst, j_dst, 
-        area_frac_dst, NULL, &nxgrid, 
+    // TODO bilinear uses i_lat/j_lat, getter routine only gets i/j_src/dst
+    // could do a generic interface for this
+
+    cFMS_get_interp_cdouble(NULL, NULL, NULL, NULL, NULL, 
+        NULL, NULL, NULL, 
         &nlon_src, &nlat_src, &nlon_dst, &nlat_dst, 
         NULL, NULL);
 
-    for(int i=0;i<nxgrid;i++){
-        printf("i_src:%d\tj_src:%d\n", i_src, j_src);
-        printf("i_dst:%d\tj_dst:%d\n", i_dst, j_dst);
-    }
-    /*
-    assert(nlon_src == NI_SRC);
-    assert(nlat_src == NJ_SRC);
-    assert(nlon_dst == iec-isc);
-    assert(nlat_dst == jec-jsc);
+    printf("nlon_src: %d, nlat_src: %d, nlon_dst: %d, nlat_dst: %d", nlon_src, nlat_src, nlon_dst, nlat_dst);
+
+    // nlon/lat_src/dst for bilinear is exactly the size of the indices sent in 
+    assert(nlon_src == NI_SRC+1);
+    assert(nlat_src == NJ_SRC+1);
+    assert(nlon_dst == iec-isc+1);
+    assert(nlat_dst == jec-jsc+1);
     assert(interp_id == 0);
-    */
     
     free(lon_in_1D);
     free(lat_in_1D);
@@ -420,11 +423,6 @@ int test_bilinear_new(int domain_id)
     free(lat_in_2D);
     free(lon_out_2D);
     free(lat_out_2D);
-    free(i_src);
-    free(j_src);
-    free(i_dst);
-    free(j_dst);
-    free(area_frac_dst);
 
     return EXIT_SUCCESS;
 }

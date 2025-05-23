@@ -4,6 +4,8 @@ module c_horiz_interp_mod
   use FMS, only : FmsHorizInterp_type
   use FMS, only : fms_horiz_interp_new
   use FMS, only : fms_string_utils_c2f_string
+  use FMS, only : fms_mpp_error, FATAL
+  use horiz_interp_type_mod, only : CONSERVE, BILINEAR
 
   use c_fms_utils_mod, only : cFMS_pointer_to_array, cFMS_array_to_pointer
   use c_fms_mod, only : MESSAGE_LENGTH
@@ -17,6 +19,7 @@ module c_horiz_interp_mod
   public :: cFMS_create_xgrid_2dx2d_order1
   public :: cFMS_get_maxxgrid
   public :: cFMS_horiz_interp_init
+  public :: cFMS_horiz_interp_dealloc
   public :: cFMS_set_current_interp
 
   public :: cFMS_horiz_interp_2d_cdouble
@@ -107,6 +110,15 @@ contains
     end if
     
   end subroutine cFMS_set_current_interp
+
+  !cFMS_horiz_interp_dealloc
+  subroutine cFMS_horiz_interp_dealloc() bind(C, name="cFMS_horiz_interp_dealloc")
+    implicit none
+
+    if(allocated(interp)) deallocate(interp)
+    nullify(current_interp)
+
+  end subroutine cFMS_horiz_interp_dealloc
 
 #include "c_horiz_interp_new.fh"
 #include "c_get_interp.fh"

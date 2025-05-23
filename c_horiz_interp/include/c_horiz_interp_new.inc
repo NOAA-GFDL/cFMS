@@ -98,13 +98,3 @@ function CFMS_HORIZ_INTERP_NEW_2D_(lon_in_ptr, lon_in_shape, lat_in_ptr, lat_in_
   CFMS_HORIZ_INTERP_NEW_2D_ = current_interp_id
 
 end function CFMS_HORIZ_INTERP_NEW_2D_
-
-
-  
-
-
-
-
-
-
-
