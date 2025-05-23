@@ -36,7 +36,6 @@ int main(){
 
   define_domain(&domain_id);
 
-  printf("domains defined.\n");
 
   printf("starting conservative test...");
   test_conserve = test_conservative_new(domain_id);
@@ -350,8 +349,6 @@ int test_bilinear_new(int domain_id)
     }
     int lat_in_shape[2] = {lon_in_1d_size, lat_in_1d_size};
 
-    printf("out_2d_size: %d, lon_out_1d_size: %d, lat_out_1d_size: %d", out_2d_size, lon_out_1d_size, lat_out_1d_size);
-
     // for the destination, we take the midpoints between 1d source points
     lon_out_2D = (double *)malloc(out_2d_size*sizeof(double));
     for(int i=0; i<lon_out_1d_size; i++)
@@ -379,8 +376,6 @@ int test_bilinear_new(int domain_id)
 
     cFMS_horiz_interp_init(NULL);
 
-    printf("horiz_interp initialized\n");
-
     int interp_id = 0;
     int test_interp_id;
 
@@ -391,22 +386,20 @@ int test_bilinear_new(int domain_id)
                                     interp_method, NULL, NULL, NULL, NULL,
                                     NULL, NULL, NULL);
 
-    printf("horiz_interp initialized, interp id: %d\n", test_interp_id);
-
     int nlon_src;
     int nlat_src;
     int nlon_dst;
     int nlat_dst;
 
     // TODO bilinear uses i_lat/j_lat, getter routine only gets i/j_src/dst
-    // could do a generic interface for this
 
     cFMS_get_interp_cdouble(NULL, NULL, NULL, NULL, NULL, 
         NULL, NULL, NULL, 
         &nlon_src, &nlat_src, &nlon_dst, &nlat_dst, 
         NULL, NULL);
-
-    printf("nlon_src: %d, nlat_src: %d, nlon_dst: %d, nlat_dst: %d", nlon_src, nlat_src, nlon_dst, nlat_dst);
+    
+    double* i_lon = (double *) malloc(nlon_dst*nlat_dst*2*sizeof(double)); 
+    cFMS_get_i_lon_cdouble(&test_interp_id, i_lon);
 
     // nlon/lat_src/dst for bilinear is exactly the size of the indices sent in 
     assert(nlon_src == NI_SRC+1);

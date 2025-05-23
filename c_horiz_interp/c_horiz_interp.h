@@ -40,5 +40,29 @@ extern void cFMS_get_interp_cdouble(int *interp_id, int *i_src, int *j_src, int 
                                             int *nlon_src, int *nlat_src, int *nlon_dst, int *nlat_dst, 
                                             bool *is_allocated, int *interp_method);
 
+// Integer pointer getters
+extern void cFMS_get_i_src(int *interp_id, int *i_src);
+extern void cFMS_get_j_src(int *interp_id, int *j_src);
+extern void cFMS_get_i_dst(int *interp_id, int *i_dst);
+extern void cFMS_get_j_dst(int *interp_id, int *j_dst);
+
+// Area fraction (float/double) pointer getters
+extern void cFMS_get_area_frac_dst_cfloat(int *interp_id, float *area_frac_dst);
+extern void cFMS_get_area_frac_dst_cdouble(int *interp_id, double *area_frac_dst);
+extern void cFMS_get_i_lon_double(int *interp_id, double *i_lon);
+extern void cFMS_get_i_lon_float(int *interp_id, float *i_lon);
+extern void cFMS_get_j_lat_double(int *interp_id, double *j_lat);
+extern void cFMS_get_j_lat_float(int *interp_id, float *j_lat);
+
+// Scalar getters
+extern void cFMS_get_version(int *interp_id, int *version);
+extern void cFMS_get_nxgrid(int *interp_id, int *nxgrid);
+extern void cFMS_get_nlon_src(int *interp_id, int *nlon_src);
+extern void cFMS_get_nlat_src(int *interp_id, int *nlat_src);
+extern void cFMS_get_nlon_dst(int *interp_id, int *nlon_dst);
+extern void cFMS_get_nlat_dst(int *interp_id, int *nlat_dst);
+extern void cFMS_get_is_allocated(int *interp_id, bool *is_allocated);
+extern void cFMS_get_interp_method(int *interp_id, int *interp_method);
+
 
 #endif

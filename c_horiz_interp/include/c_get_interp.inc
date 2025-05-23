@@ -25,8 +25,8 @@ subroutine CFMS_GET_INTERP_NAME_(interp_id, i_src, j_src, i_dst, j_dst, &
     integer, pointer :: i_dst_cf(:)
     integer, pointer :: j_dst_cf(:)
     ! only for bilinear
-    integer, pointer :: i_lon_cf(:,:,:)
-    integer, pointer :: j_lat_cf(:,:,:)
+    CFMS_GET_INTERP_DATA_TYPE_, pointer :: i_lon_cf(:,:,:)
+    CFMS_GET_INTERP_DATA_TYPE_, pointer :: j_lat_cf(:,:,:)
     CFMS_GET_INTERP_DATA_TYPE_, pointer :: area_frac_dst_cf(:)
 
     call cFMS_set_current_interp(interp_id)
@@ -91,3 +91,45 @@ subroutine CFMS_GET_INTERP_NAME_(interp_id, i_src, j_src, i_dst, j_dst, &
 end subroutine CFMS_GET_INTERP_NAME_
 
 
+subroutine CFMS_GET_I_LON_(interp_id, i_lon) bind(C, name=CFMS_GET_I_LON_BINDC_)
+    integer, intent(in) :: interp_id
+    type(c_ptr), intent(in), value :: i_lon
+    CFMS_GET_INTERP_DATA_TYPE_, pointer :: i_lon_cf(:,:,:)
+    call cFMS_set_current_interp(interp_id)
+    if(C_ASSOCIATED(i_lon)) then
+        call C_F_POINTER(i_lon, i_lon_cf, shape=(/current_interp%nlon_dst, current_interp%nlat_dst, 2/))
+        i_lon_cf = current_interp%i_lon
+    endif
+    NULLIFY(i_lon_cf)
+end subroutine CFMS_GET_I_LON_
+
+subroutine CFMS_GET_J_LAT_(interp_id, j_lat) bind(C)
+    integer, intent(in) :: interp_id
+    type(c_ptr), intent(in), value :: j_lat
+    CFMS_GET_INTERP_DATA_TYPE_, pointer :: j_lat_cf(:,:,:)
+    call cFMS_set_current_interp(interp_id)
+    if(C_ASSOCIATED(j_lat)) then
+        call C_F_POINTER(j_lat, j_lat_cf, shape=(/current_interp%nlon_dst, current_interp%nlat_dst, 2/))
+        j_lat_cf = current_interp%j_lat
+    end if
+    NULLIFY(j_lat_cf)
+end subroutine CFMS_GET_J_LAT_
+
+subroutine CFMS_GET_AREA_FRAC_DST_(interp_id, area_frac_dst) bind(C)
+    integer, intent(in) :: interp_id
+    type(c_ptr), intent(in), value :: area_frac_dst
+    CFMS_GET_INTERP_DATA_TYPE_, pointer :: area_frac_dst_cf(:)
+    call cFMS_set_current_interp(interp_id)
+    if(C_ASSOCIATED(area_frac_dst)) then
+        call C_F_POINTER(area_frac_dst, area_frac_dst_cf, shape=(/current_interp%nxgrid/))
+        area_frac_dst_cf = current_interp%CFMS_GET_INTERP_OBJ_DATA_TYPE_%area_frac_dst
+    end if
+    NULLIFY(area_frac_dst_cf)
+end subroutine CFMS_GET_AREA_FRAC_DST_
+
+  subroutine CFMS_GET_IS_ALLOCATED_(interp_id, is_allocated) bind(C)
+      integer, intent(in) :: interp_id
+      logical(c_bool), intent(out) :: is_allocated
+      call cFMS_set_current_interp(interp_id)
+      is_allocated = current_interp%CFMS_GET_INTERP_OBJ_DATA_TYPE_%is_allocated
+  end subroutine CFMS_GET_IS_ALLOCATED_

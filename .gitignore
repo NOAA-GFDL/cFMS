@@ -20,3 +20,4 @@ config.sub
 autom4te.cache
 missing
 ltmain.sh
+.vscode

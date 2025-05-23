@@ -3,7 +3,16 @@
 # undef CFMS_GET_INTERP_BINDC_ 
 # undef CFMS_GET_INTERP_DATA_TYPE_ 
 # undef CFMS_GET_INTERP_OBJ_DATA_TYPE_ 
+# undef CFMS_GET_I_LON_
+# undef CFMS_GET_J_LAT_
+# undef CFMS_GET_AREA_FRAC_DST_
+# undef CFMS_GET_IS_ALLOCATED_
 # define CFMS_GET_INTERP_NAME_ cFMS_get_interp_cdouble
+# define CFMS_GET_I_LON_ cFMS_get_i_lon_double
+# define CFMS_GET_I_LON_BINDC_ "cFMS_get_i_lon_cdouble"
+# define CFMS_GET_J_LAT_ cFMS_get_j_lat_double
+# define CFMS_GET_AREA_FRAC_DST_ cFMS_get_area_frac_dst_double
+# define CFMS_GET_IS_ALLOCATED_ cFMS_get_is_allocated_double
 # define CFMS_GET_INTERP_BINDC_ "cFMS_get_interp_cdouble"
 # define CFMS_GET_INTERP_DATA_TYPE_ real(c_double)
 # define CFMS_GET_INTERP_OBJ_DATA_TYPE_ horizInterpReals8_type
@@ -14,7 +23,16 @@
 # undef CFMS_GET_INTERP_BINDC_ 
 # undef CFMS_GET_INTERP_DATA_TYPE_ 
 # undef CFMS_GET_INTERP_OBJ_DATA_TYPE_ 
+# undef CFMS_GET_I_LON_
+# undef CFMS_GET_J_LAT_
+# undef CFMS_GET_AREA_FRAC_DST_
+# undef CFMS_GET_IS_ALLOCATED_
 # define CFMS_GET_INTERP_NAME_ cFMS_get_interp_cfloat
+# define CFMS_GET_I_LON_ cFMS_get_i_lon_float
+# define CFMS_GET_I_LON_BINDC_ "cFMS_get_i_lon_cfloat"
+# define CFMS_GET_J_LAT_ cFMS_get_j_lat_float
+# define CFMS_GET_AREA_FRAC_DST_ cFMS_get_area_frac_dst_float
+# define CFMS_GET_IS_ALLOCATED_ cFMS_get_is_allocated_float
 # define CFMS_GET_INTERP_BINDC_ "cFMS_get_interp_cfloat"
 # define CFMS_GET_INTERP_DATA_TYPE_ real(c_float)
 # define CFMS_GET_INTERP_OBJ_DATA_TYPE_ horizInterpReals4_type
