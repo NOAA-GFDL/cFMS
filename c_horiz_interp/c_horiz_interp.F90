@@ -37,13 +37,11 @@ module c_horiz_interp_mod
   public :: cFMS_get_current_interp
   public :: cFMS_get_interp_method
 
-  public :: cFMS_get_i_lon_double
-  public :: cFMS_get_j_lat_double
+  public :: cFMS_get_i_lon
+  public :: cFMS_get_j_lat
   public :: cFMS_get_area_frac_dst_double
   public :: cFMS_get_area_frac_dst_float
   public :: cFMS_get_is_allocated_double
-  public :: cFMS_get_i_lon_float
-  public :: cFMS_get_j_lat_float
   public :: cFMS_get_is_allocated_float
 
   type(FmsHorizInterp_type), allocatable, target, public :: interp(:)

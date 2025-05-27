@@ -421,8 +421,8 @@ int test_bilinear_new(int domain_id)
     
     double* i_lon = (double *) malloc(nlon_dst*nlat_dst*2*sizeof(double)); 
     double* j_lat = (double *) malloc(nlon_dst*nlat_dst*2*sizeof(double)); 
-    cFMS_get_i_lon_cdouble(&test_interp_id, i_lon);
-    cFMS_get_j_lat_cdouble(&test_interp_id, j_lat);
+    cFMS_get_i_lon(&test_interp_id, i_lon);
+    cFMS_get_j_lat(&test_interp_id, j_lat);
     double* area_frac_dst ;
     double* wti = (double *) malloc(nlon_dst*nlat_dst*2*sizeof(double)); 
     double* wtj = (double *) malloc(nlon_dst*nlat_dst*2*sizeof(double)); 
