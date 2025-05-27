@@ -7,8 +7,8 @@ subroutine CFMS_GET_INTERP_NAME_(interp_id, i_src, j_src, i_dst, j_dst, &
     integer, intent(in), optional :: interp_id
     type(c_ptr), intent(in), value :: i_src
     type(c_ptr), intent(in), value :: j_src
-    type(c_ptr), intent(in), value :: i_dst !< if bilinear is used, this returns i_lon instead 
-    type(c_ptr), intent(in), value :: j_dst !< if bilinear is used, this returns j_lat instead
+    type(c_ptr), intent(in), value :: i_dst
+    type(c_ptr), intent(in), value :: j_dst
     type(c_ptr), intent(in), value :: area_frac_dst
     integer, intent(out), optional :: version
     integer, intent(out), optional :: nxgrid
@@ -42,23 +42,13 @@ subroutine CFMS_GET_INTERP_NAME_(interp_id, i_src, j_src, i_dst, j_dst, &
     end if
 
     if(C_ASSOCIATED(i_dst)) then
-        if(current_interp%interp_method .eq. CONSERVE) then
-            call C_F_POINTER(i_dst, i_dst_cf, shape=(/current_interp%nxgrid/))
-            i_dst_cf = current_interp%i_dst
-        else if(current_interp%interp_method .eq. BILINEAR) then
-            call C_F_POINTER(i_dst, i_lon_cf, shape=(/current_interp%nlon_dst, current_interp%nlat_dst, 2/))
-            i_lon_cf = current_interp%i_lon
-        endif
+        call C_F_POINTER(i_dst, i_dst_cf, shape=(/current_interp%nxgrid/))
+        i_dst_cf = current_interp%i_dst
     end if
 
     if(C_ASSOCIATED(j_dst)) then
-        if(current_interp%interp_method .eq. CONSERVE) then
-            call C_F_POINTER(j_dst, j_dst_cf, shape=(/current_interp%nxgrid/))
-            j_dst_cf = current_interp%j_dst
-        else if(current_interp%interp_method .eq. BILINEAR) then
-            call C_F_POINTER(j_dst, j_lat_cf, shape=(/current_interp%nlon_dst, current_interp%nlat_dst, 2/))
-            j_lat_cf = current_interp%j_lat
-        endif
+        call C_F_POINTER(j_dst, j_dst_cf, shape=(/current_interp%nxgrid/))
+        j_dst_cf = current_interp%j_dst
     end if
 
     if(C_ASSOCIATED(area_frac_dst)) then
@@ -90,30 +80,6 @@ subroutine CFMS_GET_INTERP_NAME_(interp_id, i_src, j_src, i_dst, j_dst, &
 
 end subroutine CFMS_GET_INTERP_NAME_
 
-
-subroutine CFMS_GET_I_LON_(interp_id, i_lon) bind(C, name=CFMS_GET_I_LON_BINDC_)
-    integer, intent(in) :: interp_id
-    type(c_ptr), intent(in), value :: i_lon
-    CFMS_GET_INTERP_DATA_TYPE_, pointer :: i_lon_cf(:,:,:)
-    call cFMS_set_current_interp(interp_id)
-    if(C_ASSOCIATED(i_lon)) then
-        call C_F_POINTER(i_lon, i_lon_cf, shape=(/current_interp%nlon_dst, current_interp%nlat_dst, 2/))
-        i_lon_cf = current_interp%i_lon
-    endif
-    NULLIFY(i_lon_cf)
-end subroutine CFMS_GET_I_LON_
-
-subroutine CFMS_GET_J_LAT_(interp_id, j_lat) bind(C, name=CFMS_GET_J_LAT_BINDC_)
-    integer, intent(in) :: interp_id
-    type(c_ptr), intent(in), value :: j_lat
-    CFMS_GET_INTERP_DATA_TYPE_, pointer :: j_lat_cf(:,:,:)
-    call cFMS_set_current_interp(interp_id)
-    if(C_ASSOCIATED(j_lat)) then
-        call C_F_POINTER(j_lat, j_lat_cf, shape=(/current_interp%nlon_dst, current_interp%nlat_dst, 2/))
-        j_lat_cf = current_interp%j_lat
-    end if
-    NULLIFY(j_lat_cf)
-end subroutine CFMS_GET_J_LAT_
 
 subroutine CFMS_GET_AREA_FRAC_DST_(interp_id, area_frac_dst) bind(C, name=CFMS_GET_AREA_FRAC_DST_BINDC_)
     integer, intent(in) :: interp_id

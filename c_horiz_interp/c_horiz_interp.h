@@ -45,14 +45,12 @@ extern void cFMS_get_i_src(int *interp_id, int *i_src);
 extern void cFMS_get_j_src(int *interp_id, int *j_src);
 extern void cFMS_get_i_dst(int *interp_id, int *i_dst);
 extern void cFMS_get_j_dst(int *interp_id, int *j_dst);
+extern void cFMS_get_i_lon(int *interp_id, int *i_lon);
+extern void cFMS_get_j_lat(int *interp_id, int *j_lat);
 
 // float/double pointer getters
 extern void cFMS_get_area_frac_dst_cfloat(int *interp_id, float *area_frac_dst);
 extern void cFMS_get_area_frac_dst_cdouble(int *interp_id, double *area_frac_dst);
-extern void cFMS_get_i_lon_cdouble(int *interp_id, double *i_lon);
-extern void cFMS_get_i_lon_cfloat(int *interp_id, float *i_lon);
-extern void cFMS_get_j_lat_cdouble(int *interp_id, double *j_lat);
-extern void cFMS_get_j_lat_cfloat(int *interp_id, float *j_lat);
 extern void cFMS_get_wti_cdouble(int *interp_id, double *wti);
 extern void cFMS_get_wti_cfloat(int *interp_id, float *wti);
 extern void cFMS_get_wtj_cdouble(int *interp_id, double *wtj);

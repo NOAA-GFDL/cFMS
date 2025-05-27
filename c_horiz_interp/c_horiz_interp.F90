@@ -162,6 +162,31 @@ contains
       NULLIFY(j_src_cf)
   end subroutine cFMS_get_j_src
 
+  subroutine cFMS_get_i_lon(interp_id, i_lon) bind(C, name="cFMS_get_i_lon")
+      integer, intent(in) :: interp_id
+      type(c_ptr), intent(in), value :: i_lon
+      integer, pointer :: i_lon_cf(:,:,:)
+      call cFMS_set_current_interp(interp_id)
+      if(C_ASSOCIATED(i_lon)) then
+          call C_F_POINTER(i_lon, i_lon_cf, shape=(/current_interp%nlon_dst, current_interp%nlat_dst, 2/))
+          i_lon_cf = current_interp%i_lon
+      endif
+      NULLIFY(i_lon_cf)
+  end subroutine cFMS_get_i_lon
+
+  subroutine cFMS_get_j_lat(interp_id, j_lat) bind(C, name="cFMS_get_j_lat")
+      integer, intent(in) :: interp_id
+      type(c_ptr), intent(in), value :: j_lat
+      integer, pointer :: j_lat_cf(:,:,:)
+      call cFMS_set_current_interp(interp_id)
+      if(C_ASSOCIATED(j_lat)) then
+          call C_F_POINTER(j_lat, j_lat_cf, shape=(/current_interp%nlon_dst, current_interp%nlat_dst, 2/))
+          j_lat_cf = current_interp%j_lat
+      end if
+      NULLIFY(j_lat_cf)
+  end subroutine cfms_get_j_lat
+
+
   subroutine cFMS_get_i_dst(interp_id, i_dst) bind(C, name="cFMS_get_i_dst")
       integer, intent(in) :: interp_id
       type(c_ptr), intent(in), value :: i_dst
