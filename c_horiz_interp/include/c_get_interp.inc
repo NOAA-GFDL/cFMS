@@ -103,7 +103,7 @@ subroutine CFMS_GET_I_LON_(interp_id, i_lon) bind(C, name=CFMS_GET_I_LON_BINDC_)
     NULLIFY(i_lon_cf)
 end subroutine CFMS_GET_I_LON_
 
-subroutine CFMS_GET_J_LAT_(interp_id, j_lat) bind(C)
+subroutine CFMS_GET_J_LAT_(interp_id, j_lat) bind(C, name=CFMS_GET_J_LAT_BINDC_)
     integer, intent(in) :: interp_id
     type(c_ptr), intent(in), value :: j_lat
     CFMS_GET_INTERP_DATA_TYPE_, pointer :: j_lat_cf(:,:,:)
@@ -115,7 +115,7 @@ subroutine CFMS_GET_J_LAT_(interp_id, j_lat) bind(C)
     NULLIFY(j_lat_cf)
 end subroutine CFMS_GET_J_LAT_
 
-subroutine CFMS_GET_AREA_FRAC_DST_(interp_id, area_frac_dst) bind(C)
+subroutine CFMS_GET_AREA_FRAC_DST_(interp_id, area_frac_dst) bind(C, name=CFMS_GET_AREA_FRAC_DST_BINDC_)
     integer, intent(in) :: interp_id
     type(c_ptr), intent(in), value :: area_frac_dst
     CFMS_GET_INTERP_DATA_TYPE_, pointer :: area_frac_dst_cf(:)
@@ -127,9 +127,33 @@ subroutine CFMS_GET_AREA_FRAC_DST_(interp_id, area_frac_dst) bind(C)
     NULLIFY(area_frac_dst_cf)
 end subroutine CFMS_GET_AREA_FRAC_DST_
 
-  subroutine CFMS_GET_IS_ALLOCATED_(interp_id, is_allocated) bind(C)
+  subroutine CFMS_GET_IS_ALLOCATED_(interp_id, is_allocated) bind(C, name=CFMS_GET_IS_ALLOCATED_BINDC_)
       integer, intent(in) :: interp_id
       logical(c_bool), intent(out) :: is_allocated
       call cFMS_set_current_interp(interp_id)
       is_allocated = current_interp%CFMS_GET_INTERP_OBJ_DATA_TYPE_%is_allocated
   end subroutine CFMS_GET_IS_ALLOCATED_
+
+subroutine CFMS_GET_WTI_(interp_id, wti) bind(C, name=CFMS_GET_WTI_BINDC_)
+    integer, intent(in) :: interp_id
+    type(c_ptr), intent(in), value :: wti
+    CFMS_GET_INTERP_DATA_TYPE_, pointer :: wti_cf(:,:,:)
+    call cFMS_set_current_interp(interp_id)
+    if(C_ASSOCIATED(wti)) then
+        call C_F_POINTER(wti, wti_cf, shape=(/current_interp%nlon_dst, current_interp%nlat_dst, 2/))
+        wti_cf = current_interp%CFMS_GET_INTERP_OBJ_DATA_TYPE_%wti
+    endif
+    NULLIFY(wti_cf)
+end subroutine CFMS_GET_WTI_
+
+subroutine CFMS_GET_WTJ_(interp_id, wtj) bind(C, name=CFMS_GET_WTJ_BINDC_)
+    integer, intent(in) :: interp_id
+    type(c_ptr), intent(in), value :: wtj
+    CFMS_GET_INTERP_DATA_TYPE_, pointer :: wtj_cf(:,:,:)
+    call cFMS_set_current_interp(interp_id)
+    if(C_ASSOCIATED(wtj)) then
+        call C_F_POINTER(wtj, wtj_cf, shape=(/current_interp%nlon_dst, current_interp%nlat_dst, 2/))
+        wtj_cf = current_interp%CFMS_GET_INTERP_OBJ_DATA_TYPE_%wtj
+    end if
+    NULLIFY(wtj_cf)
+end subroutine CFMS_GET_WTJ_

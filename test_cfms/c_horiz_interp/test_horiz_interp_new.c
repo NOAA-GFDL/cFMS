@@ -391,15 +391,34 @@ int test_bilinear_new(int domain_id)
     int nlon_dst;
     int nlat_dst;
 
-    // TODO bilinear uses i_lat/j_lat, getter routine only gets i/j_src/dst
 
+    // make sure all the getters work
     cFMS_get_interp_cdouble(NULL, NULL, NULL, NULL, NULL, 
         NULL, NULL, NULL, 
         &nlon_src, &nlat_src, &nlon_dst, &nlat_dst, 
         NULL, NULL);
     
     double* i_lon = (double *) malloc(nlon_dst*nlat_dst*2*sizeof(double)); 
+    double* j_lat = (double *) malloc(nlon_dst*nlat_dst*2*sizeof(double)); 
     cFMS_get_i_lon_cdouble(&test_interp_id, i_lon);
+    cFMS_get_j_lat_cdouble(&test_interp_id, j_lat);
+    double* area_frac_dst ;
+    double* wti = (double *) malloc(nlon_dst*nlat_dst*2*sizeof(double)); 
+    double* wtj = (double *) malloc(nlon_dst*nlat_dst*2*sizeof(double)); 
+    cFMS_get_wti_cdouble(&test_interp_id, wti);
+    cFMS_get_wtj_cdouble(&test_interp_id, wtj);
+
+    bool is_allocated = false;
+    cFMS_get_is_allocated_cdouble(&test_interp_id, &is_allocated);
+    assert(is_allocated);
+
+    // since output grid is the midpoints, weights will all be 0.5
+    const double tolerance = 1.0e-10;
+    const double expected  = 0.5;
+    for(int i= 0; i<nlon_dst*nlat_dst*2; i++){
+        assert(abs(wti[i] - expected) < tolerance);
+        assert(abs(wtj[i] - expected) < tolerance);
+    }
 
     // nlon/lat_src/dst for bilinear is exactly the size of the indices sent in 
     assert(nlon_src == NI_SRC+1);
@@ -416,6 +435,10 @@ int test_bilinear_new(int domain_id)
     free(lat_in_2D);
     free(lon_out_2D);
     free(lat_out_2D);
+    free(i_lon);
+    free(j_lat);
+    free(wti);
+    free(wtj);
 
     return EXIT_SUCCESS;
 }
