@@ -25,8 +25,6 @@ subroutine CFMS_GET_INTERP_NAME_(interp_id, i_src, j_src, i_dst, j_dst, &
     integer, pointer :: i_dst_cf(:)
     integer, pointer :: j_dst_cf(:)
     ! only for bilinear
-    CFMS_GET_INTERP_DATA_TYPE_, pointer :: i_lon_cf(:,:,:)
-    CFMS_GET_INTERP_DATA_TYPE_, pointer :: j_lat_cf(:,:,:)
     CFMS_GET_INTERP_DATA_TYPE_, pointer :: area_frac_dst_cf(:)
 
     call cFMS_set_current_interp(interp_id)

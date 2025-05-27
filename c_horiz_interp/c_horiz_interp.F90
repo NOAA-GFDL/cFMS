@@ -5,7 +5,6 @@ module c_horiz_interp_mod
   use FMS, only : fms_horiz_interp_new
   use FMS, only : fms_string_utils_c2f_string
   use FMS, only : fms_mpp_error, FATAL
-  use horiz_interp_type_mod, only : CONSERVE, BILINEAR
 
   use c_fms_utils_mod, only : cFMS_pointer_to_array, cFMS_array_to_pointer
   use c_fms_mod, only : MESSAGE_LENGTH
@@ -138,75 +137,44 @@ contains
 
   subroutine cFMS_get_i_src(interp_id, i_src) bind(C, name="cFMS_get_i_src")
       integer, intent(in) :: interp_id
-      type(c_ptr), intent(in), value :: i_src
-      integer, pointer :: i_src_cf(:)
+      integer, intent(out):: i_src(current_interp%nxgrid)
       call cFMS_set_current_interp(interp_id)
-      if(C_ASSOCIATED(i_src)) then
-          call C_F_POINTER(i_src, i_src_cf, shape=(/current_interp%nxgrid/))
-          i_src_cf = current_interp%i_src
-      end if
-      NULLIFY(i_src_cf)
+      i_src = current_interp%i_src
   end subroutine cFMS_get_i_src
 
   subroutine cFMS_get_j_src(interp_id, j_src) bind(C, name="cFMS_get_j_src")
       integer, intent(in) :: interp_id
-      type(c_ptr), intent(in), value :: j_src
-      integer, pointer :: j_src_cf(:)
+      integer, intent(out) :: j_src(current_interp%nxgrid)
       call cFMS_set_current_interp(interp_id)
-      if(C_ASSOCIATED(j_src)) then
-          call C_F_POINTER(j_src, j_src_cf, shape=(/current_interp%nxgrid/))
-          j_src_cf = current_interp%j_src
-      end if
-      NULLIFY(j_src_cf)
+      j_src = current_interp%j_src
   end subroutine cFMS_get_j_src
 
   subroutine cFMS_get_i_lon(interp_id, i_lon) bind(C, name="cFMS_get_i_lon")
       integer, intent(in) :: interp_id
-      type(c_ptr), intent(in), value :: i_lon
-      integer, pointer :: i_lon_cf(:,:,:)
+      integer, intent(out) :: i_lon(current_interp%nlon_dst, current_interp%nlat_dst, 2)
       call cFMS_set_current_interp(interp_id)
-      if(C_ASSOCIATED(i_lon)) then
-          call C_F_POINTER(i_lon, i_lon_cf, shape=(/current_interp%nlon_dst, current_interp%nlat_dst, 2/))
-          i_lon_cf = current_interp%i_lon
-      endif
-      NULLIFY(i_lon_cf)
+      i_lon = current_interp%i_lon
   end subroutine cFMS_get_i_lon
 
   subroutine cFMS_get_j_lat(interp_id, j_lat) bind(C, name="cFMS_get_j_lat")
       integer, intent(in) :: interp_id
-      type(c_ptr), intent(in), value :: j_lat
-      integer, pointer :: j_lat_cf(:,:,:)
+      integer :: j_lat(current_interp%nlon_dst, current_interp%nlat_dst, 2)
       call cFMS_set_current_interp(interp_id)
-      if(C_ASSOCIATED(j_lat)) then
-          call C_F_POINTER(j_lat, j_lat_cf, shape=(/current_interp%nlon_dst, current_interp%nlat_dst, 2/))
-          j_lat_cf = current_interp%j_lat
-      end if
-      NULLIFY(j_lat_cf)
+      j_lat = current_interp%j_lat
   end subroutine cfms_get_j_lat
-
 
   subroutine cFMS_get_i_dst(interp_id, i_dst) bind(C, name="cFMS_get_i_dst")
       integer, intent(in) :: interp_id
-      type(c_ptr), intent(in), value :: i_dst
-      integer, pointer :: i_dst_cf(:)
+      integer :: i_dst(current_interp%nxgrid)
       call cFMS_set_current_interp(interp_id)
-      if(C_ASSOCIATED(i_dst)) then
-        call C_F_POINTER(i_dst, i_dst_cf, shape=(/current_interp%nxgrid/))
-        i_dst_cf = current_interp%i_dst
-      end if
-      NULLIFY(i_dst_cf)
+      i_dst = current_interp%i_dst
   end subroutine cFMS_get_i_dst
 
   subroutine cFMS_get_j_dst(interp_id, j_dst) bind(C, name="cFMS_get_j_dst")
       integer, intent(in) :: interp_id
-      type(c_ptr), intent(in), value :: j_dst
-      integer, pointer :: j_dst_cf(:)
+      integer :: j_dst(current_interp%nxgrid)
       call cFMS_set_current_interp(interp_id)
-      if(C_ASSOCIATED(j_dst)) then
-        call C_F_POINTER(j_dst, j_dst_cf, shape=(/current_interp%nxgrid/))
-        j_dst_cf = current_interp%j_dst
-      end if
-      NULLIFY(j_dst_cf)
+      j_dst = current_interp%j_dst
   end subroutine cFMS_get_j_dst
 
   subroutine cFMS_get_version(interp_id, version) bind(C, name="cFMS_get_version")
@@ -250,7 +218,6 @@ contains
       call cFMS_set_current_interp(interp_id)
       nlat_dst = current_interp%nlat_dst
   end subroutine cFMS_get_nlat_dst
-
 
   subroutine cFMS_get_interp_method(interp_id, interp_method) bind(C, name="cFMS_get_interp_method")
       integer, intent(in) :: interp_id

@@ -36,7 +36,6 @@ int main(){
 
   define_domain(&domain_id);
 
-
   printf("starting conservative test...");
   test_conserve = test_conservative_new(domain_id);
   printf("done.\n");
@@ -80,7 +79,7 @@ void define_domain(int *domain_id)
   cdomain.xflags = &cyclic_global_domain;
   cdomain.yflags = &cyclic_global_domain;
 
-  cFMS_define_domains_easy(cdomain);
+  domain_id[0] = cFMS_define_domains_easy(cdomain);
 }
 
 int test_conservative_new(int domain_id)
@@ -315,15 +314,6 @@ int test_bilinear_new(int domain_id)
     dlat_src = (lat_src_end-lat_src_beg)/NJ_SRC;
     dlon_dst = dlon_src; 
     dlat_dst = dlat_src;
-    //dlon_dst = (lon_dst_end-lon_dst_beg)/NI_DST;
-    //dlat_dst = (lat_dst_end-lat_dst_beg)/NJ_DST;
-
-    /* from conservative (doesnt work with bilinear (output grid should locate inside input grid error))
-    dlon_src = (lon_src_end-lon_src_beg)/NI_SRC;
-    dlat_src = (lat_src_end-lat_src_beg)/NJ_SRC;
-    dlon_dst = (lon_dst_end-lon_dst_beg)/NI_DST;
-    dlat_dst = (lat_dst_end-lat_dst_beg)/NJ_DST;
-    */
     
     cFMS_get_compute_domain(&domain_id, &isc, &iec, &jsc, &jec, &xsize_c, xmax_size, &ysize_c, ymax_size,
         x_is_global, y_is_global, tile_count, position, &whalo, &shalo);
@@ -419,8 +409,8 @@ int test_bilinear_new(int domain_id)
         &nlon_src, &nlat_src, &nlon_dst, &nlat_dst, 
         NULL, NULL);
     
-    double* i_lon = (double *) malloc(nlon_dst*nlat_dst*2*sizeof(double)); 
-    double* j_lat = (double *) malloc(nlon_dst*nlat_dst*2*sizeof(double)); 
+    int* i_lon = (int*) malloc(nlon_dst*nlat_dst*2*sizeof(int)); 
+    int* j_lat = (int*) malloc(nlon_dst*nlat_dst*2*sizeof(int)); 
     cFMS_get_i_lon(&test_interp_id, i_lon);
     cFMS_get_j_lat(&test_interp_id, j_lat);
     double* area_frac_dst ;
