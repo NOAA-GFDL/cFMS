@@ -38,11 +38,15 @@ AC_CANONICAL_TARGET
 
 AC_CONFIG_MACRO_DIR([m4])
 
+# needed for FMS subpackage
+AC_CONFIG_AUX_DIR([.])
+
 AM_INIT_AUTOMAKE([foreign dist-zip subdir-objects])
 
 # Set up libtool.
 LT_PREREQ([2.4])
 LT_INIT()
+
 
 # If building on a Cray PE system, check if CRAYPE_LINK_TYPE is 'static'.  If it
 # is, then disable building shared libraries.  Note, the user can still override
@@ -175,6 +179,18 @@ GX_FC_CHECK_MOD([netcdf], [], [], [AC_MSG_ERROR([Can't find the netCDF Fortran m
 GX_FORTRAN_SEARCH_LIBS([nf90_create], [netcdff], [use netcdf], [iret = nf90_create('foo.nc', 1, ncid)], [],
   [AC_MSG_ERROR([Can't find the netCDF Fortran library.  Set LDFLAGS/LIBS])])
 
+
+# Add FMS as a subpackage and set flags for the subdirectories to find it (builds on top of FMS source)
+AC_MSG_CHECKING([if FMS library is available])
+GX_LIB_FMS()
+AC_MSG_RESULT([$with_fms])
+if test "x$with_fms" = xno; then
+  AC_CONFIG_SUBDIRS([FMS])
+  AC_SUBST([LIBFMS_FCFLAGS], ["-I\$(abs_top_builddir)/FMS/include -I\$(abs_top_builddir)/FMS/.mods"])
+  AC_SUBST([LIBFMS_LIBS], ["-L\$(abs_top_builddir)/FMS/libFMS -lFMS"])
+fi
+AM_CONDITIONAL(BUILD_FMS, [test "x$with_fms" = xno])
+
 # Check if we get a floating point exception with netcdf
 # this will only get triggered if you have FPE traps enabled via FCFLAGS
 AC_MSG_CHECKING([if HDF5 version causes floating point exceptions with set flags])
@@ -189,15 +205,6 @@ if test $hdf5_fpe_bug = yes; then
 NetCDF must be built with a HDF5 version other than 1.14.3 to support floating point exception traps.])
 fi
 
-# check if we have FMS!
-# TODO change m4 macro to default to on
-# currently the script will always fail if --with-fms is omitted
-AC_MSG_CHECKING([if FMS library is available])
-GX_LIB_FMS()
-AC_MSG_RESULT([$with_fms])
-if test "x$with_fms" = xno; then
-  AC_MSG_ERROR([No FMS library found. FMS install path should be specified via --with-fms=<path> option when configuring.])
-fi
 
 
 # Check if Fortran compiler has Cray pointer support
