@@ -26,7 +26,7 @@ AM_FCFLAGS = $(LIBFMS_FCFLAGS)
 AM_LDFLAGS = $(LIBFMS_LIBS)
 
 # Link to the FMS library.
-LDADD = ${top_builddir}/libcFMS/libcFMS.la
+LDADD = ${abs_top_builddir}/libcFMS/libcFMS.la
 
 check_PROGRAMS = test_create_xgrid \
   test_horiz_interp_new

@@ -32,7 +32,12 @@ DOCS = docs
 endif
 
 # Make targets will be run in each subdirectory. Order is significant.
-SUBDIRS = c_fms_utils \
+if BUILD_FMS
+SUBDIRS = FMS
+else
+SUBDIRS =
+endif
+SUBDIRS += c_fms_utils \
           c_constants \
           c_fms \
           c_data_override \
@@ -43,8 +48,9 @@ SUBDIRS = c_fms_utils \
           test_cfms
 
 ## Build libFMS module
-AM_CPPFLAGS = -I${top_srcdir}/include
+AM_CPPFLAGS = -I${abs_top_srcdir}/include -I$(abs_top_builddir)/FMS/include
 AM_FCFLAGS = $(FC_MODINC). $(FC_MODOUT)$(MODDIR)
+AM_LDFLAGS = -L$(abs_top_builddir)/libFMS -lFMS
 
 include $(top_srcdir)/mkmods.mk
 
