@@ -231,6 +231,27 @@ int test_conservative_new(int domain_id)
     assert(nlon_dst == iec-isc);
     assert(nlat_dst == jec-jsc);
     assert(interp_id == 0);
+
+    // test individual getters
+    int version, interp_method_enum;
+    cFMS_get_i_src(&test_interp_id, i_src);
+    cFMS_get_j_src(&test_interp_id, i_src);
+    cFMS_get_i_dst(&test_interp_id, i_dst);
+    cFMS_get_j_dst(&test_interp_id, i_dst);
+    cFMS_get_version(&test_interp_id, &version);
+    cFMS_get_nxgrid(&test_interp_id, &nxgrid);
+    cFMS_get_nlon_src(&test_interp_id, &nlon_src);
+    cFMS_get_nlat_src(&test_interp_id, &nlat_src);
+    cFMS_get_nlon_dst(&test_interp_id, &nlon_dst);
+    cFMS_get_nlat_dst(&test_interp_id, &nlat_dst);
+    cFMS_get_interp_method(&test_interp_id, &interp_method_enum);
+
+    assert(nlon_src == NI_SRC);
+    assert(nlat_src == NJ_SRC);
+    assert(nlon_dst == iec-isc);
+    assert(nlat_dst == jec-jsc);
+    assert(interp_method_enum == 1); //1 is the enum for conservative set in horiz_interp_types.F90
+    assert(version == 2);
     
     free(lon_in_1D);
     free(lat_in_1D);

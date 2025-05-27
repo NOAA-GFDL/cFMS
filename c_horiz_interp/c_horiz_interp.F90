@@ -138,7 +138,7 @@ contains
 
   end subroutine cFMS_horiz_interp_dealloc
 
-  subroutine cFMS_get_i_src(interp_id, i_src) bind(C)
+  subroutine cFMS_get_i_src(interp_id, i_src) bind(C, name="cFMS_get_i_src")
       integer, intent(in) :: interp_id
       type(c_ptr), intent(in), value :: i_src
       integer, pointer :: i_src_cf(:)
@@ -150,7 +150,7 @@ contains
       NULLIFY(i_src_cf)
   end subroutine cFMS_get_i_src
 
-  subroutine cFMS_get_j_src(interp_id, j_src) bind(C)
+  subroutine cFMS_get_j_src(interp_id, j_src) bind(C, name="cFMS_get_j_src")
       integer, intent(in) :: interp_id
       type(c_ptr), intent(in), value :: j_src
       integer, pointer :: j_src_cf(:)
@@ -162,7 +162,7 @@ contains
       NULLIFY(j_src_cf)
   end subroutine cFMS_get_j_src
 
-  subroutine cFMS_get_i_dst(interp_id, i_dst) bind(C)
+  subroutine cFMS_get_i_dst(interp_id, i_dst) bind(C, name="cFMS_get_i_dst")
       integer, intent(in) :: interp_id
       type(c_ptr), intent(in), value :: i_dst
       integer, pointer :: i_dst_cf(:)
@@ -174,7 +174,7 @@ contains
       NULLIFY(i_dst_cf)
   end subroutine cFMS_get_i_dst
 
-  subroutine cFMS_get_j_dst(interp_id, j_dst) bind(C)
+  subroutine cFMS_get_j_dst(interp_id, j_dst) bind(C, name="cFMS_get_j_dst")
       integer, intent(in) :: interp_id
       type(c_ptr), intent(in), value :: j_dst
       integer, pointer :: j_dst_cf(:)
@@ -186,42 +186,42 @@ contains
       NULLIFY(j_dst_cf)
   end subroutine cFMS_get_j_dst
 
-  subroutine cFMS_get_version(interp_id, version) bind(C)
+  subroutine cFMS_get_version(interp_id, version) bind(C, name="cFMS_get_version")
       integer, intent(in) :: interp_id
       integer, intent(out) :: version
       call cFMS_set_current_interp(interp_id)
       version = current_interp%version
   end subroutine cFMS_get_version
 
-  subroutine cFMS_get_nxgrid(interp_id, nxgrid) bind(C)
+  subroutine cFMS_get_nxgrid(interp_id, nxgrid) bind(C, name="cFMS_get_nxgrid")
       integer, intent(in) :: interp_id
       integer, intent(out) :: nxgrid
       call cFMS_set_current_interp(interp_id)
       nxgrid = current_interp%nxgrid
   end subroutine cFMS_get_nxgrid
 
-  subroutine cFMS_get_nlon_src(interp_id, nlon_src) bind(C)
+  subroutine cFMS_get_nlon_src(interp_id, nlon_src) bind(C, name="cFMS_get_nlon_src")
       integer, intent(in) :: interp_id
       integer, intent(out) :: nlon_src
       call cFMS_set_current_interp(interp_id)
       nlon_src = current_interp%nlon_src
   end subroutine cFMS_get_nlon_src
 
-  subroutine cFMS_get_nlat_src(interp_id, nlat_src) bind(C)
+  subroutine cFMS_get_nlat_src(interp_id, nlat_src) bind(C, name="cFMS_get_nlat_src")
       integer, intent(in) :: interp_id
       integer, intent(out) :: nlat_src
       call cFMS_set_current_interp(interp_id)
       nlat_src = current_interp%nlat_src
   end subroutine cFMS_get_nlat_src
 
-  subroutine cFMS_get_nlon_dst(interp_id, nlon_dst) bind(C)
+  subroutine cFMS_get_nlon_dst(interp_id, nlon_dst) bind(C, name="cFMS_get_nlon_dst")
       integer, intent(in) :: interp_id
       integer, intent(out) :: nlon_dst
       call cFMS_set_current_interp(interp_id)
       nlon_dst = current_interp%nlon_dst
   end subroutine cFMS_get_nlon_dst
 
-  subroutine cFMS_get_nlat_dst(interp_id, nlat_dst) bind(C)
+  subroutine cFMS_get_nlat_dst(interp_id, nlat_dst) bind(C, name="cFMS_get_nlat_dst")
       integer, intent(in) :: interp_id
       integer, intent(out) :: nlat_dst
       call cFMS_set_current_interp(interp_id)
@@ -229,7 +229,7 @@ contains
   end subroutine cFMS_get_nlat_dst
 
 
-  subroutine cFMS_get_interp_method(interp_id, interp_method) bind(C)
+  subroutine cFMS_get_interp_method(interp_id, interp_method) bind(C, name="cFMS_get_interp_method")
       integer, intent(in) :: interp_id
       integer, intent(out) :: interp_method
       call cFMS_set_current_interp(interp_id)
