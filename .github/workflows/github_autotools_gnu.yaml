@@ -9,7 +9,7 @@ concurrency:
 
 
 jobs:
-  build:
+  build_external:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/noaa-gfdl/fms/fms-ci-rocky-gnu:13.2.0
@@ -22,7 +22,19 @@ jobs:
         submodules: 'recursive'
     - name: test
       run: $PWD/.github/workflows/test.sh
-                            
-        
-            
-
+  build_subpackage:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/noaa-gfdl/fms/fms-ci-rocky-gnu:13.2.0
+      env:
+        TEST_VERBOSE: 1
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+    - name: test
+      run: |
+        autoreconf -if ../
+        ./configure --enable-portable-kinds --with-yaml
+        make check -C test_cfms/
