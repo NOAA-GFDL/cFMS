@@ -37,4 +37,5 @@ jobs:
       run: |
         autoreconf -if
         ./configure --enable-portable-kinds --with-yaml
+        make
         make check -C test_cfms/
