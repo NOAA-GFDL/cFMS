@@ -137,93 +137,80 @@ contains
 
   subroutine cFMS_get_i_src(interp_id, i_src) bind(C, name="cFMS_get_i_src")
       integer, intent(in) :: interp_id
-      integer, intent(out):: i_src(current_interp%nxgrid)
-      call cFMS_set_current_interp(interp_id)
-      i_src = current_interp%i_src
+      integer, intent(out):: i_src(interp(interp_id)%nxgrid)
+      i_src = interp(interp_id)%i_src
   end subroutine cFMS_get_i_src
 
   subroutine cFMS_get_j_src(interp_id, j_src) bind(C, name="cFMS_get_j_src")
       integer, intent(in) :: interp_id
-      integer, intent(out) :: j_src(current_interp%nxgrid)
-      call cFMS_set_current_interp(interp_id)
-      j_src = current_interp%j_src
+      integer, intent(out) :: j_src(interp(interp_id)%nxgrid)
+      j_src = interp(interp_id)%j_src
   end subroutine cFMS_get_j_src
 
   subroutine cFMS_get_i_lon(interp_id, i_lon) bind(C, name="cFMS_get_i_lon")
       integer, intent(in) :: interp_id
-      integer, intent(out) :: i_lon(current_interp%nlon_dst, current_interp%nlat_dst, 2)
-      call cFMS_set_current_interp(interp_id)
-      i_lon = current_interp%i_lon
+      integer, intent(out) :: i_lon(interp(interp_id)%nlon_dst, interp(interp_id)%nlat_dst, 2)
+      i_lon = interp(interp_id)%i_lon
   end subroutine cFMS_get_i_lon
 
   subroutine cFMS_get_j_lat(interp_id, j_lat) bind(C, name="cFMS_get_j_lat")
       integer, intent(in) :: interp_id
-      integer :: j_lat(current_interp%nlon_dst, current_interp%nlat_dst, 2)
-      call cFMS_set_current_interp(interp_id)
-      j_lat = current_interp%j_lat
+      integer :: j_lat(interp(interp_id)%nlon_dst, interp(interp_id)%nlat_dst, 2)
+      j_lat = interp(interp_id)%j_lat
   end subroutine cfms_get_j_lat
 
   subroutine cFMS_get_i_dst(interp_id, i_dst) bind(C, name="cFMS_get_i_dst")
       integer, intent(in) :: interp_id
-      integer :: i_dst(current_interp%nxgrid)
-      call cFMS_set_current_interp(interp_id)
-      i_dst = current_interp%i_dst
+      integer :: i_dst(interp(interp_id)%nxgrid)
+      i_dst = interp(interp_id)%i_dst
   end subroutine cFMS_get_i_dst
 
   subroutine cFMS_get_j_dst(interp_id, j_dst) bind(C, name="cFMS_get_j_dst")
       integer, intent(in) :: interp_id
-      integer :: j_dst(current_interp%nxgrid)
-      call cFMS_set_current_interp(interp_id)
-      j_dst = current_interp%j_dst
+      integer :: j_dst(interp(interp_id)%nxgrid)
+      j_dst = interp(interp_id)%j_dst
   end subroutine cFMS_get_j_dst
 
   subroutine cFMS_get_version(interp_id, version) bind(C, name="cFMS_get_version")
       integer, intent(in) :: interp_id
       integer, intent(out) :: version
-      call cFMS_set_current_interp(interp_id)
-      version = current_interp%version
+      version = interp(interp_id)%version
   end subroutine cFMS_get_version
 
   subroutine cFMS_get_nxgrid(interp_id, nxgrid) bind(C, name="cFMS_get_nxgrid")
       integer, intent(in) :: interp_id
       integer, intent(out) :: nxgrid
-      call cFMS_set_current_interp(interp_id)
-      nxgrid = current_interp%nxgrid
+      nxgrid = interp(interp_id)%nxgrid
   end subroutine cFMS_get_nxgrid
 
   subroutine cFMS_get_nlon_src(interp_id, nlon_src) bind(C, name="cFMS_get_nlon_src")
       integer, intent(in) :: interp_id
       integer, intent(out) :: nlon_src
-      call cFMS_set_current_interp(interp_id)
-      nlon_src = current_interp%nlon_src
+      nlon_src = interp(interp_id)%nlon_src
   end subroutine cFMS_get_nlon_src
 
   subroutine cFMS_get_nlat_src(interp_id, nlat_src) bind(C, name="cFMS_get_nlat_src")
       integer, intent(in) :: interp_id
       integer, intent(out) :: nlat_src
-      call cFMS_set_current_interp(interp_id)
-      nlat_src = current_interp%nlat_src
+      nlat_src = interp(interp_id)%nlat_src
   end subroutine cFMS_get_nlat_src
 
   subroutine cFMS_get_nlon_dst(interp_id, nlon_dst) bind(C, name="cFMS_get_nlon_dst")
       integer, intent(in) :: interp_id
       integer, intent(out) :: nlon_dst
-      call cFMS_set_current_interp(interp_id)
-      nlon_dst = current_interp%nlon_dst
+      nlon_dst = interp(interp_id)%nlon_dst
   end subroutine cFMS_get_nlon_dst
 
   subroutine cFMS_get_nlat_dst(interp_id, nlat_dst) bind(C, name="cFMS_get_nlat_dst")
       integer, intent(in) :: interp_id
       integer, intent(out) :: nlat_dst
-      call cFMS_set_current_interp(interp_id)
-      nlat_dst = current_interp%nlat_dst
+      nlat_dst = interp(interp_id)%nlat_dst
   end subroutine cFMS_get_nlat_dst
 
   subroutine cFMS_get_interp_method(interp_id, interp_method) bind(C, name="cFMS_get_interp_method")
       integer, intent(in) :: interp_id
       integer, intent(out) :: interp_method
-      call cFMS_set_current_interp(interp_id)
-      interp_method = current_interp%interp_method
+      interp_method = interp(interp_id)%interp_method
   end subroutine cFMS_get_interp_method
 
 
