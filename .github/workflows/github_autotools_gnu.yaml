@@ -35,6 +35,6 @@ jobs:
         submodules: 'recursive'
     - name: test
       run: |
-        autoreconf -if ../
+        autoreconf -if
         ./configure --enable-portable-kinds --with-yaml
         make check -C test_cfms/
