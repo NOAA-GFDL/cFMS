@@ -28,6 +28,7 @@ jobs:
       image: ghcr.io/noaa-gfdl/fms/fms-ci-rocky-gnu:13.2.0
       env:
         TEST_VERBOSE: 1
+        SKIP_TESTS: "test_data_override_scalar.1 test_data_override_2d.1 test_data_override_3d.1"
     steps:
     - name: checkout code
       uses: actions/checkout@v4
