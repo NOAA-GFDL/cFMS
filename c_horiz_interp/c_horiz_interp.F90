@@ -4,6 +4,7 @@ module c_horiz_interp_mod
   use FMS, only : FmsHorizInterp_type
   use FMS, only : fms_horiz_interp_new
   use FMS, only : fms_string_utils_c2f_string
+  use FMS, only : fms_mpp_error, FATAL
 
   use c_fms_utils_mod, only : cFMS_pointer_to_array, cFMS_array_to_pointer
   use c_fms_mod, only : MESSAGE_LENGTH
@@ -17,6 +18,7 @@ module c_horiz_interp_mod
   public :: cFMS_create_xgrid_2dx2d_order1
   public :: cFMS_get_maxxgrid
   public :: cFMS_horiz_interp_init
+  public :: cFMS_horiz_interp_dealloc
   public :: cFMS_set_current_interp
 
   public :: cFMS_horiz_interp_2d_cdouble
@@ -24,6 +26,22 @@ module c_horiz_interp_mod
 
   public :: cFMS_get_interp_cdouble
   public :: cFMS_get_interp_cfloat
+
+  public :: cFMS_get_i_src, cFMS_get_i_dst
+  public :: cFMS_get_j_src, cFMS_get_j_dst
+  public :: cFMS_get_nlon_src, cFMS_get_nlat_src
+  public :: cFMS_get_nlon_dst, cFMS_get_nlat_dst
+  public :: cFMS_get_version
+  public :: cFMS_get_nxgrid
+  public :: cFMS_get_current_interp
+  public :: cFMS_get_interp_method
+
+  public :: cFMS_get_i_lon
+  public :: cFMS_get_j_lat
+  public :: cFMS_get_area_frac_dst_double
+  public :: cFMS_get_area_frac_dst_float
+  public :: cFMS_get_is_allocated_double
+  public :: cFMS_get_is_allocated_float
 
   type(FmsHorizInterp_type), allocatable, target, public :: interp(:)
   type(fmshorizinterp_type), pointer :: current_interp
@@ -107,6 +125,94 @@ contains
     end if
     
   end subroutine cFMS_set_current_interp
+
+  !cFMS_horiz_interp_dealloc
+  subroutine cFMS_horiz_interp_dealloc() bind(C, name="cFMS_horiz_interp_dealloc")
+    implicit none
+
+    if(allocated(interp)) deallocate(interp)
+    nullify(current_interp)
+
+  end subroutine cFMS_horiz_interp_dealloc
+
+  subroutine cFMS_get_i_src(interp_id, i_src) bind(C, name="cFMS_get_i_src")
+      integer, intent(in) :: interp_id
+      integer, intent(out):: i_src(interp(interp_id)%nxgrid)
+      i_src = interp(interp_id)%i_src
+  end subroutine cFMS_get_i_src
+
+  subroutine cFMS_get_j_src(interp_id, j_src) bind(C, name="cFMS_get_j_src")
+      integer, intent(in) :: interp_id
+      integer, intent(out) :: j_src(interp(interp_id)%nxgrid)
+      j_src = interp(interp_id)%j_src
+  end subroutine cFMS_get_j_src
+
+  subroutine cFMS_get_i_lon(interp_id, i_lon) bind(C, name="cFMS_get_i_lon")
+      integer, intent(in) :: interp_id
+      integer, intent(out) :: i_lon(interp(interp_id)%nlon_dst, interp(interp_id)%nlat_dst, 2)
+      i_lon = interp(interp_id)%i_lon
+  end subroutine cFMS_get_i_lon
+
+  subroutine cFMS_get_j_lat(interp_id, j_lat) bind(C, name="cFMS_get_j_lat")
+      integer, intent(in) :: interp_id
+      integer :: j_lat(interp(interp_id)%nlon_dst, interp(interp_id)%nlat_dst, 2)
+      j_lat = interp(interp_id)%j_lat
+  end subroutine cfms_get_j_lat
+
+  subroutine cFMS_get_i_dst(interp_id, i_dst) bind(C, name="cFMS_get_i_dst")
+      integer, intent(in) :: interp_id
+      integer :: i_dst(interp(interp_id)%nxgrid)
+      i_dst = interp(interp_id)%i_dst
+  end subroutine cFMS_get_i_dst
+
+  subroutine cFMS_get_j_dst(interp_id, j_dst) bind(C, name="cFMS_get_j_dst")
+      integer, intent(in) :: interp_id
+      integer :: j_dst(interp(interp_id)%nxgrid)
+      j_dst = interp(interp_id)%j_dst
+  end subroutine cFMS_get_j_dst
+
+  subroutine cFMS_get_version(interp_id, version) bind(C, name="cFMS_get_version")
+      integer, intent(in) :: interp_id
+      integer, intent(out) :: version
+      version = interp(interp_id)%version
+  end subroutine cFMS_get_version
+
+  subroutine cFMS_get_nxgrid(interp_id, nxgrid) bind(C, name="cFMS_get_nxgrid")
+      integer, intent(in) :: interp_id
+      integer, intent(out) :: nxgrid
+      nxgrid = interp(interp_id)%nxgrid
+  end subroutine cFMS_get_nxgrid
+
+  subroutine cFMS_get_nlon_src(interp_id, nlon_src) bind(C, name="cFMS_get_nlon_src")
+      integer, intent(in) :: interp_id
+      integer, intent(out) :: nlon_src
+      nlon_src = interp(interp_id)%nlon_src
+  end subroutine cFMS_get_nlon_src
+
+  subroutine cFMS_get_nlat_src(interp_id, nlat_src) bind(C, name="cFMS_get_nlat_src")
+      integer, intent(in) :: interp_id
+      integer, intent(out) :: nlat_src
+      nlat_src = interp(interp_id)%nlat_src
+  end subroutine cFMS_get_nlat_src
+
+  subroutine cFMS_get_nlon_dst(interp_id, nlon_dst) bind(C, name="cFMS_get_nlon_dst")
+      integer, intent(in) :: interp_id
+      integer, intent(out) :: nlon_dst
+      nlon_dst = interp(interp_id)%nlon_dst
+  end subroutine cFMS_get_nlon_dst
+
+  subroutine cFMS_get_nlat_dst(interp_id, nlat_dst) bind(C, name="cFMS_get_nlat_dst")
+      integer, intent(in) :: interp_id
+      integer, intent(out) :: nlat_dst
+      nlat_dst = interp(interp_id)%nlat_dst
+  end subroutine cFMS_get_nlat_dst
+
+  subroutine cFMS_get_interp_method(interp_id, interp_method) bind(C, name="cFMS_get_interp_method")
+      integer, intent(in) :: interp_id
+      integer, intent(out) :: interp_method
+      interp_method = interp(interp_id)%interp_method
+  end subroutine cFMS_get_interp_method
+
 
 #include "c_horiz_interp_new.fh"
 #include "c_get_interp.fh"

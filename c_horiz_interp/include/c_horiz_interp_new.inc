@@ -56,7 +56,13 @@ function CFMS_HORIZ_INTERP_NEW_2D_(lon_in_ptr, lon_in_shape, lat_in_ptr, lat_in_
     call cFMS_pointer_to_array(mask_out_ptr, lon_out_shape, mask_out)
   end if
 
-  if(present(interp_method) .and. interp_method_f /= '' ) interp_method_f = fms_string_utils_c2f_string(interp_method)
+  ! error out if not a supported method (if not present routine will default to conservative)
+  if(present(interp_method)) then
+    interp_method_f = fms_string_utils_c2f_string(interp_method)
+    if(.not. (interp_method_f .eq. 'conservative' .or. interp_method_f .eq. 'bilinear')) then
+      call fms_mpp_error(FATAL, "cFMS_horiz_interp_new_2d:: invalid interpolation method provided. 'bilinear' and 'conservative' are the valid options")
+    endif
+  endif
 
   if(present(src_modulo)) then 
     src_modulo_f = logical(src_modulo)
@@ -92,13 +98,3 @@ function CFMS_HORIZ_INTERP_NEW_2D_(lon_in_ptr, lon_in_shape, lat_in_ptr, lat_in_
   CFMS_HORIZ_INTERP_NEW_2D_ = current_interp_id
 
 end function CFMS_HORIZ_INTERP_NEW_2D_
-
-
-  
-
-
-
-
-
-
-

@@ -8,3 +8,16 @@
 *.guess
 *.status
 *.out
+build
+*.mod
+configure
+Makefile.in
+aclocal.m4
+compile
+install-sh
+depcomp
+config.sub
+autom4te.cache
+missing
+ltmain.sh
+.vscode

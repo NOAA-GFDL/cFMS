@@ -3,6 +3,22 @@
 # undef CFMS_GET_INTERP_BINDC_ 
 # undef CFMS_GET_INTERP_DATA_TYPE_ 
 # undef CFMS_GET_INTERP_OBJ_DATA_TYPE_ 
+# undef CFMS_GET_AREA_FRAC_DST_
+# undef CFMS_GET_IS_ALLOCATED_
+# undef CFMS_GET_AREA_FRAC_DST_BINDC_
+# undef CFMS_GET_IS_ALLOCATED_BINDC_
+# undef CFMS_GET_WTI_
+# undef CFMS_GET_WTI_BINDC_
+# undef CFMS_GET_WTJ_
+# undef CFMS_GET_WTJ_BINDC_
+# define CFMS_GET_AREA_FRAC_DST_ cFMS_get_area_frac_dst_double
+# define CFMS_GET_AREA_FRAC_DST_BINDC_ "cFMS_get_area_frac_dst_cdouble" 
+# define CFMS_GET_IS_ALLOCATED_ cFMS_get_is_allocated_double
+# define CFMS_GET_IS_ALLOCATED_BINDC_ "cFMS_get_is_allocated_cdouble"
+# define CFMS_GET_WTI_ cFMS_get_wti_double
+# define CFMS_GET_WTI_BINDC_ "cFMS_get_wti_cdouble"
+# define CFMS_GET_WTJ_ cFMS_get_wtj_cdouble
+# define CFMS_GET_WTJ_BINDC_ "cFMS_get_wtj_cdouble"
 # define CFMS_GET_INTERP_NAME_ cFMS_get_interp_cdouble
 # define CFMS_GET_INTERP_BINDC_ "cFMS_get_interp_cdouble"
 # define CFMS_GET_INTERP_DATA_TYPE_ real(c_double)
@@ -14,6 +30,22 @@
 # undef CFMS_GET_INTERP_BINDC_ 
 # undef CFMS_GET_INTERP_DATA_TYPE_ 
 # undef CFMS_GET_INTERP_OBJ_DATA_TYPE_ 
+# undef CFMS_GET_AREA_FRAC_DST_
+# undef CFMS_GET_IS_ALLOCATED_
+# undef CFMS_GET_AREA_FRAC_DST_BINDC_
+# undef CFMS_GET_IS_ALLOCATED_BINDC_
+# undef CFMS_GET_WTI_
+# undef CFMS_GET_WTI_BINDC_
+# undef CFMS_GET_WTJ_
+# undef CFMS_GET_WTJ_BINDC_
+# define CFMS_GET_AREA_FRAC_DST_ cFMS_get_area_frac_dst_float
+# define CFMS_GET_AREA_FRAC_DST_BINDC_ "cFMS_get_area_frac_dst_cfloat" 
+# define CFMS_GET_IS_ALLOCATED_ cFMS_get_is_allocated_float
+# define CFMS_GET_IS_ALLOCATED_BINDC_ "cFMS_get_is_allocated_cfloat"
+# define CFMS_GET_WTI_ cFMS_get_wti_float
+# define CFMS_GET_WTI_BINDC_ "cFMS_get_wti_cfloat"
+# define CFMS_GET_WTJ_ cFMS_get_wtj_cfloat
+# define CFMS_GET_WTJ_BINDC_ "cFMS_get_wtj_cfloat"
 # define CFMS_GET_INTERP_NAME_ cFMS_get_interp_cfloat
 # define CFMS_GET_INTERP_BINDC_ "cFMS_get_interp_cfloat"
 # define CFMS_GET_INTERP_DATA_TYPE_ real(c_float)
