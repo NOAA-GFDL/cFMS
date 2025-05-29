@@ -39,9 +39,10 @@ libcFMS_la_LIBADD += $(top_builddir)/c_horiz_interp/lib_c_horiz_interp.la
 libcFMS_la_LIBADD += $(top_builddir)/c_grid_utils/lib_c_grid_utils.la
 libcFMS_la_LIBADD += $(top_builddir)/c_fms_utils/lib_c_fms_utils.la
 
+if BUILD_FMS
 libcFMS_la_LIBADD += $(abs_top_builddir)/FMS/libFMS/libFMS.la
-
 libcFMS_la_LDFLAGS += -L$(abs_top_builddir)/FMS/libFMS/
+endif
 
 libcFMS_la_SOURCES =
 
