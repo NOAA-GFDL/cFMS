@@ -29,16 +29,20 @@ LDADD = ${abs_top_builddir}/libcFMS/libcFMS.la
 check_PROGRAMS = test_define_domains \
 	test_getset_domains \
 	test_update_domains \
-  test_vector_update_domains
+  test_vector_update_domains \
+  test_define_cubic_mosaic
 
 TESTS = test_define_domains.sh \
 	test_getset_domains.sh \
-  test_update_domains.sh test_vector_update_domains.sh
+  test_update_domains.sh \
+  test_vector_update_domains.sh \
+  test_define_cubic_mosaic.sh
 
 test_define_domains_SOURCES = c_mpp_domains_helper.c test_define_domains.c 
 test_getset_domains_SOURCES = c_mpp_domains_helper.c test_getset_domains.c
 test_update_domains_SOURCES = c_mpp_domains_helper.c test_update_domains.c
 test_vector_update_domains_SOURCES = c_mpp_domains_helper.c test_vector_update_domains.c 
+test_define_cubic_mosaic_SOURCES = c_mpp_domains_helper.c test_define_cubic_mosaic.c
 
 TEST_EXTENSIONS = .sh
 SH_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \
@@ -48,7 +52,8 @@ SH_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \
 EXTRA_DIST = test_define_domains.sh \
   test_getset_domains.sh \
   test_update_domains.sh \
-  test_vector_update_domains.sh
+  test_vector_update_domains.sh \
+  test_define_cubic_mosaic.sh
 
 # Clean up
 CLEANFILES = input.nml *.nc* *.out *.dpi *.spi *.dyn *.spl *_table* input* *trs
