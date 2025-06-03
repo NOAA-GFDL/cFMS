@@ -32,6 +32,7 @@ module c_fms_mod
   use FMS, only : fms_mpp_domains_get_layout, fms_mpp_domains_get_pelist
   use FMS, only : fms_mpp_domains_set_compute_domain, fms_mpp_domains_set_data_domain, fms_mpp_domains_set_global_domain
   use FMS, only : fms_mpp_domains_update_domains
+  use FMS, only : fms_mpp_domains_define_mosaic
 
   use FMS, only : THIRTY_DAY_MONTHS, GREGORIAN, JULIAN, NOLEAP
   use FMS, only : fms_time_manager_init, fms_time_manager_set_calendar_type
@@ -69,6 +70,7 @@ module c_fms_mod
   public :: cFMS_set_current_domain
   public :: cFMS_set_data_domain
   public :: cFMS_set_global_domain
+  public :: cFMS_define_cubic_mosaic
   
   integer, public, parameter :: NAME_LENGTH = 64 !< value taken from mpp_domains
   integer, public, parameter :: MESSAGE_LENGTH=128
@@ -705,6 +707,126 @@ contains
     if(present(tile_count)) tile_count = tile_count - 1
    
   end subroutine cFMS_set_global_domain
+
+  function cFMS_define_cubic_mosaic(ni, nj, global_indices, layout, ntiles, halo, use_memsize) &
+       bind(C, name="cFMS_define_cubic_mosaic")
+    implicit none
+    integer, intent(in) :: ni(6)
+    integer, intent(in) :: nj(6)
+    integer, intent(in) :: global_indices(4)
+    integer, intent(in) :: layout(2)
+    integer, intent(in) :: ntiles
+    integer, intent(in), optional :: halo
+    logical(c_bool), intent(in), optional :: use_memsize
+
+    character(len=NAME_LENGTH) :: type = "Cubic: cubed-sphere"
+    logical :: use_memsize_f = .False.
+    integer :: n
+    integer :: npes_per_tile
+    integer :: pe_start(ntiles)
+    integer :: pe_end(ntiles)
+    integer :: global_indices_f(4)
+    integer :: global_indices2d(4,ntiles)
+    integer :: layout2d(2,ntiles)
+    integer, dimension(12) :: istart1, iend1, jstart1, jend1, tile1
+    integer, dimension(12) :: istart2, iend2, jstart2, jend2, tile2
+    integer :: num_contact = 12
+    integer :: msize(2)
+    logical :: use_memsize_local = .True.
+    integer :: whalo = 2, shalo = 2, ehalo = 2, nhalo = 2
+    integer :: cFMS_define_cubic_mosaic
+
+    global_indices_f = global_indices + 1
+
+    if(present(use_memsize)) then
+      use_memsize_f = logical(use_memsize)
+      use_memsize_local = use_memsize_f
+    end if
+    if(present(halo)) then
+      nhalo = halo; shalo = halo; whalo = halo; ehalo = halo
+    end if
+
+    npes_per_tile = cFMS_npes()/ntiles
+
+    do n = 1, ntiles
+      pe_start(n)           = (n-1)*npes_per_tile
+      pe_end(n)             = n*npes_per_tile-1
+      global_indices2d(:,n) = global_indices_f
+      layout2d(:,n)         = layout
+    end do
+
+    cFMS_define_cubic_mosaic = domain_count
+
+    call cFMS_set_current_domain(cFMS_define_cubic_mosaic)
+
+    !--- Contact line 1, between tile 1 (EAST) and tile 2 (WEST)
+    tile1(1) = 1; tile2(1) = 2
+    istart1(1) = ni(1);  iend1(1) = ni(1);  jstart1(1) = 1;      jend1(1) = nj(1)
+    istart2(1) = 1;      iend2(1) = 1;      jstart2(1) = 1;      jend2(1) = nj(2)
+    !--- Contact line 2, between tile 1 (NORTH) and tile 3 (WEST)
+    tile1(2) = 1; tile2(2) = 3
+    istart1(2) = 1;      iend1(2) = ni(1);  jstart1(2) = nj(1);  jend1(2) = nj(1)
+    istart2(2) = 1;      iend2(2) = 1;      jstart2(2) = nj(3);  jend2(2) = 1
+    !--- Contact line 3, between tile 1 (WEST) and tile 5 (NORTH)
+    tile1(3) = 1; tile2(3) = 5
+    istart1(3) = 1;      iend1(3) = 1;      jstart1(3) = 1;      jend1(3) = nj(1)
+    istart2(3) = ni(5);  iend2(3) = 1;      jstart2(3) = nj(5);  jend2(3) = nj(5)
+    !--- Contact line 4, between tile 1 (SOUTH) and tile 6 (NORTH)
+    tile1(4) = 1; tile2(4) = 6
+    istart1(4) = 1;      iend1(4) = ni(1);  jstart1(4) = 1;      jend1(4) = 1
+    istart2(4) = 1;      iend2(4) = ni(6);  jstart2(4) = nj(6);  jend2(4) = nj(6)
+    !--- Contact line 5, between tile 2 (NORTH) and tile 3 (SOUTH)
+    tile1(5) = 2; tile2(5) = 3
+    istart1(5) = 1;      iend1(5) = ni(2);  jstart1(5) = nj(2);  jend1(5) = nj(2)
+    istart2(5) = 1;      iend2(5) = ni(3);  jstart2(5) = 1;      jend2(5) = 1
+    !--- Contact line 6, between tile 2 (EAST) and tile 4 (SOUTH)
+    tile1(6) = 2; tile2(6) = 4
+    istart1(6) = ni(2);  iend1(6) = ni(2);  jstart1(6) = 1;      jend1(6) = nj(2)
+    istart2(6) = ni(4);  iend2(6) = 1;      jstart2(6) = 1;      jend2(6) = 1
+    !--- Contact line 7, between tile 2 (SOUTH) and tile 6 (EAST)
+    tile1(7) = 2; tile2(7) = 6
+    istart1(7) = 1;      iend1(7) = ni(2);  jstart1(7) = 1;      jend1(7) = 1
+    istart2(7) = ni(6);  iend2(7) = ni(6);  jstart2(7) = nj(6);  jend2(7) = 1
+    !--- Contact line 8, between tile 3 (EAST) and tile 4 (WEST)
+    tile1(8) = 3; tile2(8) = 4
+    istart1(8) = ni(3);  iend1(8) = ni(3);  jstart1(8) = 1;      jend1(8) = nj(3)
+    istart2(8) = 1;      iend2(8) = 1;      jstart2(8) = 1;      jend2(8) = nj(4)
+    !--- Contact line 9, between tile 3 (NORTH) and tile 5 (WEST)
+    tile1(9) = 3; tile2(9) = 5
+    istart1(9) = 1;      iend1(9) = ni(3);  jstart1(9) = nj(3);  jend1(9) = nj(3)
+    istart2(9) = 1;      iend2(9) = 1;      jstart2(9) = nj(5);  jend2(9) = 1
+    !--- Contact line 10, between tile 4 (NORTH) and tile 5 (SOUTH)
+    tile1(10) = 4; tile2(10) = 5
+    istart1(10) = 1;     iend1(10) = ni(4); jstart1(10) = nj(4); jend1(10) = nj(4)
+    istart2(10) = 1;     iend2(10) = ni(5); jstart2(10) = 1;     jend2(10) = 1
+    !--- Contact line 11, between tile 4 (EAST) and tile 6 (SOUTH)
+    tile1(11) = 4; tile2(11) = 6
+    istart1(11) = ni(4); iend1(11) = ni(4); jstart1(11) = 1;     jend1(11) = nj(4)
+    istart2(11) = ni(6); iend2(11) = 1;     jstart2(11) = 1;     jend2(11) = 1
+    !--- Contact line 12, between tile 5 (EAST) and tile 6 (WEST)
+    tile1(12) = 5; tile2(12) = 6
+    istart1(12) = ni(5); iend1(12) = ni(5); jstart1(12) = 1;     jend1(12) = nj(5)
+    istart2(12) = 1;     iend2(12) = 1;     jstart2(12) = 1;     jend2(12) = nj(6)
+    msize(1) = maxval(ni(:)/layout2d(1,:)) + whalo + ehalo + 1 ! make sure memory domain size is no smaller than
+    msize(2) = maxval(nj(:)/layout2d(2,:)) + shalo + nhalo + 1 ! data domain size
+
+    if(use_memsize_local) then
+      call fms_mpp_domains_define_mosaic(global_indices2d, layout2d, &
+         current_domain, ntiles, num_contact, tile1, tile2, istart1, &
+         iend1, jstart1, jend1, istart2, iend2, jstart2, jend2, pe_start, &
+         pe_end, symmetry = .true., whalo=whalo, ehalo=ehalo, shalo=shalo, &
+         nhalo=nhalo, name=trim(type), memory_size=msize)
+    else
+      call fms_mpp_domains_define_mosaic(global_indices2d, layout2d, &
+      current_domain, ntiles, num_contact, tile1, tile2, istart1, &
+      iend1, jstart1, jend1, istart2, iend2, jstart2, jend2, pe_start, &
+      pe_end, symmetry = .true., whalo=whalo, ehalo=ehalo, shalo=shalo, &
+      nhalo=nhalo, name=trim(type))
+    end if
+    
+    domain_count = domain_count + 1
+
+  end function cFMS_define_cubic_mosaic
   
   !> cFMS_update_domains
 #include "c_update_domains.fh"
