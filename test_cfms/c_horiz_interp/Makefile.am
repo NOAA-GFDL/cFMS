@@ -32,10 +32,10 @@ check_PROGRAMS = test_create_xgrid \
   test_horiz_interp_new
 
 TESTS = test_create_xgrid.sh \
-  test_horiz_interp_new.sh
+  test_horiz_interp.sh
 
 test_create_xgrid_SOURCES = test_create_xgrid.c
-test_horiz_interp_new_SOURCES = ../c_fms/c_mpp_domains_helper.c test_horiz_interp_new.c
+test_horiz_interp_new_SOURCES = ../c_fms/c_mpp_domains_helper.c test_horiz_interp.c
 
 TEST_EXTENSIONS = .sh
 SH_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \
