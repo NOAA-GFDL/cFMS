@@ -48,9 +48,9 @@ SUBDIRS += c_fms_utils \
           test_cfms
 
 ## Build libFMS module
-AM_CPPFLAGS = -I${abs_top_srcdir}/include -I$(abs_top_builddir)/FMS/include
+AM_CPPFLAGS = -I${abs_top_srcdir}/include $(LIBFMS_FCFLAGS)
 AM_FCFLAGS = $(FC_MODINC). $(FC_MODOUT)$(MODDIR)
-AM_LDFLAGS = -L$(abs_top_builddir)/libFMS -lFMS
+AM_LDFLAGS = $(LIBFMS_LIBS)
 
 include $(top_srcdir)/mkmods.mk
 
