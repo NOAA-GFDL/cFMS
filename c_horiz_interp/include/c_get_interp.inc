@@ -89,17 +89,17 @@ end subroutine CFMS_GET_AREA_FRAC_DST_
 subroutine CFMS_GET_IS_ALLOCATED_(interp_id, is_allocated) bind(C, name=CFMS_GET_IS_ALLOCATED_BINDC_)
   integer, intent(in) :: interp_id
   logical(c_bool), intent(out) :: is_allocated
-  is_allocated = current_interp%CFMS_GET_INTERP_OBJ_DATA_TYPE_%is_allocated
+  is_allocated = interp(interp_id)%CFMS_GET_INTERP_OBJ_DATA_TYPE_%is_allocated
 end subroutine CFMS_GET_IS_ALLOCATED_
 
 subroutine CFMS_GET_WTI_(interp_id, wti) bind(C, name=CFMS_GET_WTI_BINDC_)
     integer, intent(in) :: interp_id
-    CFMS_GET_INTERP_DATA_TYPE_, intent(out) :: wti(current_interp%nlon_dst,current_interp%nlat_dst,2)
-    wti = current_interp%CFMS_GET_INTERP_OBJ_DATA_TYPE_%wti
+    CFMS_GET_INTERP_DATA_TYPE_, intent(out) :: wti(interp(interp_id)%nlon_dst,interp(interp_id)%nlat_dst,2)
+    wti = interp(interp_id)%CFMS_GET_INTERP_OBJ_DATA_TYPE_%wti
 end subroutine CFMS_GET_WTI_
 
 subroutine CFMS_GET_WTJ_(interp_id, wtj) bind(C, name=CFMS_GET_WTJ_BINDC_)
     integer, intent(in) :: interp_id
-    CFMS_GET_INTERP_DATA_TYPE_, intent(out) :: wtj(current_interp%nlon_dst,current_interp%nlat_dst,2)
-    wtj = current_interp%CFMS_GET_INTERP_OBJ_DATA_TYPE_%wtj
+    CFMS_GET_INTERP_DATA_TYPE_, intent(out) :: wtj(interp(interp_id)%nlon_dst,interp(interp_id)%nlat_dst,2)
+    wtj = interp(interp_id)%CFMS_GET_INTERP_OBJ_DATA_TYPE_%wtj
 end subroutine CFMS_GET_WTJ_

@@ -42,8 +42,6 @@ module c_horiz_interp_mod
   public :: cFMS_get_is_allocated_float
 
   type(FmsHorizInterp_type), allocatable, target, public :: interp(:)
-  type(fmshorizinterp_type), pointer :: current_interp
-  integer, public :: current_interp_id
   integer :: interp_count = 0
   
 contains
@@ -98,7 +96,9 @@ contains
       allocate(interp(0:ninterp-1))
     else
       allocate(interp(0:0))
-    end if
+   end if
+
+   interp_count = 0
 
   end subroutine cFMS_horiz_interp_init
 
@@ -107,7 +107,6 @@ contains
     implicit none
 
     if(allocated(interp)) deallocate(interp)
-    nullify(current_interp)
 
   end subroutine cFMS_horiz_interp_dealloc
 
