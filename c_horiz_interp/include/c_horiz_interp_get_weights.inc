@@ -1,6 +1,6 @@
 function CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_shape,&
-     lon_out_ptr, lat_out_ptr, lonlat_out_shape, interp_method, verbose, &
-     max_dist, src_modulo, mask_in_ptr, mask_out_ptr, is_latlon_in, is_latlon_out) &
+     lon_out_ptr, lat_out_ptr, lonlat_out_shape, mask_in_ptr, mask_out_ptr, &
+     interp_method, verbose, max_dist, src_modulo, is_latlon_in, is_latlon_out) &
      bind(C, name=CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_BINDC_)
 
   implicit none

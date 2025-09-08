@@ -202,7 +202,7 @@ int test_conservative_new(int domain_id)
 
     test_interp_id = cFMS_horiz_interp_get_weights_2d_cdouble(lon_in_2D, lat_in_2D, lat_in_shape,
                                                               lon_out_2D, lat_out_2D, lat_out_shape,
-                                                              interp_method, NULL, NULL, NULL, NULL,
+                                                              NULL, NULL, interp_method, NULL, NULL,
                                                               NULL, NULL, NULL);
 
     assert(test_interp_id == interp_id);
@@ -391,7 +391,7 @@ int test_bilinear_new(int domain_id)
 
     test_interp_id = cFMS_horiz_interp_get_weights_2d_cdouble(lon_in_2D, lat_in_2D, lat_in_shape,
                                                               lon_out_2D, lat_out_2D, lat_out_shape,
-                                                              interp_method, NULL, NULL, NULL, NULL,
+                                                              NULL, NULL, interp_method, NULL, NULL,
                                                               NULL, NULL, NULL);
 
     printf("ids %d %d\n", test_interp_id, interp_id);
