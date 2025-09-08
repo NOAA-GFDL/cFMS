@@ -3,6 +3,7 @@ module c_horiz_interp_mod
   use FMS, only : fms_horiz_interp_init
   use FMS, only : FmsHorizInterp_type
   use FMS, only : fms_horiz_interp_new
+  use FMS, only : fms_horiz_interp
   use FMS, only : fms_string_utils_c2f_string
   use FMS, only : fms_mpp_error, FATAL
 
@@ -23,6 +24,9 @@ module c_horiz_interp_mod
   public :: cFMS_horiz_interp_get_weights_2d_cdouble
   public :: cFMS_horiz_interp_get_weights_2d_cfloat
 
+  public :: cFMS_horiz_interp_from_weights_2d_cfloat
+  public :: cFMS_horiz_interp_from_weights_2d_cdouble
+  
   public :: cFMS_get_interp_cdouble
   public :: cFMS_get_interp_cfloat
 
@@ -112,6 +116,7 @@ contains
 
 #include "c_horiz_interp_int.inc"
 #include "c_horiz_interp_get_weights.fh"
+#include "c_horiz_interp_from_weights.fh"
 #include "c_get_interp.fh"
   
 end module c_horiz_interp_mod

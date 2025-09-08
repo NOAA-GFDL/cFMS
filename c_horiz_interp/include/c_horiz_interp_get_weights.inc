@@ -1,6 +1,6 @@
 function CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_shape,&
-     lon_out_ptr, lat_out_ptr, lonlat_out_shape, interp_method, verbose, &
-     max_dist, src_modulo, mask_in_ptr, mask_out_ptr, is_latlon_in, is_latlon_out) &
+     lon_out_ptr, lat_out_ptr, lonlat_out_shape, mask_in_ptr, mask_out_ptr, &
+     interp_method, verbose, max_dist, src_modulo, is_latlon_in, is_latlon_out) &
      bind(C, name=CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_BINDC_)
 
   implicit none
@@ -21,6 +21,7 @@ function CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_sha
   logical(c_bool), intent(in), optional :: is_latlon_out
 
   integer :: CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_
+  integer :: mask_shape(2)
   character(MESSAGE_LENGTH-1) :: interp_method_f
   logical :: src_modulo_f
   logical :: is_latlon_in_f
@@ -44,12 +45,14 @@ function CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_sha
   call cFMS_pointer_to_array(lat_out_ptr, lonlat_out_shape, lat_out)
 
   if(c_associated(mask_in_ptr))  then
-    allocate(mask_in(lonlat_in_shape(1), lonlat_in_shape(2)))
-    call cFMS_pointer_to_array(mask_in_ptr, lonlat_in_shape, mask_in)
+    mask_shape = lonlat_in_shape -1
+    allocate(mask_in(mask_shape(1), mask_shape(2)))
+    call cFMS_pointer_to_array(mask_in_ptr, mask_shape, mask_in)
   end if
-  if(c_associated(mask_out_ptr)) then 
-    allocate(mask_out(lonlat_out_shape(1), lonlat_out_shape(2)))
-    call cFMS_pointer_to_array(mask_out_ptr, lonlat_out_shape, mask_out)
+  if(c_associated(mask_out_ptr)) then
+     mask_shape = lonlat_out_shape -1
+    allocate(mask_out(mask_shape(1), mask_shape(2)))
+    call cFMS_pointer_to_array(mask_out_ptr, mask_shape, mask_out)
   end if
 
   ! error out if not a supported method (if not present routine will default to conservative)
