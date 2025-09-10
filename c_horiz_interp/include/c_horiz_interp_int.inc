@@ -10,15 +10,19 @@
       j_src = interp(interp_id)%j_src
   end subroutine cFMS_get_j_src
 
-  subroutine cFMS_get_i_lon(interp_id, i_lon) bind(C, name="cFMS_get_i_lon")
+  !check for correctness
+  subroutine cFMS_get_i_lon(interp_id, i_lon) bind(C, name="cFMS_get_i_lon")      
       integer, intent(in) :: interp_id
       integer, intent(out) :: i_lon(interp(interp_id)%nlon_dst, interp(interp_id)%nlat_dst, 2)
+      call fms_mpp_error(WARNING, "cFMS_get_i_lon may not have been implemented correctly")
       i_lon = interp(interp_id)%i_lon
   end subroutine cFMS_get_i_lon
 
+  !check for correctness
   subroutine cFMS_get_j_lat(interp_id, j_lat) bind(C, name="cFMS_get_j_lat")
       integer, intent(in) :: interp_id
       integer :: j_lat(interp(interp_id)%nlon_dst, interp(interp_id)%nlat_dst, 2)
+      call fms_mpp_error(WARNING, "cFMS_get_j_lat may not have been implemented correctly")
       j_lat = interp(interp_id)%j_lat
   end subroutine cfms_get_j_lat
 

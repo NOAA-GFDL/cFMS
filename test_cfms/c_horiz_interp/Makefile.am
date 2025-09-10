@@ -29,15 +29,15 @@ AM_LDFLAGS = $(LIBFMS_LIBS)
 LDADD = ${abs_top_builddir}/libcFMS/libcFMS.la
 
 check_PROGRAMS = test_create_xgrid \
-  test_horiz_interp_get_weights \
-	test_horiz_interp_from_weights
+  test_horiz_interp_new \
+	test_horiz_interp_base
 
 TESTS = test_create_xgrid.sh \
-  test_horiz_interp.sh 
+  test_horiz_interp.sh
 
 test_create_xgrid_SOURCES = test_create_xgrid.c
-test_horiz_interp_get_weights_SOURCES = ../c_fms/c_mpp_domains_helper.c test_horiz_interp_get_weights.c
-test_horiz_interp_from_weights_SOURCES = test_horiz_interp_from_weights.c
+test_horiz_interp_new_SOURCES = ../c_fms/c_mpp_domains_helper.c test_horiz_interp_new.c
+test_horiz_interp_base_SOURCES = test_horiz_interp_base.c
 
 TEST_EXTENSIONS = .sh
 SH_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \

@@ -1,7 +1,7 @@
-function CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_shape,&
+function CFMS_HORIZ_INTERP_NEW_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_shape,&
      lon_out_ptr, lat_out_ptr, lonlat_out_shape, mask_in_ptr, mask_out_ptr, &
      interp_method, verbose, max_dist, src_modulo, is_latlon_in, is_latlon_out) &
-     bind(C, name=CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_BINDC_)
+     bind(C, name=CFMS_HORIZ_INTERP_NEW_2D_BINDC_)
 
   implicit none
 
@@ -15,24 +15,24 @@ function CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_sha
   type(c_ptr), intent(in), value :: mask_out_ptr
   character(c_char), intent(in), optional :: interp_method(MESSAGE_LENGTH)
   integer, intent(in), optional :: verbose
-  CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_DATA_TYPE_, intent(in), optional :: max_dist
+  CFMS_HORIZ_INTERP_NEW_2D_DATA_TYPE_, intent(in), optional :: max_dist
   logical(c_bool), intent(in), optional :: src_modulo
   logical(c_bool), intent(in), optional :: is_latlon_in
   logical(c_bool), intent(in), optional :: is_latlon_out
 
-  integer :: CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_
+  integer :: CFMS_HORIZ_INTERP_NEW_2D_
   integer :: mask_shape(2)
   character(MESSAGE_LENGTH-1) :: interp_method_f
   logical :: src_modulo_f
   logical :: is_latlon_in_f
   logical :: is_latlon_out_f
 
-  CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_DATA_TYPE_, allocatable :: lon_in(:,:)
-  CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_DATA_TYPE_, allocatable :: lat_in(:,:)
-  CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_DATA_TYPE_, allocatable :: lon_out(:,:)
-  CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_DATA_TYPE_, allocatable :: lat_out(:,:)
-  CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_DATA_TYPE_, allocatable :: mask_in(:,:)
-  CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_DATA_TYPE_, allocatable :: mask_out(:,:)
+  CFMS_HORIZ_INTERP_NEW_2D_DATA_TYPE_, allocatable :: lon_in(:,:)
+  CFMS_HORIZ_INTERP_NEW_2D_DATA_TYPE_, allocatable :: lat_in(:,:)
+  CFMS_HORIZ_INTERP_NEW_2D_DATA_TYPE_, allocatable :: lon_out(:,:)
+  CFMS_HORIZ_INTERP_NEW_2D_DATA_TYPE_, allocatable :: lat_out(:,:)
+  CFMS_HORIZ_INTERP_NEW_2D_DATA_TYPE_, allocatable :: mask_in(:,:)
+  CFMS_HORIZ_INTERP_NEW_2D_DATA_TYPE_, allocatable :: mask_out(:,:)
 
   allocate(lon_in(lonlat_in_shape(1), lonlat_in_shape(2)))
   allocate(lat_in(lonlat_in_shape(1), lonlat_in_shape(2)))
@@ -55,14 +55,11 @@ function CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_sha
     call cFMS_pointer_to_array(mask_out_ptr, mask_shape, mask_out)
   end if
 
-  ! error out if not a supported method (if not present routine will default to conservative)
+  interp_method_f = "conservative"
   if(present(interp_method)) then
-    interp_method_f = fms_string_utils_c2f_string(interp_method)
-    if(.not. (interp_method_f .eq. 'conservative' .or. interp_method_f .eq. 'bilinear')) then
-      call fms_mpp_error(FATAL, "cFMS_horiz_interp_new_2d:: invalid interpolation method provided. 'bilinear' and 'conservative' are the valid options")
-    endif
+     interp_method_f = fms_string_utils_c2f_string(interp_method)
   endif
-
+ 
   if(present(src_modulo)) then 
     src_modulo_f = logical(src_modulo)
   else
@@ -79,7 +76,7 @@ function CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_sha
     is_latlon_out_f = .false.
   end if
 
-  CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_ = interp_count  
+  CFMS_HORIZ_INTERP_NEW_2D_ = interp_count  
 
   call fms_horiz_interp_new(Interp=interp(interp_count), lon_in=lon_in, lat_in=lat_in, &
                             lon_out=lon_out, lat_out=lat_out, verbose=verbose, &
@@ -89,7 +86,7 @@ function CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_sha
                             is_latlon_out=is_latlon_out_f)
 
   interp_count = interp_count + 1
-  
+
   deallocate(lon_in)
   deallocate(lat_in)
   deallocate(lon_out)
@@ -97,4 +94,4 @@ function CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_sha
   if(allocated(mask_in))  deallocate(mask_in)
   if(allocated(mask_out)) deallocate(mask_out)
 
-end function CFMS_HORIZ_INTERP_GET_WEIGHTS_2D_
+end function CFMS_HORIZ_INTERP_NEW_2D_
