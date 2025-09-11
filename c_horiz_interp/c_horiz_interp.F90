@@ -1,6 +1,6 @@
 module c_horiz_interp_mod
 
-  use FMS, only : fms_horiz_interp_init
+  use FMS, only : fms_horiz_interp_init, fms_horiz_interp_del
   use FMS, only : FmsHorizInterp_type
   use FMS, only : fms_horiz_interp_new
   use FMS, only : fms_horiz_interp
@@ -19,7 +19,7 @@ module c_horiz_interp_mod
   public :: cFMS_create_xgrid_2dx2d_order1
   public :: cFMS_get_maxxgrid
   public :: cFMS_horiz_interp_init
-  public :: cFMS_horiz_interp_dealloc
+  public :: cFMS_horiz_interp_end
 
   public :: cFMS_horiz_interp_new_2d_cdouble
   public :: cFMS_horiz_interp_new_2d_cfloat
@@ -103,13 +103,17 @@ contains
 
   end subroutine cFMS_horiz_interp_init
 
-  !cFMS_horiz_interp_dealloc
-  subroutine cFMS_horiz_interp_dealloc() bind(C, name="cFMS_horiz_interp_dealloc")
+  !cFMS_horiz_interp_end
+  subroutine cFMS_horiz_interp_end() bind(C, name="cFMS_horiz_interp_end")
     implicit none
+    integer :: i
+    
+    do i=1, size(interp)
+       call fms_horiz_interp_del(interp(i))
+    end do
+    deallocate(interp)
 
-    if(allocated(interp)) deallocate(interp)
-
-  end subroutine cFMS_horiz_interp_dealloc
+  end subroutine cFMS_horiz_interp_end
 
 #include "c_horiz_interp_int.inc"
 #include "c_horiz_interp_new.fh"

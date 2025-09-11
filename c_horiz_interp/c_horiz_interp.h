@@ -12,7 +12,7 @@ extern int cFMS_get_maxxgrid();
 
 extern void cFMS_horiz_interp_init(int *ninterp);
 
-extern void cFMS_horiz_interp_dealloc();
+extern void cFMS_horiz_interp_end();
 
 extern int cFMS_horiz_interp_new_2d_cfloat(float *lon_in_ptr,float *lat_in_ptr, int *lonlat_in_shape, 
                                            float *lon_out_ptr, float *lat_out_ptr, int *lonlat_out_shape,
