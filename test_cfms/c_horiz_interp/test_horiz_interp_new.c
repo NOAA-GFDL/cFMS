@@ -200,20 +200,16 @@ int test_conservative_new(int domain_id)
     int interp_id = 0;
     int test_interp_id;
 
-    test_interp_id = cFMS_horiz_interp_get_weights_2d_cdouble(lon_in_2D, lat_in_2D, lat_in_shape,
-                                                              lon_out_2D, lat_out_2D, lat_out_shape,
-                                                              NULL, NULL, interp_method, NULL, NULL,
-                                                              NULL, NULL, NULL);
+    test_interp_id = cFMS_horiz_interp_new_2d_cdouble(lon_in_2D, lat_in_2D, lat_in_shape,
+                                                      lon_out_2D, lat_out_2D, lat_out_shape,
+                                                      NULL, NULL, interp_method, NULL, NULL,
+                                                      NULL, NULL, NULL);
 
     assert(test_interp_id == interp_id);
-    
+
     int nxgrid;
-
-    cFMS_get_interp_cdouble(&test_interp_id, NULL, NULL, NULL, NULL, 
-        NULL, NULL, &nxgrid, 
-        NULL, NULL, NULL, NULL, 
-        NULL, NULL);
-
+    cFMS_get_nxgrid(&test_interp_id, &nxgrid);
+    
     int nlon_src;
     int nlat_src;
     int nlon_dst;
@@ -223,18 +219,7 @@ int test_conservative_new(int domain_id)
     int *i_dst = (int *)malloc(nxgrid*sizeof(int));
     int *j_dst = (int *)malloc(nxgrid*sizeof(int));
     double *area_frac_dst = (double *)malloc(nxgrid*sizeof(double));
-
-    cFMS_get_interp_cdouble(&test_interp_id, i_src, j_src, i_dst, j_dst, 
-        area_frac_dst, NULL, NULL, 
-        &nlon_src, &nlat_src, &nlon_dst, &nlat_dst, 
-        NULL, NULL);
-
-    assert(nlon_src == NI_SRC);
-    assert(nlat_src == NJ_SRC);
-    assert(nlon_dst == iec-isc);
-    assert(nlat_dst == jec-jsc);
-    assert(interp_id == 0);
-
+    
     // test individual getters
     int version, interp_method_enum;
     cFMS_get_i_src(&test_interp_id, i_src);
@@ -242,13 +227,13 @@ int test_conservative_new(int domain_id)
     cFMS_get_i_dst(&test_interp_id, i_dst);
     cFMS_get_j_dst(&test_interp_id, i_dst);
     cFMS_get_version(&test_interp_id, &version);
-    cFMS_get_nxgrid(&test_interp_id, &nxgrid);
     cFMS_get_nlon_src(&test_interp_id, &nlon_src);
     cFMS_get_nlat_src(&test_interp_id, &nlat_src);
     cFMS_get_nlon_dst(&test_interp_id, &nlon_dst);
     cFMS_get_nlat_dst(&test_interp_id, &nlat_dst);
     cFMS_get_interp_method(&test_interp_id, &interp_method_enum);
-
+    cFMS_get_area_frac_dst_cdouble(&test_interp_id, area_frac_dst);
+    
     assert(nlon_src == NI_SRC);
     assert(nlat_src == NJ_SRC);
     assert(nlon_dst == iec-isc);
@@ -389,11 +374,11 @@ int test_bilinear_new(int domain_id)
     int interp_id = 1;
     int test_interp_id;
 
-    test_interp_id = cFMS_horiz_interp_get_weights_2d_cdouble(lon_in_2D, lat_in_2D, lat_in_shape,
-                                                              lon_out_2D, lat_out_2D, lat_out_shape,
-                                                              NULL, NULL, interp_method, NULL, NULL,
-                                                              NULL, NULL, NULL);
-
+    test_interp_id = cFMS_horiz_interp_new_2d_cdouble(lon_in_2D, lat_in_2D, lat_in_shape,
+                                                      lon_out_2D, lat_out_2D, lat_out_shape,
+                                                      NULL, NULL, interp_method, NULL, NULL,
+                                                      NULL, NULL, NULL);
+    
     printf("ids %d %d\n", test_interp_id, interp_id);
     assert(test_interp_id == interp_id);
     
@@ -402,13 +387,6 @@ int test_bilinear_new(int domain_id)
     int nlon_dst;
     int nlat_dst;
 
-
-    // make sure all the getters work
-    cFMS_get_interp_cdouble(&test_interp_id, NULL, NULL, NULL, NULL, 
-        NULL, NULL, NULL, 
-        &nlon_src, &nlat_src, &nlon_dst, &nlat_dst, 
-        NULL, NULL);
-    
     int* i_lon = (int*) malloc(nlon_dst*nlat_dst*2*sizeof(int)); 
     int* j_lat = (int*) malloc(nlon_dst*nlat_dst*2*sizeof(int)); 
     cFMS_get_i_lon(&test_interp_id, i_lon);

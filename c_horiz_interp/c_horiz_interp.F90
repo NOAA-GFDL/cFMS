@@ -3,9 +3,10 @@ module c_horiz_interp_mod
   use FMS, only : fms_horiz_interp_init
   use FMS, only : FmsHorizInterp_type
   use FMS, only : fms_horiz_interp_new
+  use FMS, only : fms_horiz_interp
   use FMS, only : fms_string_utils_c2f_string
-  use FMS, only : fms_mpp_error, FATAL
-
+  use FMS, only : fms_mpp_error, WARNING
+  
   use c_fms_utils_mod, only : cFMS_pointer_to_array, cFMS_array_to_pointer
   use c_fms_mod, only : MESSAGE_LENGTH
 
@@ -20,12 +21,12 @@ module c_horiz_interp_mod
   public :: cFMS_horiz_interp_init
   public :: cFMS_horiz_interp_dealloc
 
-  public :: cFMS_horiz_interp_get_weights_2d_cdouble
-  public :: cFMS_horiz_interp_get_weights_2d_cfloat
+  public :: cFMS_horiz_interp_new_2d_cdouble
+  public :: cFMS_horiz_interp_new_2d_cfloat
 
-  public :: cFMS_get_interp_cdouble
-  public :: cFMS_get_interp_cfloat
-
+  public :: cFMS_horiz_interp_base_2d_cfloat
+  public :: cFMS_horiz_interp_base_2d_cdouble
+  
   public :: cFMS_get_i_src, cFMS_get_i_dst
   public :: cFMS_get_j_src, cFMS_get_j_dst
   public :: cFMS_get_nlon_src, cFMS_get_nlat_src
@@ -111,7 +112,8 @@ contains
   end subroutine cFMS_horiz_interp_dealloc
 
 #include "c_horiz_interp_int.inc"
-#include "c_horiz_interp_get_weights.fh"
+#include "c_horiz_interp_new.fh"
+#include "c_horiz_interp_base.fh"
 #include "c_get_interp.fh"
   
 end module c_horiz_interp_mod

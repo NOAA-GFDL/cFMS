@@ -1,6 +1,4 @@
 ! cdouble 2d
-# undef CFMS_GET_INTERP_NAME_ 
-# undef CFMS_GET_INTERP_BINDC_ 
 # undef CFMS_GET_INTERP_DATA_TYPE_ 
 # undef CFMS_GET_INTERP_OBJ_DATA_TYPE_ 
 # undef CFMS_GET_AREA_FRAC_DST_
@@ -19,15 +17,11 @@
 # define CFMS_GET_WTI_BINDC_ "cFMS_get_wti_cdouble"
 # define CFMS_GET_WTJ_ cFMS_get_wtj_cdouble
 # define CFMS_GET_WTJ_BINDC_ "cFMS_get_wtj_cdouble"
-# define CFMS_GET_INTERP_NAME_ cFMS_get_interp_cdouble
-# define CFMS_GET_INTERP_BINDC_ "cFMS_get_interp_cdouble"
 # define CFMS_GET_INTERP_DATA_TYPE_ real(c_double)
 # define CFMS_GET_INTERP_OBJ_DATA_TYPE_ horizInterpReals8_type
 #include "c_get_interp.inc"
 
 ! cfloat 2d
-# undef CFMS_GET_INTERP_NAME_ 
-# undef CFMS_GET_INTERP_BINDC_ 
 # undef CFMS_GET_INTERP_DATA_TYPE_ 
 # undef CFMS_GET_INTERP_OBJ_DATA_TYPE_ 
 # undef CFMS_GET_AREA_FRAC_DST_
@@ -46,8 +40,6 @@
 # define CFMS_GET_WTI_BINDC_ "cFMS_get_wti_cfloat"
 # define CFMS_GET_WTJ_ cFMS_get_wtj_cfloat
 # define CFMS_GET_WTJ_BINDC_ "cFMS_get_wtj_cfloat"
-# define CFMS_GET_INTERP_NAME_ cFMS_get_interp_cfloat
-# define CFMS_GET_INTERP_BINDC_ "cFMS_get_interp_cfloat"
 # define CFMS_GET_INTERP_DATA_TYPE_ real(c_float)
 # define CFMS_GET_INTERP_OBJ_DATA_TYPE_ horizInterpReals4_type
 #include "c_get_interp.inc"

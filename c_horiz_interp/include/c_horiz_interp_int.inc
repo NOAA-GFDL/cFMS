@@ -1,37 +1,41 @@
   subroutine cFMS_get_i_src(interp_id, i_src) bind(C, name="cFMS_get_i_src")
       integer, intent(in) :: interp_id
       integer, intent(out):: i_src(interp(interp_id)%nxgrid)
-      i_src = interp(interp_id)%i_src
+      i_src = interp(interp_id)%i_src - 1
   end subroutine cFMS_get_i_src
 
   subroutine cFMS_get_j_src(interp_id, j_src) bind(C, name="cFMS_get_j_src")
       integer, intent(in) :: interp_id
       integer, intent(out) :: j_src(interp(interp_id)%nxgrid)
-      j_src = interp(interp_id)%j_src
+      j_src = interp(interp_id)%j_src - 1
   end subroutine cFMS_get_j_src
 
-  subroutine cFMS_get_i_lon(interp_id, i_lon) bind(C, name="cFMS_get_i_lon")
+  !check for correctness
+  subroutine cFMS_get_i_lon(interp_id, i_lon) bind(C, name="cFMS_get_i_lon")      
       integer, intent(in) :: interp_id
       integer, intent(out) :: i_lon(interp(interp_id)%nlon_dst, interp(interp_id)%nlat_dst, 2)
+      call fms_mpp_error(WARNING, "cFMS_get_i_lon may not have been implemented correctly")
       i_lon = interp(interp_id)%i_lon
   end subroutine cFMS_get_i_lon
 
+  !check for correctness
   subroutine cFMS_get_j_lat(interp_id, j_lat) bind(C, name="cFMS_get_j_lat")
       integer, intent(in) :: interp_id
       integer :: j_lat(interp(interp_id)%nlon_dst, interp(interp_id)%nlat_dst, 2)
+      call fms_mpp_error(WARNING, "cFMS_get_j_lat may not have been implemented correctly")
       j_lat = interp(interp_id)%j_lat
   end subroutine cfms_get_j_lat
 
   subroutine cFMS_get_i_dst(interp_id, i_dst) bind(C, name="cFMS_get_i_dst")
       integer, intent(in) :: interp_id
       integer :: i_dst(interp(interp_id)%nxgrid)
-      i_dst = interp(interp_id)%i_dst
+      i_dst = interp(interp_id)%i_dst - 1 
   end subroutine cFMS_get_i_dst
 
   subroutine cFMS_get_j_dst(interp_id, j_dst) bind(C, name="cFMS_get_j_dst")
       integer, intent(in) :: interp_id
       integer :: j_dst(interp(interp_id)%nxgrid)
-      j_dst = interp(interp_id)%j_dst
+      j_dst = interp(interp_id)%j_dst - 1
   end subroutine cFMS_get_j_dst
 
   subroutine cFMS_get_version(interp_id, version) bind(C, name="cFMS_get_version")
