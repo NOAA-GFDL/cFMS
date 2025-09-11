@@ -94,6 +94,8 @@ int main()
                                     new_missing_handle);
 
   for(int i=0; i<Nout*Nout; i++) assert(data_out[i] == (double)i);
+
+  cFMS_horiz_interp_end();
   
   return EXIT_SUCCESS;
 

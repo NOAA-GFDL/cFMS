@@ -51,7 +51,7 @@ int main(){
   printf("done.\n");
   */
 
-  cFMS_horiz_interp_dealloc();
+  cFMS_horiz_interp_end();
 
   cFMS_end();
 
@@ -428,5 +428,7 @@ int test_bilinear_new(int domain_id)
     free(wti);
     free(wtj);
 
+    cFMS_horiz_interp_end();
+    
     return EXIT_SUCCESS;
 }

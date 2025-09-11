@@ -69,6 +69,8 @@ contains
     implicit none
 
     call fms_diag_end(cFMS_diag_end_time)
+    if(allocated(field_curr_time)) deallocate(field_curr_time)
+    if(allocated(field_timestep)) deallocate(field_timestep)
     
   end subroutine cFMS_diag_end
 

@@ -125,6 +125,10 @@ contains
   subroutine cFMS_end() bind(C, name="cFMS_end")
     implicit none
     call fms_end()
+
+    if(allocated(domain)) deallocate(domain)
+    if(allocated(nest_domain)) deallocate(nest_domain)
+    
   end subroutine cFMS_end
 
   !> cFMS_get_domain_count
