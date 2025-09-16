@@ -40,13 +40,13 @@ int main(){
 
   cFMS_horiz_interp_init(&ninterp);
 
-  printf("starting conservative test...");
+  //printf("starting conservative test...\n");
   test_conserve = test_conservative_new(domain_id);
-  printf("done.\n");
+  //printf("done.\n");
 
   /*
   bilinear test needs to be fixed
-  printf("starting bilinear test...");
+  printf("starting bilinear test...\n");
   test_bilinear = test_bilinear_new(domain_id);
   printf("done.\n");
   */
@@ -126,7 +126,7 @@ int test_conservative_new(int domain_id)
     double SMALL = 1.0e-10;
 
     char interp_method[MESSAGE_LENGTH] = "conservative";
-
+    
     dlon_src = (lon_src_end-lon_src_beg)/NI_SRC;
     dlat_src = (lat_src_end-lat_src_beg)/NJ_SRC;
     dlon_dst = (lon_dst_end-lon_dst_beg)/NI_DST;
@@ -195,15 +195,19 @@ int test_conservative_new(int domain_id)
             lat_out_2D[lat_out_1d_size*i + j] = lat_out_1D[j];
         }
     }
-    int lat_out_shape[2] = {lon_out_1d_size, lat_out_1d_size};
 
     int interp_id = 0;
     int test_interp_id;
 
-    test_interp_id = cFMS_horiz_interp_new_2d_cdouble(lon_in_2D, lat_in_2D, lat_in_shape,
-                                                      lon_out_2D, lat_out_2D, lat_out_shape,
+    int nlon_in = lon_in_1d_size - 1;
+    int nlat_in = lat_in_1d_size - 1;
+    int nlon_out = lon_out_1d_size - 1;
+    int nlat_out = lat_out_1d_size - 1;
+    
+    test_interp_id = cFMS_horiz_interp_new_2d_cdouble(&nlon_in, &nlat_in, &nlon_out, &nlat_out,
+                                                      lon_in_2D, lat_in_2D, lon_out_2D, lat_out_2D,
                                                       NULL, NULL, interp_method, NULL, NULL,
-                                                      NULL, NULL, NULL);
+                                                      NULL, NULL, NULL, NULL);
 
     assert(test_interp_id == interp_id);
 
@@ -374,12 +378,11 @@ int test_bilinear_new(int domain_id)
     int interp_id = 1;
     int test_interp_id;
 
-    test_interp_id = cFMS_horiz_interp_new_2d_cdouble(lon_in_2D, lat_in_2D, lat_in_shape,
-                                                      lon_out_2D, lat_out_2D, lat_out_shape,
+    test_interp_id = cFMS_horiz_interp_new_2d_cdouble(&lon_in_1d_size, &lat_in_1d_size, &lon_out_1d_size,
+                                                      &lat_out_1d_size, lon_in_2D, lat_in_2D, lon_out_2D, lat_out_2D,
                                                       NULL, NULL, interp_method, NULL, NULL,
-                                                      NULL, NULL, NULL);
-    
-    printf("ids %d %d\n", test_interp_id, interp_id);
+                                                      NULL, NULL, NULL, NULL);
+
     assert(test_interp_id == interp_id);
     
     int nlon_src;
