@@ -1,6 +1,6 @@
 function CFMS_HORIZ_INTERP_NEW_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_shape,&
      lon_out_ptr, lat_out_ptr, lonlat_out_shape, mask_in_ptr, mask_out_ptr, &
-     interp_method, verbose, max_dist, src_modulo, is_latlon_in, is_latlon_out) &
+     interp_method, verbose, max_dist, src_modulo, is_latlon_in, is_latlon_out, convert_cf_order) &
      bind(C, name=CFMS_HORIZ_INTERP_NEW_2D_BINDC_)
 
   implicit none
@@ -19,6 +19,7 @@ function CFMS_HORIZ_INTERP_NEW_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_shape,&
   logical(c_bool), intent(in), optional :: src_modulo
   logical(c_bool), intent(in), optional :: is_latlon_in
   logical(c_bool), intent(in), optional :: is_latlon_out
+  logical(c_bool), intent(in), optional :: convert_cf_order
 
   integer :: CFMS_HORIZ_INTERP_NEW_2D_
   integer :: mask_shape(2)
@@ -26,6 +27,7 @@ function CFMS_HORIZ_INTERP_NEW_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_shape,&
   logical :: src_modulo_f
   logical :: is_latlon_in_f
   logical :: is_latlon_out_f
+  logical :: convert_f_to_c_order, convert_c_to_f_order
 
   CFMS_HORIZ_INTERP_NEW_2D_DATA_TYPE_, allocatable :: lon_in(:,:)
   CFMS_HORIZ_INTERP_NEW_2D_DATA_TYPE_, allocatable :: lat_in(:,:)
@@ -39,20 +41,20 @@ function CFMS_HORIZ_INTERP_NEW_2D_(lon_in_ptr, lat_in_ptr, lonlat_in_shape,&
   allocate(lon_out(lonlat_out_shape(1), lonlat_out_shape(2)))
   allocate(lat_out(lonlat_out_shape(1), lonlat_out_shape(2)))
 
-  call cFMS_pointer_to_array(lon_in_ptr, lonlat_in_shape, lon_in)
-  call cFMS_pointer_to_array(lat_in_ptr, lonlat_in_shape, lat_in)
-  call cFMS_pointer_to_array(lon_out_ptr, lonlat_out_shape, lon_out)
-  call cFMS_pointer_to_array(lat_out_ptr, lonlat_out_shape, lat_out)
+  call cFMS_pointer_to_array(lon_in_ptr, lonlat_in_shape, lon_in, convert_cf_order)
+  call cFMS_pointer_to_array(lat_in_ptr, lonlat_in_shape, lat_in, convert_cf_order)
+  call cFMS_pointer_to_array(lon_out_ptr, lonlat_out_shape, lon_out, convert_cf_order)
+  call cFMS_pointer_to_array(lat_out_ptr, lonlat_out_shape, lat_out, convert_cf_order)
 
   if(c_associated(mask_in_ptr))  then
     mask_shape = lonlat_in_shape -1
     allocate(mask_in(mask_shape(1), mask_shape(2)))
-    call cFMS_pointer_to_array(mask_in_ptr, mask_shape, mask_in)
+    call cFMS_pointer_to_array(mask_in_ptr, mask_shape, mask_in, convert_cf_order)
   end if
   if(c_associated(mask_out_ptr)) then
      mask_shape = lonlat_out_shape -1
     allocate(mask_out(mask_shape(1), mask_shape(2)))
-    call cFMS_pointer_to_array(mask_out_ptr, mask_shape, mask_out)
+    call cFMS_pointer_to_array(mask_out_ptr, mask_shape, mask_out, convert_cf_order)
   end if
 
   interp_method_f = "conservative"

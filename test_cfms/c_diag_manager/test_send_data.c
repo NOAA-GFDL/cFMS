@@ -242,7 +242,7 @@ int main()
       }
     }
     cFMS_diag_advance_field_time(&id_var3);
-    cFMS_diag_send_data_3d_cfloat(&id_var3, var3_shape, var3, NULL);
+    cFMS_diag_send_data_3d_cfloat(&id_var3, var3_shape, var3, NULL, NULL);
     cFMS_diag_send_complete(&id_var3, NULL);
 
     int ij = 0;
@@ -253,7 +253,7 @@ int main()
       }
     }
     cFMS_diag_advance_field_time(&id_var2);
-    cFMS_diag_send_data_2d_cfloat(&id_var2, var2_shape, var2, NULL);
+    cFMS_diag_send_data_2d_cfloat(&id_var2, var2_shape, var2, NULL, NULL);
     cFMS_diag_send_complete(&id_var2, NULL);    
   }
 

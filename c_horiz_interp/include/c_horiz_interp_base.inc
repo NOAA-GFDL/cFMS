@@ -1,6 +1,6 @@
 subroutine CFMS_HORIZ_INTERP_BASE_2D_(interp_id, data_in_ptr, data_in_shape, &
      data_out_ptr, data_out_shape, mask_in_ptr, mask_out_ptr, verbose, missing_value, &
-     missing_permit, new_missing_handle) bind(C, name=CFMS_HORIZ_INTERP_BASE_2D_BINDC_)
+     missing_permit, new_missing_handle, convert_cf_order) bind(C, name=CFMS_HORIZ_INTERP_BASE_2D_BINDC_)
   
   implicit none
   integer, intent(in) :: interp_id
@@ -14,6 +14,7 @@ subroutine CFMS_HORIZ_INTERP_BASE_2D_(interp_id, data_in_ptr, data_in_shape, &
   CFMS_HORIZ_INTERP_BASE_2D_TYPE_, intent(in), optional :: missing_value
   integer, intent(in), optional :: missing_permit
   logical(c_bool), intent(in), optional :: new_missing_handle
+  logical(c_bool), intent(in), optional :: convert_cf_order
 
   logical :: new_missing_handle_f
   logical :: mask_in_present, mask_out_present
@@ -26,16 +27,16 @@ subroutine CFMS_HORIZ_INTERP_BASE_2D_(interp_id, data_in_ptr, data_in_shape, &
   allocate(data_in(data_in_shape(1), data_in_shape(2)))
   allocate(data_out(data_out_shape(1), data_out_shape(2)))
 
-  call cFMS_pointer_to_array(data_in_ptr, data_in_shape, data_in)
-  call cFMS_pointer_to_array(data_out_ptr, data_out_shape, data_out)
+  call cFMS_pointer_to_array(data_in_ptr, data_in_shape, data_in, convert_cf_order)
+  call cFMS_pointer_to_array(data_out_ptr, data_out_shape, data_out, convert_cf_order)
 
   mask_in_present = c_associated(mask_in_ptr)
   mask_out_present = c_associated(mask_out_ptr)
   if(mask_in_present) then
-     call cFMS_pointer_to_array(mask_in_ptr, data_in_shape, mask_in)
+     call cFMS_pointer_to_array(mask_in_ptr, data_in_shape, mask_in, convert_cf_order)
   end if
   if(mask_out_present) then
-     call cFMS_pointer_to_array(mask_out_ptr, data_out_shape, mask_out)
+     call cFMS_pointer_to_array(mask_out_ptr, data_out_shape, mask_out, convert_cf_order)
   end if
 
   if(present(new_missing_handle)) then
@@ -62,6 +63,6 @@ subroutine CFMS_HORIZ_INTERP_BASE_2D_(interp_id, data_in_ptr, data_in_shape, &
 
   write(*,*) interp(interp_id)%nxgrid
   
-  call cFMS_array_to_pointer(data_out, data_out_shape, data_out_ptr)
+  call cFMS_array_to_pointer(data_out, data_out_shape, data_out_ptr, convert_cf_order)
 
 end subroutine CFMS_HORIZ_INTERP_BASE_2D_

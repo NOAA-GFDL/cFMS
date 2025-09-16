@@ -188,8 +188,8 @@ void test_vector_double2d(int *domain_id)
     char *name = NULL;
 
     cFMS_v_update_domains_double_2d(x_shape, x_data, y_shape, y_data, domain_id, flags,
-                                     &gridtype, complete, &whalo, &ehalo, &shalo, &nhalo,
-                                     name, tile_count);
+                                    &gridtype, complete, &whalo, &ehalo, &shalo, &nhalo,
+                                    name, tile_count, NULL);
 
     /*
     global2r8(nx/2+1:nx, ny+shift) = -global2r8(nx/2:1:-1, ny+shift)

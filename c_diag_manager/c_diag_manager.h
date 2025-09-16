@@ -64,17 +64,17 @@ extern int cFMS_register_diag_field_array_cdouble(char *module_name, char *field
                                                   char *interp_method, int *tile_count, int *area, int *volume,
                                                   char *realm, bool *multiple_send_data);                                                 
 
-extern bool cFMS_diag_send_data_2d_cint(int *diag_field_id, int *field_shape, int *field, char *err_msg);
-extern bool cFMS_diag_send_data_3d_cint(int *diag_field_id, int *field_shape, int *field, char *err_msg);
-extern bool cFMS_diag_send_data_4d_cint(int *diag_field_id, int *field_shape, int *field, char *err_msg);
-extern bool cFMS_diag_send_data_5d_cint(int *diag_field_id, int *field_shape, int *field, char *err_msg);
-extern bool cFMS_diag_send_data_2d_cfloat(int *diag_field_id, int *field_shape, float *field, char *err_msg);
-extern bool cFMS_diag_send_data_3d_cfloat(int *diag_field_id, int *field_shape, float *field, char *err_msg);
-extern bool cFMS_diag_send_data_4d_cfloat(int *diag_field_id, int *field_shape, float *field, char *err_msg);
-extern bool cFMS_diag_send_data_5d_cfloat(int *diag_field_id, int *field_shape, float *field, char *err_msg);
-extern bool cFMS_diag_send_data_2d_cdouble(int *diag_field_id, int *field_shape, double *field, char *err_msg);
-extern bool cFMS_diag_send_data_3d_cdouble(int *diag_field_id, int *field_shape, double *field, char *err_msg);
-extern bool cFMS_diag_send_data_4d_cdouble(int *diag_field_id, int *field_shape, double *field, char *err_msg);
-extern bool cFMS_diag_send_data_5d_cdouble(int *diag_field_id, int *field_shape, double *field, char *err_msg);
+extern bool cFMS_diag_send_data_2d_cint(int *diag_field_id, int *field_shape, int *field, char *err_msg, bool *convert_cf_data);
+extern bool cFMS_diag_send_data_3d_cint(int *diag_field_id, int *field_shape, int *field, char *err_msg, bool *convert_cf_data);
+extern bool cFMS_diag_send_data_4d_cint(int *diag_field_id, int *field_shape, int *field, char *err_msg, bool *convert_cf_data);
+extern bool cFMS_diag_send_data_5d_cint(int *diag_field_id, int *field_shape, int *field, char *err_msg, bool *convert_cf_data);
+extern bool cFMS_diag_send_data_2d_cfloat(int *diag_field_id, int *field_shape, float *field, char *err_msg, bool *convert_cf_data);
+extern bool cFMS_diag_send_data_3d_cfloat(int *diag_field_id, int *field_shape, float *field, char *err_msg, bool *convert_cf_data);
+extern bool cFMS_diag_send_data_4d_cfloat(int *diag_field_id, int *field_shape, float *field, char *err_msg, bool *convert_cf_data);
+extern bool cFMS_diag_send_data_5d_cfloat(int *diag_field_id, int *field_shape, float *field, char *err_msg, bool *convert_cf_data);
+extern bool cFMS_diag_send_data_2d_cdouble(int *diag_field_id, int *field_shape, double *field, char *err_msg, bool *convert_cf_data);
+extern bool cFMS_diag_send_data_3d_cdouble(int *diag_field_id, int *field_shape, double *field, char *err_msg, bool *convert_cf_data);
+extern bool cFMS_diag_send_data_4d_cdouble(int *diag_field_id, int *field_shape, double *field, char *err_msg, bool *convert_cf_data);
+extern bool cFMS_diag_send_data_5d_cdouble(int *diag_field_id, int *field_shape, double *field, char *err_msg, bool *convert_cf_data);
 
 #endif
