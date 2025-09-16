@@ -10,7 +10,7 @@ void set_grid(double *lon_in, double *lat_in, double *lon_out, double *lat_out, 
 void set_data(double *data_in, char order);
 
 int nin = 5, nout = 5;
-double din = 0.5, dout = 0.5;  
+double din = 0.5, dout = 0.5;
 
 int main()
 {
@@ -38,7 +38,7 @@ int main()
   double *missing_value = NULL;
   int *missing_permit = NULL;
   bool *new_missing_handle = NULL;
-    
+
   cFMS_init(NULL,NULL,NULL,NULL,NULL);
   int two = 2; cFMS_horiz_interp_init(&two);
 
@@ -46,7 +46,7 @@ int main()
 
   convert_cf_order = true;
   {
-    set_grid(lon_in, lat_in, lon_out, lat_out, 'C');    
+    set_grid(lon_in, lat_in, lon_out, lat_out, 'C');
     int interp = cFMS_horiz_interp_new_2d_cdouble(&nin, &nin, &nout, &nout,
                                                   lon_in, lat_in, lon_out, lat_out,
                                                   mask_in, mask_out, interp_method,
@@ -56,7 +56,7 @@ int main()
     set_data(data_in, 'C');
     cFMS_horiz_interp_base_2d_cdouble(&interp, data_in, data_out, mask_in, mask_out, verbose, missing_value,
                                       missing_permit, new_missing_handle, &convert_cf_order);
-        
+
     int ij = 0;
     for(int i=0; i<nout; i++){
       for(int j=0; j<nout; j++){
@@ -88,7 +88,7 @@ int main()
 
   cFMS_horiz_interp_end();
   cFMS_end();
-  
+
   return EXIT_SUCCESS;
 
 }
@@ -97,7 +97,7 @@ void set_grid(double *lon_in, double *lat_in, double *lon_out, double *lat_out, 
 {
 
   char C = 'C';
-  
+
   if(order == C){
     for(int i=0; i<nin+1; i++){
       for(int j=0; j<nin+1; j++){
@@ -114,7 +114,7 @@ void set_grid(double *lon_in, double *lat_in, double *lon_out, double *lat_out, 
       }
     }
   }
-  else { //fortran ordered    
+  else { //fortran ordered
     for(int j=0; j<nin+1; j++){
       for(int i=0; i<nin+1; i++){
         int ij = j*(nin+1) + i;
@@ -128,7 +128,7 @@ void set_grid(double *lon_in, double *lat_in, double *lon_out, double *lat_out, 
         lon_out[ij] = (double)i*dout*DEG_TO_RAD;
         lat_out[ij] = (double)j*dout*DEG_TO_RAD;
       }
-    }    
+    }
   }//if
 
 }
@@ -137,7 +137,7 @@ void set_data(double *data_in, char order)
 {
 
   char C = 'C';
-  
+
   if(order == C) {
     for(int i=0; i<nin; i++){
       for(int j=0; j<nin; j++){
@@ -156,6 +156,3 @@ void set_data(double *data_in, char order)
   }
 
 }
-  
-
-  
