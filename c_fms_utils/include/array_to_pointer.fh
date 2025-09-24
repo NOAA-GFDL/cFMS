@@ -2,48 +2,48 @@
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_2d_int
 #define CFMS_ARRAY_TO_POINTER_TYPE_           integer
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   2,1
 #include "array_to_pointer.inc"
 
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_3d_int
 #define CFMS_ARRAY_TO_POINTER_TYPE_           integer
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(3),c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(3),f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   3,2,1
 #include "array_to_pointer.inc"
 
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_4d_int
 #define CFMS_ARRAY_TO_POINTER_TYPE_           integer
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:,:,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(4),c_shape(3),c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(4),f_shape(3),f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   4,3,2,1
 #include "array_to_pointer.inc"
 
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_5d_int
 #define CFMS_ARRAY_TO_POINTER_TYPE_           integer
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:,:,:,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(5),c_shape(4),c_shape(3),c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(5),f_shape(4),f_shape(3),f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   5,4,3,2,1
 #include "array_to_pointer.inc"
 
@@ -51,48 +51,48 @@
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_2d_cfloat
 #define CFMS_ARRAY_TO_POINTER_TYPE_           real(c_float)
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   2,1
 #include "array_to_pointer.inc"
 
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_3d_cfloat
 #define CFMS_ARRAY_TO_POINTER_TYPE_           real(c_float)
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(3),c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(3),f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   3,2,1
 #include "array_to_pointer.inc"
 
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_4d_cfloat
 #define CFMS_ARRAY_TO_POINTER_TYPE_           real(c_float)
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:,:,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(4),c_shape(3),c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(4),f_shape(3),f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   4,3,2,1
 #include "array_to_pointer.inc"
 
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_5d_cfloat
 #define CFMS_ARRAY_TO_POINTER_TYPE_           real(c_float)
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:,:,:,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(5),c_shape(4),c_shape(3),c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(5),f_shape(4),f_shape(3),f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   5,4,3,2,1
 #include "array_to_pointer.inc"
 
@@ -100,48 +100,48 @@
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_2d_cdouble
 #define CFMS_ARRAY_TO_POINTER_TYPE_           real(c_double)
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   2,1
 #include "array_to_pointer.inc"
 
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_3d_cdouble
 #define CFMS_ARRAY_TO_POINTER_TYPE_           real(c_double)
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(3),c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(3),f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   3,2,1
 #include "array_to_pointer.inc"
 
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_4d_cdouble
 #define CFMS_ARRAY_TO_POINTER_TYPE_           real(c_double)
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:,:,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(4),c_shape(3),c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(4),f_shape(3),f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   4,3,2,1
 #include "array_to_pointer.inc"
 
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_5d_cdouble
 #define CFMS_ARRAY_TO_POINTER_TYPE_           real(c_double)
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:,:,:,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(5),c_shape(4),c_shape(3),c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(5),f_shape(4),f_shape(3),f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   5,4,3,2,1
 #include "array_to_pointer.inc"
 
@@ -149,47 +149,47 @@
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_2d_logical
 #define CFMS_ARRAY_TO_POINTER_TYPE_           logical
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   2,1
 #include "array_to_pointer.inc"
 
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_3d_logical
 #define CFMS_ARRAY_TO_POINTER_TYPE_           logical
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(3),c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(3),f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   3,2,1
 #include "array_to_pointer.inc"
 
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_4d_logical
 #define CFMS_ARRAY_TO_POINTER_TYPE_           logical
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:,:,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(4),c_shape(3),c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(4),f_shape(3),f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   4,3,2,1
 #include "array_to_pointer.inc"
 
 #undef  CFMS_ARRAY_TO_POINTER_
 #undef  CFMS_ARRAY_TO_POINTER_TYPE_
 #undef  CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_
-#undef  CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_
+#undef  CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_
 #undef  CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_
 #define CFMS_ARRAY_TO_POINTER_                cFMS_array_to_pointer_5d_logical
 #define CFMS_ARRAY_TO_POINTER_TYPE_           logical
 #define CFMS_ARRAY_TO_POINTER_ASSUMED_SHAPE_  :,:,:,:,:
-#define CFMS_ARRAY_TO_POINTER_REVERSED_SHAPE_ c_shape(5),c_shape(4),c_shape(3),c_shape(2),c_shape(1)
+#define CFMS_ARRAY_TO_POINTER_REVERSED_F_SHAPE_ f_shape(5),f_shape(4),f_shape(3),f_shape(2),f_shape(1)
 #define CFMS_ARRAY_TO_POINTER_COLUMN_MAJOR_   5,4,3,2,1
 #include "array_to_pointer.inc"

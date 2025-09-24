@@ -195,7 +195,7 @@ void test_float2d(int *domain_id)
   char *name = NULL;
   
   cFMS_update_domains_double_2d(field_shape, idata, domain_id, flags, complete, position,
-                               &whalo, &ehalo, &shalo, &nhalo, name, tile_count);
+                                &whalo, &ehalo, &shalo, &nhalo, name, tile_count, NULL);
 
   int ipe = cFMS_pe();  
   for(int ix=WHALO ; ix<xsize_d-WHALO; ix++) {

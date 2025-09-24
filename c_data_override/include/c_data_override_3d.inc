@@ -1,5 +1,5 @@
-subroutine CFMS_DATA_OVERRIDE_3D_(gridname, fieldname, data_shape, data, override, data_index, is, ie, js, je) &
-     bind(C, name=CFMS_DATA_OVERRIDE_3D_BINDC_)
+subroutine CFMS_DATA_OVERRIDE_3D_(gridname, fieldname, data_shape, data, override, &
+     data_index, is, ie, js, je, convert_cf_order) bind(C, name=CFMS_DATA_OVERRIDE_3D_BINDC_)
 
   implicit none
   character(c_char), intent(in) :: gridname(NAME_LENGTH)
@@ -12,6 +12,7 @@ subroutine CFMS_DATA_OVERRIDE_3D_(gridname, fieldname, data_shape, data, overrid
   integer, intent(in), optional :: ie
   integer, intent(in), optional :: js
   integer, intent(in), optional :: je
+  logical(c_bool), intent(in), optional :: convert_cf_order
 
   character(len=NAME_LENGTH-1) :: gridname_f
   character(len=NAME_LENGTH-1) :: fieldname_f
@@ -35,7 +36,7 @@ subroutine CFMS_DATA_OVERRIDE_3D_(gridname, fieldname, data_shape, data, overrid
                          ie_in = ie, &
                          je_in = je)
   
-  call cfms_array_to_pointer(data_f, data_shape, data)  
+  call cfms_array_to_pointer(data_f, data_shape, data, convert_cf_order)
   deallocate(data_f)
   
   if(present(override)) override = logical(override_f, c_bool)

@@ -77,7 +77,8 @@ int main()
     double *data = NULL;
     int *override_index = NULL;
     bool override = false;
-
+    bool *convert_cf_order = NULL;
+    
     int year = 1;
     int month = 1;
     int day = 4;
@@ -92,7 +93,7 @@ int main()
     
     cFMS_data_override_set_time(&year, &month, &day, &hour, &minute, &second, NULL, NULL);
     cFMS_data_override_3d_cdouble(gridname, fieldname, data_shape, data, &override, 
-                                  override_index, NULL, NULL, NULL, NULL);
+                                  override_index, NULL, NULL, NULL, NULL, convert_cf_order);
 
     int ijk = 0;
     for(int i=0; i<xsize; i++){

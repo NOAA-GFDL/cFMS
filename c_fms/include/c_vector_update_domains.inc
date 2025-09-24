@@ -1,5 +1,5 @@
 subroutine CFMS_V_UPDATE_DOMAINS_SUB_NAME_(fieldx_shape, fieldx, fieldy_shape, fieldy, domain_id, flags, gridtype, &
-  complete, whalo, ehalo, shalo, nhalo, name_c, tile_count) bind(C, name=CFMS_V_UPDATE_DOMAINS_BINDC_)
+  complete, whalo, ehalo, shalo, nhalo, name_c, tile_count, convert_cf_order) bind(C, name=CFMS_V_UPDATE_DOMAINS_BINDC_)
 
   implicit none
   integer, intent(in) :: fieldx_shape(CFMS_V_UPDATE_DOMAINS_FIELD_NDIM_)
@@ -13,6 +13,7 @@ subroutine CFMS_V_UPDATE_DOMAINS_SUB_NAME_(fieldx_shape, fieldx, fieldy_shape, f
   integer, intent(in), optional :: whalo, ehalo, shalo, nhalo
   character(c_char), intent(in), optional :: name_c(NAME_LENGTH)
   integer, intent(inout), optional :: tile_count
+  logical(c_bool), intent(in), optional :: convert_cf_order
 
   CFMS_V_UPDATE_DOMAINS_FIELD_TYPE_, allocatable :: fieldx_f(CFMS_V_UPDATE_DOMAINS_FIELD_POINTER_)
   CFMS_V_UPDATE_DOMAINS_FIELD_TYPE_, allocatable :: fieldy_f(CFMS_V_UPDATE_DOMAINS_FIELD_POINTER_)
@@ -22,18 +23,18 @@ subroutine CFMS_V_UPDATE_DOMAINS_SUB_NAME_(fieldx_shape, fieldx, fieldy_shape, f
   if(present(tile_count)) tile_count = tile_count + 1
   
   allocate(fieldx_f(CFMS_V_UPDATE_DOMAINS_SHAPEX_F_))
-  call cFMS_pointer_to_array(fieldx, fieldx_shape, fieldx_f)
+  call cFMS_pointer_to_array(fieldx, fieldx_shape, fieldx_f, convert_cf_order)
 
   allocate(fieldy_f(CFMS_V_UPDATE_DOMAINS_SHAPEY_F_))
-  call cFMS_pointer_to_array(fieldy, fieldy_shape, fieldy_f)
+  call cFMS_pointer_to_array(fieldy, fieldy_shape, fieldy_f, convert_cf_order)
   
   call cFMS_set_current_domain(domain_id)  
   call fms_mpp_domains_update_domains(fieldx=fieldx_f, fieldy=fieldy_f, domain=current_domain, flags=flags, &
     gridtype=gridtype, complete=complete, whalo=whalo, ehalo=ehalo, shalo=shalo, nhalo=nhalo, name=name_f, &
     tile_count=tile_count)
 
-  call cFMS_array_to_pointer(fieldx_f, fieldx_shape, fieldx)
-  call cFMS_array_to_pointer(fieldy_f, fieldy_shape, fieldy)
+  call cFMS_array_to_pointer(fieldx_f, fieldx_shape, fieldx, convert_cf_order)
+  call cFMS_array_to_pointer(fieldy_f, fieldy_shape, fieldy, convert_cf_order)
   
   deallocate(fieldx_f)
   deallocate(fieldy_f)

@@ -75,6 +75,7 @@ int main()
     int data_shape[2];
     double *data = NULL;
     bool override = false;
+    bool *convert_cf_order = NULL;
 
     int year = 1;
     int month = 1;
@@ -88,7 +89,8 @@ int main()
     data = (double *)malloc(xsize*ysize*sizeof(double));
     
     cFMS_data_override_set_time(&year, &month, &day, &hour, &minute, &second, NULL, NULL);
-    cFMS_data_override_2d_cdouble(gridname, fieldname, data_shape, data, &override, NULL, NULL, NULL, NULL);
+    cFMS_data_override_2d_cdouble(gridname, fieldname, data_shape, data, &override, NULL, NULL, NULL, NULL,
+                                  convert_cf_order);
 
     for(int ij=0; ij<xsize*ysize; ij++) {
       if( ABS(data[ij],100.03) > TOLERANCE ) {
