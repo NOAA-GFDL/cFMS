@@ -1,0 +1,29 @@
+package:
+  name: cfms
+
+source:
+  path: ..
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('fortran') }}
+    - {{ mpi }}
+    - hdf5
+    - netcdf-c
+    - netcdf-fortran
+    - libyaml
+  host: #what is needed on host system
+    - {{ mpi }}
+    - hdf5
+    - netcdf-c
+    - netcdf-fortran
+    - libyaml
+  run: #what is needed during runtime
+    - {{ mpi }}
+    - hdf5
+    - netcdf-c
+    - netcdf-fortan
+    - libyaml
+    
+

@@ -1,0 +1,7 @@
+target_platform:
+  - linux-64
+  - linux-arm64
+  - osx-64
+  - osx-arm64
+mpi:
+  - mpich # [linux]
