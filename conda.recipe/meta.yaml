@@ -1,0 +1,32 @@
+{% set version = "1.0.0" %}
+
+package:
+  name: cfms
+  version: {{ version }}
+
+source:
+  path: ..
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('fortran') }}
+    - mpich
+    - hdf5
+    - libnetcdf
+    - netcdf-fortran
+    - yaml
+  host: #what is needed on host system
+    - mpich
+    - hdf5
+    - libnetcdf
+    - netcdf-fortran
+    - yaml
+  run: #what is needed during runtime
+    - mpich
+    - hdf5
+    - libnetcdf
+    - netcdf-fortran
+    - yaml
+    
+
