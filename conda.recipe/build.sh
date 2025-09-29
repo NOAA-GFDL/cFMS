@@ -11,7 +11,6 @@ LDFLAGS="-L${PREFIX}/lib"
 
 cfms_install=${PREFIX}
 
-cd $curr_dir
 autoreconf -iv
 ./configure --enable-portable-kinds \
             --with-yaml \
