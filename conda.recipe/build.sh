@@ -9,23 +9,11 @@ CFLAGS="-fPIC -I${PREFIX}/include"
 FCFLAGS="-fPIC -I${PREFIX}/include"
 LDFLAGS="-L${PREFIX}/lib"
 
-curr_dir=$PWD
-
-fms_install="${PREFIX}"
-cfms_install="${PREFIX}"
-
-cfms_dir=$curr_dir/cFMS
-fms_dir=$curr_dir/FMS
-
-# cd $fms_dir
-# autoreconf -iv
-# ./configure --enable-portable-kinds \
-#             --with-yaml \
-#             --prefix=$fms_install
-# make install
+cfms_install=${PREFIX}
 
 cd $curr_dir
 autoreconf -iv
-./configure --with-fms=$fms_install \
-            --prefix=$cfms_install
+./configure --enable-portable-kinds \
+            --with-yaml \
+            --prefix=${cfms_install}
 make install

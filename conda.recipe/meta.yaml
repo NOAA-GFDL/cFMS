@@ -11,19 +11,19 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('fortran') }}
-    - {{ mpi }}
+    - mpich
     - hdf5
     - libnetcdf
     - netcdf-fortran
     - yaml
   host: #what is needed on host system
-    - {{ mpi }}
+    - mpich
     - hdf5
     - libnetcdf
     - netcdf-fortran
     - yaml
   run: #what is needed during runtime
-    - {{ mpi }}
+    - mpich
     - hdf5
     - libnetcdf
     - netcdf-fortran

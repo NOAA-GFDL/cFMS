@@ -1,4 +1,2 @@
 target_platform:
   - linux-64
-mpi:
-  - mpich # [linux]
