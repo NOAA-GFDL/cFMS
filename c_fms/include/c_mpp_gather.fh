@@ -1,0 +1,17 @@
+#undef  CFMS_GATHER_PELIST_2D_
+#undef  CFMS_GATHER_PELIST_2D_BINDC_
+#undef  CFMS_GATHER_PELIST_2D_KIND_
+#define CFMS_GATHER_PELIST_2D_  cFMS_gather_pelist_2d_cfloat
+#define CFMS_GATHER_PELIST_2D_BINDC_  "cFMS_gather_pelist_2d_cfloat"
+#define CFMS_GATHER_PELIST_2D_KIND_ c_float
+#include "c_mpp_gather.inc"
+
+#undef  CFMS_GATHER_PELIST_2D_
+#undef  CFMS_GATHER_PELIST_2D_BINDC_
+#undef  CFMS_GATHER_PELIST_2D_KIND_
+#define CFMS_GATHER_PELIST_2D_  cFMS_gather_pelist_2d_cdouble
+#define CFMS_GATHER_PELIST_2D_BINDC_  "cFMS_gather_pelist_2d_cdouble"
+#define CFMS_GATHER_PELIST_2D_KIND_ c_double
+#include "c_mpp_gather.inc"
+
+  

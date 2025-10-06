@@ -26,6 +26,8 @@ module c_fms_mod
   use FMS, only : fms_mpp_declare_pelist, fms_mpp_error, fms_mpp_get_current_pelist
   use FMS, only : fms_mpp_npes, fms_mpp_pe, fms_mpp_set_current_pelist
 
+  use FMS, only : fms_mpp_gather
+  
   use FMS, only : fms_mpp_domains_define_domains, fms_mpp_domains_define_io_domain, fms_mpp_domains_define_layout
   use FMS, only : fms_mpp_domains_define_nest_domains, fms_mpp_domains_domain_is_initialized
   use FMS, only : fms_mpp_domains_get_compute_domain, fms_mpp_domains_get_data_domain, fms_mpp_domains_get_domain_name
@@ -52,14 +54,15 @@ module c_fms_mod
   implicit none
 
   public :: cFMS_init
-  public :: cFMS_end, cFMS_error, cFMS_set_pelist_npes
+  public :: cFMS_end, cFMS_error
   public :: cFMS_get_domain_count, cFMS_get_nest_domain_count
   public :: cFMS_declare_pelist, cFMS_get_current_pelist, cFMS_npes, cFMS_pe, cFMS_set_current_pelist
   public :: cFMS_define_domains
   public :: cFMS_define_io_domain
   public :: cFMS_define_layout
   public :: cFMS_define_nest_domains
-  public :: cFMS_domain_is_initialized  
+  public :: cFMS_domain_is_initialized
+  public :: cFMS_gather_pelist_2d_cfloat, cFMS_gather_pelist_2d_cdouble
   public :: cFMS_get_compute_domain
   public :: cFMS_get_domain
   public :: cFMS_get_data_domain
@@ -76,7 +79,6 @@ module c_fms_mod
   integer, public, parameter :: MESSAGE_LENGTH=128
   character(NAME_LENGTH), parameter :: input_nml_path="./input.nml"
 
-  integer, public, bind(C, name="cFMS_pelist_npes") :: npes
   integer, public, bind(C, name="NOTE")    :: NOTE_C    = NOTE
   integer, public, bind(C, name="WARNING") :: WARNING_C = WARNING
   integer, public, bind(C, name="FATAL")   :: FATAL_C   = FATAL
@@ -185,17 +187,11 @@ contains
     
   end subroutine cfms_init
 
-  !> cFMS_set_npes
-  subroutine cFMS_set_pelist_npes(npes_in) bind(C, name="cFMS_set_pelist_npes")
-    implicit none
-    integer, intent(in) :: npes_in
-    npes = npes_in
-  end subroutine cFMS_set_pelist_npes
-  
   !> cFMS_declare_pelist
-  subroutine cFMS_declare_pelist(pelist, name, commID) bind(C, name="cFMS_declare_pelist")
+  subroutine cFMS_declare_pelist(npes, pelist, name, commID) bind(C, name="cFMS_declare_pelist")
 
     implicit none
+    integer, intent(in) :: npes
     integer, intent(in) :: pelist(npes)
     character(c_char), intent(in), optional :: name(NAME_LENGTH)
     integer, intent(out), optional :: commID
@@ -222,9 +218,10 @@ contains
 
   
   !> cFMS_get_current_pelist
-  subroutine cFMS_get_current_pelist(pelist, name, commID) bind(C, name="cFMS_get_current_pelist")
+  subroutine cFMS_get_current_pelist(npes, pelist, name, commID) bind(C, name="cFMS_get_current_pelist")
 
     implicit none
+    integer, intent(in) :: npes
     integer, intent(out) :: pelist(npes)
     character(c_char), intent(out), optional :: name(NAME_LENGTH)
     integer, intent(out), optional :: commID
@@ -251,21 +248,34 @@ contains
   end function cFMS_pe
   
   !> cFMS_set_current_pelist
-  subroutine cFMS_set_current_pelist(pelist, no_sync) bind(C, name="cFMS_set_current_pelist")
+  subroutine cFMS_set_current_pelist(npes, pelist, no_sync) bind(C, name="cFMS_set_current_pelist")
 
     implicit none
-    integer, intent(in), optional :: pelist(npes)
+    
+    integer, intent(in), optional :: npes
+    type(c_ptr), intent(in), optional :: pelist
     logical(c_bool), intent(in), optional :: no_sync
 
+    integer, pointer :: pelist_f(:)
+    
+    if(present(pelist)) then
+       if(present(npes)) then
+          allocate(pelist_f(npes))
+          call c_f_pointer(pelist, pelist_f, (/npes/))
+       else
+          call fms_mpp_error(FATAL, "cFMS_set_current_pelist, must provide number of pes in the pelist")
+       end if
+    end if
     if(present(no_sync)) then
-       call fms_mpp_set_current_pelist(pelist, logical(no_sync))
+       call fms_mpp_set_current_pelist(pelist_f, logical(no_sync))
     else
-       call fms_mpp_set_current_pelist(pelist)
+       !unallocated variables are considered as not-present for optional arguments
+       call fms_mpp_set_current_pelist(pelist_f)
     end if
     
   end subroutine cFMS_set_current_pelist
   
-  function cFMS_define_domains(global_indices, layout, npelist, pelist,         &
+  function cFMS_define_domains(global_indices, layout, npes, pelist,            &
        xflags, yflags, xhalo, yhalo, xextent, yextent, maskmap, name,           &
        symmetry, memory_size, whalo, ehalo, shalo, nhalo, is_mosaic, tile_count,&
        tile_id, complete, x_cyclic_offset, y_cyclic_offset) bind(C, name="cFMS_define_domains")
@@ -273,8 +283,8 @@ contains
     implicit none   
     integer, intent(inout) :: global_indices(4) 
     integer, intent(in) :: layout(2)
-    integer, intent(in) :: npelist
-    integer, intent(in), optional :: pelist(npelist)
+    integer, intent(in) :: npes
+    integer, intent(in), optional :: pelist(npes)
     integer, intent(in), optional :: xflags, yflags
     integer, intent(in), optional :: xhalo, yhalo
     integer, intent(in), optional :: xextent(layout(1)), yextent(layout(2))
@@ -539,9 +549,10 @@ contains
 
 
   !> cFMS_get_pelist
-  subroutine cFMS_get_domain_pelist(pelist, domain_id) bind(C, name="cFMS_get_domain_pelist")
+  subroutine cFMS_get_domain_pelist(npes, pelist, domain_id) bind(C, name="cFMS_get_domain_pelist")
     
     implicit none
+    integer, intent(in)  :: npes
     integer, intent(out) :: pelist(npes)
     integer, intent(in)  :: domain_id
     
@@ -833,6 +844,7 @@ contains
   end function cFMS_define_cubic_mosaic
   
   !> cFMS_update_domains
+#include "c_mpp_gather.fh"
 #include "c_update_domains.fh"
 #include "c_vector_update_domains.fh"
   

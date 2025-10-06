@@ -27,17 +27,20 @@ AM_LDFLAGS = $(LIBFMS_LIBS)
 LDADD = ${abs_top_builddir}/libcFMS/libcFMS.la
 
 check_PROGRAMS = test_define_domains \
-	test_getset_domains \
+  test_gather \
+  test_getset_domains \
 	test_update_domains \
   test_vector_update_domains \
   test_define_cubic_mosaic
 
 TESTS = test_define_domains.sh \
+  test_gather.sh \
 	test_getset_domains.sh \
   test_update_domains.sh \
   test_vector_update_domains.sh \
   test_define_cubic_mosaic.sh
 
+test_gather_SOURCES = c_mpp_domains_helper.c test_gather.c
 test_define_domains_SOURCES = c_mpp_domains_helper.c test_define_domains.c 
 test_getset_domains_SOURCES = c_mpp_domains_helper.c test_getset_domains.c
 test_update_domains_SOURCES = c_mpp_domains_helper.c test_update_domains.c
@@ -50,6 +53,7 @@ SH_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \
 
 # Include these files with the distribution.
 EXTRA_DIST = test_define_domains.sh \
+  test_gather.sh \
   test_getset_domains.sh \
   test_update_domains.sh \
   test_vector_update_domains.sh \
