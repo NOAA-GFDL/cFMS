@@ -32,6 +32,7 @@ subroutine CFMS_HORIZ_INTERP_BASE_2D_(interp_id, data_in_ptr, data_out_ptr, &
 
   in_shape = (/nlon_in, nlat_in/)
   out_shape = (/nlon_out, nlat_out/)
+
   allocate(data_in(nlon_in, nlat_in))
   allocate(data_out(nlon_out, nlat_out))
 
