@@ -248,7 +248,6 @@ contains
   end function cFMS_pe
   
   !> cFMS_set_current_pelist
-  !test if sending in NULL pelist works
   subroutine cFMS_set_current_pelist(npes, pelist, no_sync) bind(C, name="cFMS_set_current_pelist")
 
     implicit none

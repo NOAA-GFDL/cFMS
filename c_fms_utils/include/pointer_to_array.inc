@@ -17,7 +17,6 @@ subroutine CFMS_POINTER_TO_ARRAY_(c_pointer, f_shape, f_array, convert_c_to_f_or
   else
      call c_f_pointer(c_pointer, f_pointer, CFMS_POINTER_TO_ARRAY_SHAPE_)
      f_array = f_pointer
-     write(*,*) f_pointer
   end if
 
   nullify(f_pointer)
