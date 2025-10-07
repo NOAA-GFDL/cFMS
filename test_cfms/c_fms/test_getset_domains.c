@@ -45,7 +45,7 @@ int main()
     if( !cFMS_domain_is_initialized(&domain_id) ) cFMS_error(FATAL, "error in setting domain");
   }
 
-  cFMS_set_current_pelist(NULL, NULL);
+  cFMS_set_current_pelist(NULL, NULL, NULL);
 
   //flipping the domain
   //pe 0:  isc=2, iec=3, jsc=2, jec=3 --> pe 3

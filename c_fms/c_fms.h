@@ -103,6 +103,8 @@ extern void cFMS_get_domain_pelist(int *npes, int* pelist, int *domain_id);
 
 extern void cFMS_get_layout(int* layout, int *domain_id);
 
+extern int cFMS_root_pe();
+
 extern void cFMS_set_compute_domain(int *domain_id, int *xbegin, int *xend, int *ybegin, int *yend,
                                     int *xsize, int *ysize, bool *x_is_global, bool *y_is_global, int *tile_count,
                                     int *whalo, int *shalo);

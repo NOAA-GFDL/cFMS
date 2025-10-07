@@ -24,7 +24,7 @@ module c_fms_mod
   use FMS, only : fms_string_utils_c2f_string, fms_string_utils_f2c_string, fms_string_utils_cstring2cpointer
   
   use FMS, only : fms_mpp_declare_pelist, fms_mpp_error, fms_mpp_get_current_pelist
-  use FMS, only : fms_mpp_npes, fms_mpp_pe, fms_mpp_set_current_pelist
+  use FMS, only : fms_mpp_npes, fms_mpp_pe, fms_mpp_root_pe, fms_mpp_set_current_pelist
 
   use FMS, only : fms_mpp_gather
   
@@ -248,17 +248,18 @@ contains
   end function cFMS_pe
   
   !> cFMS_set_current_pelist
+  !test if sending in NULL pelist works
   subroutine cFMS_set_current_pelist(npes, pelist, no_sync) bind(C, name="cFMS_set_current_pelist")
 
     implicit none
     
     integer, intent(in), optional :: npes
-    type(c_ptr), intent(in), optional :: pelist
+    type(c_ptr), intent(in), value :: pelist 
     logical(c_bool), intent(in), optional :: no_sync
 
     integer, pointer :: pelist_f(:)
     
-    if(present(pelist)) then
+    if(c_associated(pelist)) then
        if(present(npes)) then
           allocate(pelist_f(npes))
           call c_f_pointer(pelist, pelist_f, (/npes/))
@@ -561,7 +562,14 @@ contains
     
   end subroutine cFMS_get_domain_pelist
 
+
+  function cFMS_root_pe() bind(C, name="cFMS_root_pe")
+    implicit none
+    integer :: cFMS_root_pe
+    cFMS_root_pe = fms_mpp_root_pe()
+  end function cFMS_root_pe
     
+  
   !>cFMS_set_compute_domain
   subroutine cFMS_set_compute_domain(domain_id, xbegin, xend, ybegin, yend, xsize, ysize, &
        x_is_global, y_is_global, tile_count, whalo, shalo) bind(C, name="cFMS_set_compute_domain")
