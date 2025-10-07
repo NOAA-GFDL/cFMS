@@ -79,6 +79,10 @@ extern int cFMS_define_nest_domains(int *num_nest, int *ntiles, int* nest_level,
 
 extern bool cFMS_domain_is_initialized(int *domain_id);
 
+extern void cFMS_gather_pelist_2d_cint(int *is, int *ie, int *js, int *je, int *npes, int *pelist,
+                                       int *array_seg, int *gather_data_c_shape, int *gather_data,
+                                       bool *is_root_pe, int *ishift, int *jshift, bool *convert_cf_order);
+
 extern void cFMS_gather_pelist_2d_cfloat(int *is, int *ie, int *js, int *je, int *npes, int *pelist,
                                          float *array_seg, int *gather_data_c_shape, float *gather_data,
                                          bool *is_root_pe, int *ishift, int *jshift, bool *convert_cf_order);

@@ -27,6 +27,7 @@ AM_LDFLAGS = $(LIBFMS_LIBS)
 LDADD = ${abs_top_builddir}/libcFMS/libcFMS.la
 
 check_PROGRAMS = test_define_domains \
+  test_gather_cint \
   test_gather_cfloat \
   test_gather_cdouble \
   test_getset_domains \
@@ -41,6 +42,7 @@ TESTS = test_define_domains.sh \
   test_vector_update_domains.sh \
   test_define_cubic_mosaic.sh
 
+test_gather_cint_SOURCES = c_mpp_domains_helper.c test_gather.c
 test_gather_cfloat_SOURCES = c_mpp_domains_helper.c test_gather.c
 test_gather_cdouble_SOURCES = c_mpp_domains_helper.c test_gather.c
 test_define_domains_SOURCES = c_mpp_domains_helper.c test_define_domains.c 
@@ -49,8 +51,17 @@ test_update_domains_SOURCES = c_mpp_domains_helper.c test_update_domains.c
 test_vector_update_domains_SOURCES = c_mpp_domains_helper.c test_vector_update_domains.c 
 test_define_cubic_mosaic_SOURCES = c_mpp_domains_helper.c test_define_cubic_mosaic.c
 
-test_gather_cfloat_CPPFLAGS = -DCFMS_TEST_KIND_=float $(AM_CPPFLAGS)
-test_gather_cdouble_CPPFLAGS = -DCFMS_TEST_KIND_=double $(AM_CPPFLAGS)
+test_gather_cint_CPPFLAGS = -DCFMS_TEST_KIND_=int \
+                            -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cint \
+                            $(AM_CPPFLAGS)
+
+test_gather_cfloat_CPPFLAGS = -DCFMS_TEST_KIND_=float \
+                              -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cfloat \
+                              $(AM_CPPFLAGS)
+
+test_gather_cdouble_CPPFLAGS = -DCFMS_TEST_KIND_=double \
+                               -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cdouble \
+                               $(AM_CPPFLAGS)
 
 TEST_EXTENSIONS = .sh
 SH_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \

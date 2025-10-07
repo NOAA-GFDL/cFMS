@@ -8,8 +8,6 @@
 #define NX 16
 #define NY 8
 
-void (cFMS_gather_2d_cfloat(int*, int*, int*, int*, int*, int*, *double, int*, *double, bool*, int*, int*, bool*);
-
 int main()
 {
 
@@ -64,25 +62,9 @@ int main()
   }
   else gather = (CFMS_TEST_KIND_ *)malloc(1*sizeof(CFMS_TEST_KIND_));  
 
-  if(sizeof(CFMS_TEST_KIND_)==sizeof(float)){
-    cFMS_gather_pelist_2d_cfloat(&isc, &iec, &jsc, &jec, &ndivs, pelist,
-                                 send, gather_shape, gather, &is_root_pe, NULL, NULL, NULL);
-  }
-  else if(sizeof(CFMS_TEST_KIND_)==sizeof(double)){
-    cFMS_gather_pelist_2d_cdouble(&isc, &iec, &jsc, &jec, &ndivs, pelist,
-                                  send, gather_shape, gather, &is_root_pe, NULL, NULL, NULL);
-  }
-  /*
-  else if(sizeof(CFMS_TEST_KIND_)==sizeof(int)){
-    cFMS_gather_pelist_2d_cint(&isc, &iec, &jsc, &jec, &ndivs, pelist,
-                                  send, gather_shape, gather, &is_root_pe, NULL, NULL, NULL);
-  }
-  */
-  else {
-    cFMS_error(FATAL, "variable type not known");
-    return EXIT_FAILURE;
-  }
-    
+
+  CFMS_GATHER_PELIST_2D_(&isc, &iec, &jsc, &jec, &ndivs, pelist,
+                         send, gather_shape, gather, &is_root_pe, NULL, NULL, NULL);
 
   if(is_root_pe){
     int ij=0;

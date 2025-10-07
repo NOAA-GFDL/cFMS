@@ -258,6 +258,8 @@ contains
     logical(c_bool), intent(in), optional :: no_sync
 
     integer, pointer :: pelist_f(:)
+
+    pelist_f => NULL()
     
     if(c_associated(pelist)) then
        if(present(npes)) then
@@ -273,8 +275,11 @@ contains
        !unallocated variables are considered as not-present for optional arguments
        call fms_mpp_set_current_pelist(pelist_f)
     end if
+
+    nullify(pelist_f)
     
   end subroutine cFMS_set_current_pelist
+
   
   function cFMS_define_domains(global_indices, layout, npes, pelist,            &
        xflags, yflags, xhalo, yhalo, xextent, yextent, maskmap, name,           &

@@ -13,9 +13,9 @@ subroutine CFMS_GATHER_PELIST_2D_(is, ie, js, je, npes, pelist, array_seg, gathe
   integer, intent(in), optional :: jshift
   logical(c_bool), intent(in), optional :: convert_cf_order
 
-  real(CFMS_GATHER_PELIST_2D_KIND_), allocatable :: array_seg_f(:,:)
-  real(CFMS_GATHER_PELIST_2D_KIND_), allocatable :: gather_data_f(:,:)
-  real(CFMS_GATHER_PELIST_2D_KIND_), pointer :: test(:,:)
+  CFMS_GATHER_PELIST_2D_TYPE_, allocatable :: array_seg_f(:,:)
+  CFMS_GATHER_PELIST_2D_TYPE_, allocatable :: gather_data_f(:,:)
+  CFMS_GATHER_PELIST_2D_TYPE_, pointer :: test(:,:)
   integer :: gather_data_f_shape(2)
 
   allocate(array_seg_f(ie-is+1, je-js+1))
