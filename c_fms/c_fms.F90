@@ -30,6 +30,7 @@ module c_fms_mod
   
   use FMS, only : fms_mpp_domains_define_domains, fms_mpp_domains_define_io_domain, fms_mpp_domains_define_layout
   use FMS, only : fms_mpp_domains_define_nest_domains, fms_mpp_domains_domain_is_initialized
+  use FMS, only : fms_mpp_domains_get_global_domain
   use FMS, only : fms_mpp_domains_get_compute_domain, fms_mpp_domains_get_data_domain, fms_mpp_domains_get_domain_name
   use FMS, only : fms_mpp_domains_get_layout, fms_mpp_domains_get_pelist
   use FMS, only : fms_mpp_domains_set_compute_domain, fms_mpp_domains_set_data_domain, fms_mpp_domains_set_global_domain
@@ -68,6 +69,7 @@ module c_fms_mod
   public :: cFMS_get_data_domain
   public :: cFMS_get_domain_from_id
   public :: cFMS_get_domain_name
+  public :: cFMS_get_global_domain
   public :: cFMS_get_layout
   public :: cFMS_set_compute_domain
   public :: cFMS_set_current_domain
@@ -539,6 +541,39 @@ contains
     call fms_string_utils_f2c_string(domain_name_c, domain_name_f)
     
   end subroutine cFMS_get_domain_name
+
+
+  !> cFMS_get_global_domain
+  subroutine cFMS_get_global_domain(domain_id, xbegin, xend, ybegin, yend, xsize, xmax_size, ysize, ymax_size, &
+       tile_count, position, whalo, shalo) bind(C, name="cFMS_get_global_domain")
+    
+    implicit none
+    integer, intent(in) :: domain_id
+    integer, intent(out), optional :: xbegin, xend, ybegin, yend
+    integer, intent(out), optional :: xsize, xmax_size, ysize, ymax_size
+    integer, intent(inout), optional :: tile_count
+    integer, intent(in),  optional :: position
+    integer, intent(in),  optional :: whalo, shalo
+
+    integer :: xshift = 0, yshift = 0
+    logical :: x_is_global_f, y_is_global_f
+    
+    if(present(tile_count)) tile_count = tile_count + 1
+    if(present(whalo)) xshift = whalo 
+    if(present(shalo)) yshift = shalo 
+    
+    call cFMS_set_current_domain(domain_id)
+    call fms_mpp_domains_get_global_domain(current_domain, xbegin=xbegin, xend=xend, ybegin=ybegin, yend=yend, &
+                                           xsize=xsize, xmax_size=xmax_size, ysize=ysize, ymax_size=ymax_size, &
+                                           tile_count=tile_count, position=position)
+
+    if(present(xbegin)) xbegin = xbegin + xshift - 1
+    if(present(xend))   xend   = xend   + xshift - 1 
+    if(present(ybegin)) ybegin = ybegin + yshift - 1 
+    if(present(yend))   yend   = yend   + yshift - 1    
+    if(present(tile_count)) tile_count = tile_count - 1
+    
+  end subroutine cFMS_get_global_domain
 
 
   subroutine cFMS_get_layout(layout, domain_id) bind(C, name="cFMS_get_layout")

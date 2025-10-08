@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <c_fms.h>
+#include <assert.h>
 #include <c_mpp_domains_helper.h>
+
+#define NX 4
+#define NY 4
 
 int main()
 {
@@ -19,7 +23,7 @@ int main()
   cDomainStruct domain;  
   int domain_id = -99;
   int ndiv = 4;
-  int global_indices[] = {0,3,0,3};
+  int global_indices[] = {0, NX-1, 0, NY-1};
   int whalo = 2;
   int ehalo = 2;
   int shalo = 2;
@@ -44,6 +48,25 @@ int main()
     domain_id = cFMS_define_domains_easy(domain);
     if( !cFMS_domain_is_initialized(&domain_id) ) cFMS_error(FATAL, "error in setting domain");
   }
+
+  //test get_global_domain
+  {
+    int xbegin, xend, ybegin, yend;
+    int xsize, xmax_size, ysize, ymax_size;
+      
+    cFMS_get_global_domain(&domain_id, &xbegin, &xend, &ybegin, &yend, &xsize, &xmax_size,
+                           &ysize, &ymax_size, NULL, NULL, NULL, NULL);
+
+
+    if(xbegin != 0) cFMS_error(FATAL, "test get_global_domain:  error getting xbegin");      
+    if(xend != NX-1) cFMS_error(FATAL, "test get_global_domain:  error getting xend");
+    if(ybegin != 0) cFMS_error(FATAL, "test get_global_domain:  error getting ybegin");
+    if(yend != NY-1) cFMS_error(FATAL, "test get_global_domain:  error getting yend");
+    if(xsize != NX) cFMS_error(FATAL, "get_global_domain:  error getting xsize");
+    if(xmax_size != NX) cFMS_error(FATAL, "get_global_domain:  error getting xsize_max");
+    if(ysize != NY) cFMS_error(FATAL, "test get_global_domain:  error getting yxsize");
+    if(ymax_size != NY) cFMS_error (FATAL, "get_global_domain: error getting ysize_max");
+  }      
 
   cFMS_set_current_pelist(NULL, NULL, NULL);
 

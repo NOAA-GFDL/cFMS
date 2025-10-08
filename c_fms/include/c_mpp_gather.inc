@@ -22,7 +22,7 @@ subroutine CFMS_GATHER_PELIST_2D_(is, ie, js, je, npes, pelist, array_seg, gathe
 
   gather_data_f_shape = gather_data_c_shape
   if(present(convert_cf_order)) then
-     if(convert_cf_order) gather_data_f_shape = gather_data_c_shape(2:1:-1)
+     if(.not.convert_cf_order) gather_data_f_shape = gather_data_c_shape(2:1:-1)
   end if
   
   if(is_root_pe) then

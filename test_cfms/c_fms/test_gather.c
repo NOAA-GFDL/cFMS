@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <assert.h>
 #include "c_mpp_domains_helper.h"
 #include "c_fms.h"
 
@@ -70,7 +69,7 @@ int main()
     int ij=0;
     for(int i=0; i<NX; i++){
       for(int j=0; j<NY; j++){
-        assert(gather[ij++] == (CFMS_TEST_KIND_)i*100 + j);
+        if(gather[ij++] != (CFMS_TEST_KIND_)i*100 + j) cFMS_error(FATAL, "error testing cFMS_gather_pelist");
       }
     }
   }
