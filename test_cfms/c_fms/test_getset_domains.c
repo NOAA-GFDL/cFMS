@@ -57,7 +57,6 @@ int main()
     cFMS_get_global_domain(&domain_id, &xbegin, &xend, &ybegin, &yend, &xsize, &xmax_size,
                            &ysize, &ymax_size, NULL, NULL, NULL, NULL);
 
-
     if(xbegin != 0) cFMS_error(FATAL, "test get_global_domain:  error getting xbegin");      
     if(xend != NX-1) cFMS_error(FATAL, "test get_global_domain:  error getting xend");
     if(ybegin != 0) cFMS_error(FATAL, "test get_global_domain:  error getting ybegin");
