@@ -11,6 +11,9 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('fortran') }}
+    - autoconf
+    - automake
+    - libtool
     - mpich
     - hdf5
     - libnetcdf
