@@ -13,7 +13,7 @@ int main()
   int *global_pelist = NULL;
   int global_indices[4] = {0,NX-1, 0, NY-1};
   cDomainStruct domain;
-  
+
   cFMS_init(NULL,NULL,NULL,NULL,NULL);
   cFMS_null_cdomain(&domain);
 
@@ -41,7 +41,7 @@ int main()
   //get pelist
   int pelist[4] = {0, 0, 0, 0};
   cFMS_get_domain_pelist(&ndivs, pelist, &domain_id);
-  
+
   //set data to send
   int ij = 0;
   CFMS_TEST_KIND_ *send; send = (CFMS_TEST_KIND_ *)malloc(xsize*ysize*sizeof(CFMS_TEST_KIND_));
@@ -59,7 +59,7 @@ int main()
     gather_shape[1] = NY;
     gather = (CFMS_TEST_KIND_ *)calloc(NX*NY, sizeof(CFMS_TEST_KIND_));
   }
-  else gather = (CFMS_TEST_KIND_ *)malloc(1*sizeof(CFMS_TEST_KIND_));  
+  else gather = (CFMS_TEST_KIND_ *)malloc(1*sizeof(CFMS_TEST_KIND_));
 
 
   CFMS_GATHER_PELIST_2D_(&isc, &iec, &jsc, &jec, &ndivs, pelist,
