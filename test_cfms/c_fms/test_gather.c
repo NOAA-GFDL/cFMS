@@ -17,7 +17,7 @@ int main()
   cFMS_init(NULL,NULL,NULL,NULL,NULL);
   cFMS_null_cdomain(&domain);
 
-  //set domain fields to use the easy doamin method
+  //set domain fields to use the easy domain method
   int ndivs = cFMS_npes();
   domain.layout = (int *)malloc(2*sizeof(int));
   domain.global_indices = global_indices;
@@ -47,7 +47,7 @@ int main()
   CFMS_TEST_KIND_ *send; send = (CFMS_TEST_KIND_ *)malloc(xsize*ysize*sizeof(CFMS_TEST_KIND_));
   for(int i=0; i<xsize; i++){
     for(int j=0; j<ysize; j++){
-      send[ij++] = (CFMS_TEST_KIND_)(isc+i)*100 + j+jsc;
+      send[ij++] = (CFMS_TEST_KIND_)((isc+i)*100 + j+jsc);
     }
   }
 
@@ -69,11 +69,12 @@ int main()
     int ij=0;
     for(int i=0; i<NX; i++){
       for(int j=0; j<NY; j++){
-        if(gather[ij++] != (CFMS_TEST_KIND_)i*100 + j) cFMS_error(FATAL, "error testing cFMS_gather_pelist");
+        if(gather[ij++] != (CFMS_TEST_KIND_)(i*100 + j)) cFMS_error(FATAL, "error testing cFMS_gather_pelist");
       }
     }
   }
-          
+
+  cFMS_end();
   return EXIT_SUCCESS;
 
 }
