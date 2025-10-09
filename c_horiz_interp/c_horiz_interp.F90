@@ -108,7 +108,7 @@ contains
     implicit none
     integer :: i
     
-    do i=1, size(interp)
+    do i=0, size(interp)-1
        call fms_horiz_interp_del(interp(i))
     end do
     deallocate(interp)
