@@ -45,25 +45,23 @@ extern void cFMS_init(int *localcomm, char *alt_input_nml_path, int *ndomain, in
 
 extern void cFMS_end();
 
-extern void cFMS_set_pelist_npes(int *npes_in);
-
 extern void cFMS_error(int errortype, char *errormsg);
 
 extern int cFMS_get_domain_count();
 
 extern int cFMS_get_nest_domain_count();
 
-extern void cFMS_declare_pelist(int *pelist, char *name, int *commID);
+extern void cFMS_declare_pelist(int *npes, int *pelist, char *name, int *commID);
 
-extern void cFMS_get_current_pelist(int *pelist, char *name, int *commID);
+extern void cFMS_get_current_pelist(int *npes, int *pelist, char *name, int *commID);
 
 extern int cFMS_npes();
 
 extern int cFMS_pe();
 
-extern void cFMS_set_current_pelist(int *pelist, bool *no_sync);
+extern void cFMS_set_current_pelist(int *npes, int *pelist, bool *no_sync);
 
-extern int cFMS_define_domains(int* global_indices, int* layout, int *npelist, int *pelist, 
+extern int cFMS_define_domains(int* global_indices, int* layout, int *npes, int *pelist, 
                                int *xflags, int *yflags, int *xhalo, int *yhalo, int* xextent, int *yextent,
                                bool *maskmap, char *name, bool *symmetry, int* memory_size,
                                int *whalo, int *ehalo, int *shalo, int *nhalo, bool *is_mosaic,
@@ -81,6 +79,18 @@ extern int cFMS_define_nest_domains(int *num_nest, int *ntiles, int* nest_level,
 
 extern bool cFMS_domain_is_initialized(int *domain_id);
 
+extern void cFMS_gather_pelist_2d_cint(int *is, int *ie, int *js, int *je, int *npes, int *pelist,
+                                       int *array_seg, int *gather_data_c_shape, int *gather_data,
+                                       bool *is_root_pe, int *ishift, int *jshift, bool *convert_cf_order);
+
+extern void cFMS_gather_pelist_2d_cfloat(int *is, int *ie, int *js, int *je, int *npes, int *pelist,
+                                         float *array_seg, int *gather_data_c_shape, float *gather_data,
+                                         bool *is_root_pe, int *ishift, int *jshift, bool *convert_cf_order);
+
+extern void cFMS_gather_pelist_2d_cdouble(int *is, int *ie, int *js, int *je, int *npes, int *pelist,
+                                          double *array_seg, int *gather_data_c_shape, double *gather_data,
+                                          bool *is_root_pe, int *ishift, int *jshift, bool *convert_cf_order);
+
 extern void cFMS_get_compute_domain(int *domain_id, int *xbegin, int *xend, int *ybegin, int *yend,
                                     int *xsize, int *xmax_size, int *ysize, int *ymax_size,
                                     bool *x_is_global, bool *y_is_global, int *tile_count, int *position,
@@ -93,9 +103,15 @@ extern void cFMS_get_data_domain(int *domain_id, int *xbegin, int *xend, int *yb
 
 extern void cFMS_get_domain_name(char *domain_name_c, int *domain_id);
 
-extern void cFMS_get_domain_pelist(int* pelist, int *domain_id);
+extern void cFMS_get_domain_pelist(int *npes, int* pelist, int *domain_id);
+
+extern void cFMS_get_global_domain(int *domain_id, int *xbegin, int *xend, int *ybegin, int *yend,
+                                   int *xsize, int *xmax_size, int *ysize, int *ymax_size,
+                                   int *tile_count, int *position, int *whalo, int *shalo);
 
 extern void cFMS_get_layout(int* layout, int *domain_id);
+
+extern int cFMS_root_pe();
 
 extern void cFMS_set_compute_domain(int *domain_id, int *xbegin, int *xend, int *ybegin, int *yend,
                                     int *xsize, int *ysize, bool *x_is_global, bool *y_is_global, int *tile_count,
