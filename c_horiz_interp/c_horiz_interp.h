@@ -36,6 +36,9 @@ extern void cFMS_horiz_interp_base_2d_cdouble(int *interp_id, double *data_in_pt
                                               double *missing_value, int *missing_permit, bool *new_missing_handle,
                                               bool *convert_cf_order);
 
+extern void cFMS_construct_interp(int *interp_id, int *nxgrid, int *i_src, int *j_src,
+                                  int *i_dst, int *jdst, double *area_frac_dst);
+
 // Integer pointer getters
 extern void cFMS_get_i_src(int *interp_id, int *i_src);
 extern void cFMS_get_j_src(int *interp_id, int *j_src);

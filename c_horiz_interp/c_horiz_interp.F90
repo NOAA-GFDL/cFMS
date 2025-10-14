@@ -42,6 +42,8 @@ module c_horiz_interp_mod
   public :: cFMS_get_is_allocated_double
   public :: cFMS_get_is_allocated_float
 
+  public :: cFMS_construct_interp
+  
   type(FmsHorizInterp_type), allocatable, target, public :: interp(:)
   integer :: interp_count = 0
   
@@ -115,6 +117,34 @@ contains
 
   end subroutine cFMS_horiz_interp_end
 
+  !cFMS_construct_interp
+  !Construct the interp derived type only for r8 conservative interpolation
+  !TODO:  expand to construct interp type for bilinear interpolation
+  subroutine cFMS_construct_interp(interp_id, nxgrid, i_src, j_src, &
+       i_dst, j_dst, area_frac_dst) bind(C, name="cFMS_construct_interp")
+
+    implicit none
+    integer, intent(in) :: interp_id
+    integer, intent(in) :: nxgrid
+    integer, intent(in) :: i_src(nxgrid)
+    integer, intent(in) :: j_src(nxgrid)
+    integer, intent(in) :: i_dst(nxgrid)
+    integer, intent(in) :: j_dst(nxgrid)
+    real(c_double), intent(in) :: area_frac_dst(nxgrid)
+
+    type(FmsHorizInterp_type), pointer :: interp_p
+        
+    interp_p => interp(interp_id)
+    interp_p%nxgrid = nxgrid
+    interp_p%i_src = i_src
+    interp_p%j_src = j_src
+    interp_p%i_dst = i_dst
+    interp_p%j_dst = j_dst
+    interp_p%horizInterpReals8_type%area_frac_dst = area_frac_dst        
+    
+  end subroutine cFMS_construct_interp
+
+  
 #include "c_horiz_interp_int.inc"
 #include "c_horiz_interp_new.fh"
 #include "c_horiz_interp_base.fh"
