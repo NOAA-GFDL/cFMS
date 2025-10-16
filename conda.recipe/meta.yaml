@@ -20,12 +20,22 @@ requirements:
     - netcdf-fortran
     - yaml
   host: #what is needed on host system
+    - {{ compiler('c') }}
+    - {{ compiler('fortran') }}
+    - autoconf
+    - automake
+    - libtool
     - mpich
     - hdf5
     - libnetcdf
     - netcdf-fortran
     - yaml
   run: #what is needed during runtime
+    - {{ compiler('c') }}
+    - {{ compiler('fortran') }}
+    - autoconf
+    - automake
+    - libtool 
     - mpich
     - hdf5
     - libnetcdf
