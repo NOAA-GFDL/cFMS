@@ -141,7 +141,7 @@ contains
     interp_id = interp_count
 
     call fms_horiz_interp_read_weights_conserve(interp(interp_id), weight_filename_f, weight_file_source_f, &
-         nlon_src, nlat_src, nlon_dst, nlat_dst, isw, iew, jsw, jew, src_tile)
+         nlon_src, nlat_src, nlon_dst, nlat_dst, isw+1, iew+1, jsw+1, jew+1, src_tile)
 
     cFMS_horiz_interp_read_weights_conserve = interp_id
 
