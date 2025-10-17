@@ -72,7 +72,7 @@ int main()
     cFMS_init(NULL,NULL,NULL,NULL,NULL);
 
     domain_id = define_cubic_domain(&domain_id);
-    cFMS_set_current_pelist(NULL,NULL);
+    cFMS_set_current_pelist(NULL,NULL,NULL);
 
     test_define_cubic_mosaic(&domain_id);
 

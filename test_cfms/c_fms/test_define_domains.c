@@ -87,21 +87,18 @@ int main() {
   {
   int npes = cFMS_npes();
   global_pelist = (int *)malloc(npes*sizeof(int));
-  cFMS_set_pelist_npes(&npes);
-  cFMS_get_current_pelist(global_pelist, NULL, NULL);
+  cFMS_get_current_pelist(&npes, global_pelist, NULL, NULL);
   }
   
   //set coarse domain as tile=0
   {
     for(int i=0 ; i<coarse_npes; i++) coarse_pelist[i] = global_pelist[i];
     char name_coarse[NAME_LENGTH] = "test coarse pelist";
-    cFMS_set_pelist_npes(&coarse_npes);
-    cFMS_declare_pelist(coarse_pelist, name_coarse, NULL);
+    cFMS_declare_pelist(&coarse_npes, coarse_pelist, name_coarse, NULL);
 
     if(any(coarse_npes, coarse_pelist, cFMS_pe())) {
 
-      cFMS_set_pelist_npes(&coarse_npes);
-      cFMS_set_current_pelist(coarse_pelist, NULL);
+      cFMS_set_current_pelist(&coarse_npes, coarse_pelist, NULL);
       
       char name[NAME_LENGTH] = "test coarse domain"; 
 
@@ -118,7 +115,7 @@ int main() {
       bool is_mosaic = false;
       
       cdomain.name   = name;
-      cdomain.npelist = &coarse_npes;
+      cdomain.npes = &coarse_npes;
       cdomain.pelist = coarse_pelist;
       cdomain.global_indices = coarse_global_indices;
       cdomain.whalo = &coarse_whalo;
@@ -149,23 +146,21 @@ int main() {
     }
   }
 
-  cFMS_set_current_pelist(NULL, NULL);
+  cFMS_set_current_pelist(NULL, NULL, NULL);
 
   //set fine domain as tile=1
   {
     char name_fine[NAME_LENGTH] = "test fine pelist";
     for(int i=0; i<fine_npes; i++) fine_pelist[i] = global_pelist[COARSE_NPES+i];
-    cFMS_set_pelist_npes(&fine_npes);
-    cFMS_declare_pelist(fine_pelist, name_fine, NULL);
+    cFMS_declare_pelist(&fine_npes, fine_pelist, name_fine, NULL);
     
     if(any(FINE_NPES, fine_pelist, cFMS_pe())) {
       
-      cFMS_set_pelist_npes(&fine_npes);
-      cFMS_set_current_pelist(fine_pelist, NULL);
+      cFMS_set_current_pelist(&fine_npes, fine_pelist, NULL);
       
       char name[NAME_LENGTH] = "test fine domain" ; cdomain.name = name;
       cdomain.global_indices = fine_global_indices;
-      cdomain.npelist = &fine_npes;
+      cdomain.npes = &fine_npes;
       cdomain.tile_id = &fine_tile_id;
       cdomain.whalo = &fine_whalo;
       cdomain.ehalo = &fine_ehalo;
@@ -186,7 +181,7 @@ int main() {
     }
   }
   
-  cFMS_set_current_pelist(NULL, NULL);
+  cFMS_set_current_pelist(NULL, NULL, NULL);
 
   if( !cFMS_domain_is_initialized(&domain_id) ) cFMS_error(FATAL, "domain is not initialized");
 
@@ -215,7 +210,7 @@ int main() {
     cFMS_null_cnest_domain(&cnest_domain);
   }
 
-  cFMS_set_current_pelist(NULL, NULL);
+  cFMS_set_current_pelist(NULL, NULL, NULL);
 
   if(cFMS_get_domain_count() != 1) {
     cFMS_error(FATAL, "error in setting domain");

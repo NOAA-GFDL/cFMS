@@ -12,7 +12,7 @@
 typedef struct {
   int* global_indices;
   int* layout;
-  int* npelist;
+  int* npes;
   int* pelist;
   int* xflags;
   int* yflags;
