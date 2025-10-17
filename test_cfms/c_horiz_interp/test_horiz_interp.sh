@@ -28,4 +28,5 @@ touch input.nml
 
 test_expect_success "test horiz_interp_new" 'mpirun -n 4 ./test_horiz_interp_new'
 test_expect_success "test_horiz_interp_base" './test_horiz_interp_base'
+test_expect_success "test_read_weights_conserve", "./test_read_weights_conserve"
 test_done
