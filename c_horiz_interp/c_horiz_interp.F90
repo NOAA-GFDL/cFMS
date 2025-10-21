@@ -39,6 +39,7 @@ module c_horiz_interp_mod
 
   public :: cFMS_get_i_lon
   public :: cFMS_get_j_lat
+  public :: cFMS_get_xgrid_area
   public :: cFMS_get_area_frac_dst_double
   public :: cFMS_get_area_frac_dst_float
   public :: cFMS_get_is_allocated_double
@@ -149,9 +150,11 @@ contains
 
   end function cFMS_horiz_interp_read_weights_conserve
 
-#include "c_horiz_interp_int.inc"
 #include "c_horiz_interp_new.fh"
 #include "c_horiz_interp_base.fh"
 #include "c_get_interp.fh"
+#include "c_get_interp_cdouble.inc"
+#include "c_get_interp_int.inc"
+
 
 end module c_horiz_interp_mod
