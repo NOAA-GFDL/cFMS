@@ -1,7 +1,7 @@
 function CFMS_HORIZ_INTERP_NEW_2D_(nlon_in, nlat_in, nlon_out, nlat_out, &
      lon_in_ptr, lat_in_ptr, lon_out_ptr, lat_out_ptr, mask_in_ptr, mask_out_ptr, &
-     interp_method, verbose, max_dist, src_modulo, is_latlon_in, is_latlon_out, convert_cf_order) &
-     bind(C, name=CFMS_HORIZ_INTERP_NEW_2D_BINDC_)
+     interp_method, verbose, max_dist, src_modulo, is_latlon_in, is_latlon_out, save_weights_as_fregrid, &
+     convert_cf_order) bind(C, name=CFMS_HORIZ_INTERP_NEW_2D_BINDC_)
 
   implicit none
 
@@ -18,6 +18,7 @@ function CFMS_HORIZ_INTERP_NEW_2D_(nlon_in, nlat_in, nlon_out, nlat_out, &
   logical(c_bool), intent(in), optional :: src_modulo
   logical(c_bool), intent(in), optional :: is_latlon_in
   logical(c_bool), intent(in), optional :: is_latlon_out
+  logical(c_bool), intent(in), optional :: save_weights_as_fregrid
   logical(c_bool), intent(in), optional :: convert_cf_order
 
   integer :: CFMS_HORIZ_INTERP_NEW_2D_
@@ -25,6 +26,7 @@ function CFMS_HORIZ_INTERP_NEW_2D_(nlon_in, nlat_in, nlon_out, nlat_out, &
   logical :: src_modulo_f
   logical :: is_latlon_in_f
   logical :: is_latlon_out_f
+  logical :: save_weights_as_fregrid_f
 
   integer :: in_shape(2), out_shape(2)
   
@@ -75,9 +77,14 @@ function CFMS_HORIZ_INTERP_NEW_2D_(nlon_in, nlat_in, nlon_out, nlat_out, &
   if(present(is_latlon_out)) then
     is_latlon_out_f = logical(is_latlon_out)
   else
-    is_latlon_out_f = .false.
+   is_latlon_out_f = .false.
   end if
-
+  if(present(save_weights_as_fregrid)) then
+    save_weights_as_fregrid_f = logical(save_weights_as_fregrid)
+  else
+    save_weights_as_fregrid_f = .false.
+  end if    
+ 
   CFMS_HORIZ_INTERP_NEW_2D_ = interp_count  
 
   call fms_horiz_interp_new(Interp=interp(interp_count), lon_in=lon_in, lat_in=lat_in, &
@@ -85,7 +92,7 @@ function CFMS_HORIZ_INTERP_NEW_2D_(nlon_in, nlat_in, nlon_out, nlat_out, &
                             interp_method=interp_method_f, max_dist=max_dist, &
                             src_modulo=src_modulo_f, mask_in=mask_in, &
                             mask_out=mask_out, is_latlon_in=is_latlon_in_f, &
-                            is_latlon_out=is_latlon_out_f)
+                            is_latlon_out=is_latlon_out_f, save_weights_as_fregrid=save_weights_as_fregrid_f)
 
   interp_count = interp_count + 1
 
