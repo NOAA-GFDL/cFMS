@@ -42,6 +42,9 @@ int main()
   cFMS_init(NULL,NULL,NULL,NULL,NULL);
   int two = 2; cFMS_horiz_interp_init(&two);
 
+  //test module_is_initialized
+  cFMS_horiz_interp_init(&two);
+
   bool convert_cf_order;
 
   convert_cf_order = true;
