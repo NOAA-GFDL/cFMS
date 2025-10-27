@@ -124,7 +124,7 @@ module c_fms_mod
   integer :: nest_domain_count
 
   logical :: module_is_intialized = .false.
-  
+
 contains
 
   !> cFMS_end
@@ -177,22 +177,22 @@ contains
     end if
 
     if(module_is_intialized) return
-    
+
     if(present(ndomain)) then
        allocate(domain(0:ndomain-1))
     else
        allocate(domain(0:0))
     end if
-    
+
     if(present(nnest_domain)) then
        allocate(nest_domain(0:nnest_domain-1))
     else
        allocate(nest_domain(0:0))
     end if
-    
+
     domain_count = 0
     nest_domain_count = 0
- 
+
     module_is_intialized = .true.
 
   end subroutine cfms_init
