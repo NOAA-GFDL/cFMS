@@ -73,6 +73,8 @@ contains
     call fms_diag_end(cFMS_diag_end_time)
     if(allocated(field_curr_time)) deallocate(field_curr_time)
     if(allocated(field_timestep)) deallocate(field_timestep)
+
+    module_is_initialized = .false.
     
   end subroutine cFMS_diag_end
 

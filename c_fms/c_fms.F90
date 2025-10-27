@@ -135,6 +135,8 @@ contains
     if(allocated(domain)) deallocate(domain)
     if(allocated(nest_domain)) deallocate(nest_domain)
 
+    module_is_initialized = .false.
+
   end subroutine cFMS_end
 
   !> cFMS_get_domain_count

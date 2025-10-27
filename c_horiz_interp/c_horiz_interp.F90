@@ -119,6 +119,8 @@ contains
     end do
     deallocate(interp)
 
+    module_is_initialized = .false.
+    
   end subroutine cFMS_horiz_interp_end
 
 #include "c_horiz_interp_int.inc"
