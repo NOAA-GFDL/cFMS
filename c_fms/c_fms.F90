@@ -123,7 +123,7 @@ module c_fms_mod
   type(FmsMppDomainsNestDomain_type), pointer :: current_nest_domain
   integer :: nest_domain_count
 
-  logical :: module_is_intialized = .false.
+  logical :: module_is_initialized = .false.
 
 contains
 
@@ -176,7 +176,7 @@ contains
        call fms_time_manager_set_calendar_type(NOLEAP)
     end if
 
-    if(module_is_intialized) return
+    if(module_is_initialized) return
 
     if(present(ndomain)) then
        allocate(domain(0:ndomain-1))
@@ -193,7 +193,7 @@ contains
     domain_count = 0
     nest_domain_count = 0
 
-    module_is_intialized = .true.
+    module_is_initialized = .true.
 
   end subroutine cfms_init
 
