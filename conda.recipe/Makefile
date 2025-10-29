@@ -22,25 +22,16 @@ EXES := $(OBJS:.o=)
 
 all: c_mpp_domains_helper.o $(OBJS) $(EXES)
 
-# helper files (ie. not executables) 
-c_mpp_domains_helper.o : test_cfms/c_fms/c_mpp_domains_helper.c 
-	$(CC) -c $(CFLAGS) $(LDFLAGS) $(INCLUDES) $< -o $@ 
-
-#test_utils_c.o : test_cfms/c_fms_utils/test_utils_c.c
-#	$(CC) -c $(CFLAGS) $(LDFLAGS) $(INCLUDES) $< -o $@ 
-
-#test_utils.o : test_cfms/c_fms_utils/test_utils.F90
-#	$(FC) -c $(FCFLAGS) $(LDFLAGS) $(INCLUDES) $< -o $@ 
+# helper routines need to be compiled first
+c_mpp_domains_helper.o : test_cfms/c_fms/c_mpp_domains_helper.c
+	$(CC) -c $(CFLAGS) $(LDFLAGS) $(INCLUDES) $< -o $@
 
 # pattern rules for tests
 %.o: %.c
-	@echo INCLUDES = $(INCLUDES)
-	$(CC) -c $(CFLAGS) ${R8_KIND_MACROS} $(INCLUDES) -o $@ $< 
+	$(CC) -c $(CFLAGS) ${R8_KIND_MACROS} $(INCLUDES) -o $@ $<
 
 %: %.o
-	@echo INCLUDES = $(INCLUDES)
 	$(CC) $(CFLAGS) ${R8_KIND_MACROS} $(INCLUDES) $(LDFLAGS) c_mpp_domains_helper.o -o $@ $^
 
 clean:
-	rm -f $(OBJS) $(EXES) #c_mpp_domains_helper.o test_utils_c.o test_utils.o 
-
+	rm -f $(OBJS) $(EXES) c_mpp_domains_helper.o #test_utils_c.o test_utils.o
