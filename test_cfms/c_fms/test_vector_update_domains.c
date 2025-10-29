@@ -28,7 +28,7 @@ int main()
 
   cFMS_init(NULL,NULL,NULL,NULL,NULL);
 
-  domain_id = define_domain(&domain_id);
+  domain_id = define_domain();
   cFMS_set_current_pelist(NULL,NULL,NULL);
 
   test_vector_double2d(&domain_id);
