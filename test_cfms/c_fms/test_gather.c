@@ -7,74 +7,122 @@
 #define NX 16
 #define NY 8
 
-int main()
-{
+void test_2d(int domain_id);
+void test_1d(int domain_id);
 
-  int *global_pelist = NULL;
-  int global_indices[4] = {0,NX-1, 0, NY-1};
-  cDomainStruct domain;
+int main() {
 
-  cFMS_init(NULL,NULL,NULL,NULL,NULL);
-  cFMS_null_cdomain(&domain);
+    int* global_pelist = NULL;
+    int global_indices[4] = { 0, NX - 1, 0, NY - 1 };
+    cDomainStruct domain;
 
-  //set domain fields to use the easy domain method
-  int ndivs = cFMS_npes();
-  domain.layout = (int *)malloc(2*sizeof(int));
-  domain.global_indices = global_indices;
+    cFMS_init(NULL, NULL, NULL, NULL, NULL);
+    cFMS_null_cdomain(&domain);
 
-  //set layout
-  cFMS_define_layout(global_indices, &ndivs, domain.layout);
+    // set domain fields to use the easy domain method
+    int ndivs = cFMS_npes();
+    domain.layout = (int*)malloc(2 * sizeof(int));
+    domain.global_indices = global_indices;
 
-  //set domain
-  int domain_id = cFMS_define_domains_easy(domain);
+    // set layout
+    cFMS_define_layout(global_indices, &ndivs, domain.layout);
 
-  //get compute domain
-  int isc, iec, jsc, jec, xsize, ysize;
-  cFMS_get_compute_domain(&domain_id, &isc, &iec, &jsc, &jec,
-                          &xsize, NULL, &ysize, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    // set domain
+    int domain_id = cFMS_define_domains_easy(domain);
 
-  //get pe
-  int pe = cFMS_pe();
-  int root_pe = cFMS_root_pe();
-  bool is_root_pe = pe==root_pe ? true : false;
+    printf("testing 1d gather\n");
+    test_1d(domain_id);
 
-  //get pelist
-  int pelist[4] = {0, 0, 0, 0};
-  cFMS_get_domain_pelist(&ndivs, pelist, &domain_id);
+    printf("testing 2d gather\n");
+    test_2d(domain_id);
 
-  //set data to send
-  int ij = 0;
-  CFMS_TEST_KIND_ *send; send = (CFMS_TEST_KIND_ *)malloc(xsize*ysize*sizeof(CFMS_TEST_KIND_));
-  for(int i=0; i<xsize; i++){
-    for(int j=0; j<ysize; j++){
-      send[ij++] = (CFMS_TEST_KIND_)((isc+i)*100 + j+jsc);
+    cFMS_end();
+    return EXIT_SUCCESS;
+
+}
+
+void test_2d(int domain_id) {
+    // get pe
+    int pe = cFMS_pe();
+    int root_pe = cFMS_root_pe();
+    bool is_root_pe = pe == root_pe ? true : false;
+
+    // get pelist
+    int ndivs = cFMS_npes();
+    int pelist[4] = { 0, 0, 0, 0 };
+    cFMS_get_domain_pelist(&ndivs, pelist, &domain_id);
+
+    // get compute domain
+    int isc, iec, jsc, jec, xsize, ysize;
+    cFMS_get_compute_domain(&domain_id, &isc, &iec, &jsc, &jec,
+        &xsize, NULL, &ysize, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+    // set data to send
+    int ij = 0;
+    CFMS_TEST_KIND_* send;
+    send = (CFMS_TEST_KIND_*)malloc(xsize * ysize * sizeof(CFMS_TEST_KIND_));
+    for (int i = 0; i < xsize; i++) {
+        for (int j = 0; j < ysize; j++) {
+            send[ij++] = (CFMS_TEST_KIND_)((isc + i) * 100 + j + jsc);
+        }
     }
-  }
 
-  //set data to receive
-  CFMS_TEST_KIND_ *gather;
-  int gather_shape[2] = {1,1};
-  if(is_root_pe) {
-    gather_shape[0] = NX;
-    gather_shape[1] = NY;
-    gather = (CFMS_TEST_KIND_ *)calloc(NX*NY, sizeof(CFMS_TEST_KIND_));
-  }
-  else gather = (CFMS_TEST_KIND_ *)malloc(1*sizeof(CFMS_TEST_KIND_));
-
-
-  CFMS_GATHER_PELIST_2D_(&isc, &iec, &jsc, &jec, &ndivs, pelist,
-                         send, gather_shape, gather, &is_root_pe, NULL, NULL, NULL);
-
-  if(is_root_pe){
-    int ij=0;
-    for(int i=0; i<NX; i++){
-      for(int j=0; j<NY; j++){
-        if(gather[ij++] != (CFMS_TEST_KIND_)(i*100 + j)) cFMS_error(FATAL, "error testing cFMS_gather_pelist");
-      }
+    // set data to receive
+    CFMS_TEST_KIND_* gather;
+    int gather_shape[2] = { 1, 1 };
+    if (is_root_pe) {
+        gather_shape[0] = NX;
+        gather_shape[1] = NY;
+        gather = (CFMS_TEST_KIND_*)calloc(NX * NY, sizeof(CFMS_TEST_KIND_));
     }
-  }
+    else
+        gather = (CFMS_TEST_KIND_*)malloc(1 * sizeof(CFMS_TEST_KIND_));
 
-  cFMS_end();
-  return EXIT_SUCCESS;
+    CFMS_GATHER_PELIST_2D_(&isc, &iec, &jsc, &jec, &ndivs, pelist,
+        send, gather_shape, gather, &is_root_pe, NULL, NULL, NULL);
+
+    if (is_root_pe) {
+        int ij = 0;
+        for (int i = 0; i < NX; i++) {
+            for (int j = 0; j < NY; j++) {
+                if (gather[ij++] != (CFMS_TEST_KIND_)(i * 100 + j))
+                    cFMS_error(FATAL, "error testing cFMS_gather_pelist");
+            }
+        }
+    }
+}
+
+void test_1d(int domain_id) {
+
+    int sbuf_size = 4;
+    int rbuf_size = sbuf_size * cFMS_npes();
+    int pe = cFMS_pe();
+    CFMS_TEST_KIND_* sbuf, * rbuf;
+
+    bool is_root_pe = pe == cFMS_root_pe() ? true : false;
+
+    //set data
+    sbuf = (CFMS_TEST_KIND_*)malloc(sbuf_size * sizeof(CFMS_TEST_KIND_));
+    for (int i = 0; i < sbuf_size; i++) {
+        sbuf[i] = (double)(pe * 10 + i);
+    }
+
+    //set receive data;
+    if (is_root_pe) {
+        rbuf = (double*)calloc(rbuf_size, sizeof(double));
+    }
+
+    CFMS_GATHER_1D_(&sbuf_size, &rbuf_size, sbuf, rbuf, NULL, NULL);
+
+    //check answers
+    if (is_root_pe) {
+        int ij = 0;
+        for (int p = 0; p < cFMS_npes(); p++) {
+            for (int i = 0; i < sbuf_size; i++) {
+                if (rbuf[ij++] != (double)(p * 10 + i))
+                    cFMS_error(FATAL, "error testing cFMS_gather_1d_cdouble");
+            }
+        }
+    }
 
 }
