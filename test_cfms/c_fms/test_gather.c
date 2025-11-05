@@ -109,7 +109,7 @@ void test_1d(int domain_id) {
 
     //set receive data;
     if (is_root_pe) {
-        rbuf = (double*)calloc(rbuf_size, sizeof(double));
+        rbuf = (CFMS_TEST_KIND_*)calloc(rbuf_size, sizeof(CFMS_TEST_KIND_));
     }
 
     CFMS_GATHER_1D_(&sbuf_size, &rbuf_size, sbuf, rbuf, NULL, NULL);
@@ -119,7 +119,7 @@ void test_1d(int domain_id) {
         int ij = 0;
         for (int p = 0; p < cFMS_npes(); p++) {
             for (int i = 0; i < sbuf_size; i++) {
-                if (rbuf[ij++] != (double)(p * 10 + i))
+                if (rbuf[ij++] != (CFMS_TEST_KIND_)(p * 10 + i))
                     cFMS_error(FATAL, "error testing cFMS_gather_1d_cdouble");
             }
         }
