@@ -63,8 +63,15 @@ module c_fms_mod
    public :: cFMS_define_layout
    public :: cFMS_define_nest_domains
    public :: cFMS_domain_is_initialized
-   public :: CFMS_gather_1d_cfloat, CFMS_gather_1d_cdouble
-   public :: cFMS_gather_pelist_2d_cfloat, cFMS_gather_pelist_2d_cdouble
+   public :: cFMS_gather_1d_cint
+   public :: CFMS_gather_1d_cfloat
+   public :: CFMS_gather_1d_cdouble
+   public :: cFMS_gather_v_1d_cint
+   public :: cFMS_gather_v_1d_cfloat
+   public :: cFMS_gather_v_1d_cdouble
+   public :: cFMS_gather_pelist_2d_cint
+   public :: cFMS_gather_pelist_2d_cfloat
+   public :: cFMS_gather_pelist_2d_cdouble
    public :: cFMS_get_compute_domain
    public :: cFMS_get_domain
    public :: cFMS_get_data_domain

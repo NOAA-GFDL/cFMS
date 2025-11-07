@@ -8,12 +8,14 @@
 #define NY 8
 
 void test_2d(int domain_id);
-void test_1d(int domain_id);
+void test_1d();
+void test_1d_v();
 
 int main() {
 
     int* global_pelist = NULL;
     int global_indices[4] = { 0, NX - 1, 0, NY - 1 };
+    CFMS_TEST_KIND_ kind;
     cDomainStruct domain;
 
     cFMS_init(NULL, NULL, NULL, NULL, NULL);
@@ -30,11 +32,15 @@ int main() {
     // set domain
     int domain_id = cFMS_define_domains_easy(domain);
 
-    printf("testing 1d gather\n");
-    test_1d(domain_id);
 
-    printf("testing 2d gather\n");
+    printf("testing cFMS_gather_1d %d\n", sizeof(kind));
+    test_1d();
+
+    printf("testing cFMS_gather_2d_pelist %d\n", sizeof(kind));
     test_2d(domain_id);
+
+    printf("testing cFMS_gather_v_1d %d\n", sizeof(kind));
+    test_1d_v();
 
     cFMS_end();
     return EXIT_SUCCESS;
@@ -92,7 +98,7 @@ void test_2d(int domain_id) {
     }
 }
 
-void test_1d(int domain_id) {
+void test_1d() {
 
     int sbuf_size = 4;
     int rbuf_size = sbuf_size * cFMS_npes();
@@ -104,7 +110,7 @@ void test_1d(int domain_id) {
     //set data
     sbuf = (CFMS_TEST_KIND_*)malloc(sbuf_size * sizeof(CFMS_TEST_KIND_));
     for (int i = 0; i < sbuf_size; i++) {
-        sbuf[i] = (double)(pe * 10 + i);
+        sbuf[i] = (CFMS_TEST_KIND_)(pe * 10 + i);
     }
 
     //set receive data;
@@ -120,9 +126,53 @@ void test_1d(int domain_id) {
         for (int p = 0; p < cFMS_npes(); p++) {
             for (int i = 0; i < sbuf_size; i++) {
                 if (rbuf[ij++] != (CFMS_TEST_KIND_)(p * 10 + i))
-                    cFMS_error(FATAL, "error testing cFMS_gather_1d_cdouble");
+                    cFMS_error(FATAL, "error testing cFMS_gather_1d_cCFMS_GATHER_TYPE_");
             }
         }
     }
 
+}
+
+void test_1d_v() {
+
+    int npes = cFMS_npes();
+    int pe = cFMS_pe();
+    int ssize = pe + 1;
+
+    CFMS_TEST_KIND_* sbuf;
+    sbuf = (CFMS_TEST_KIND_*)malloc(ssize * sizeof(CFMS_TEST_KIND_));
+    for (int i = 0; i < ssize; i++) {
+        sbuf[i] = (CFMS_TEST_KIND_)(pe * 10 + i);
+    }
+
+    int* rsize, rbuf_size = 0;
+    rsize = (int*)malloc(npes * sizeof(int));
+    for (int p = 0; p < npes; p++) {
+        rsize[p] = p + 1;
+        rbuf_size += rsize[p];
+    }
+
+    CFMS_TEST_KIND_* rbuf;
+    if (pe == cFMS_root_pe())
+        rbuf = (CFMS_TEST_KIND_*)malloc(rbuf_size * sizeof(CFMS_TEST_KIND_));
+
+    CFMS_GATHER_V_1D_(&npes, &ssize, &rbuf_size, sbuf, rbuf, rsize, NULL);
+
+    CFMS_TEST_KIND_* answers;
+    for (int i = 0; i < rbuf_size; i++) {
+        answers = (CFMS_TEST_KIND_*)malloc(rbuf_size * sizeof(CFMS_TEST_KIND_));
+        int ij = 0;
+        for (int p = 0; p < npes; p++) {
+            for (int j = 0; j < p + 1; j++) {
+                answers[ij++] = (CFMS_TEST_KIND_)(p * 10 + j);
+            }
+        }
+    }
+
+    if (pe == cFMS_root_pe()) {
+        for (int i = 0; i < rbuf_size; i++) {
+            if (rbuf[i] != answers[i])
+                cFMS_error(FATAL, "error testing cFMS_gather_v_1d_cCFMS_GATHER_TYPE_");
+        }
+    }
 }

@@ -4,8 +4,8 @@ subroutine CFMS_GATHER_1D_(sbuf_size, rbuf_size, sbuf, rbuf, pelist, npes) &
    implicit none
    integer, intent(in) :: sbuf_size
    integer, intent(in) :: rbuf_size
-   CFMS_GATHER_1D_TYPE_, intent(in) :: sbuf(sbuf_size)
-   CFMS_GATHER_1D_TYPE_, intent(inout) :: rbuf(rbuf_size)
+   CFMS_GATHER_TYPE_, intent(in) :: sbuf(sbuf_size)
+   CFMS_GATHER_TYPE_, intent(inout) :: rbuf(rbuf_size)
    type(c_ptr), intent(in), value :: pelist
    integer, intent(in), optional :: npes
 
@@ -40,8 +40,8 @@ subroutine CFMS_GATHER_PELIST_2D_(is, ie, js, je, npes, pelist, array_seg, gathe
    integer, intent(in), optional :: jshift
    logical(c_bool), intent(in), optional :: convert_cf_order
 
-   CFMS_GATHER_PELIST_2D_TYPE_, allocatable :: array_seg_f(:,:)
-   CFMS_GATHER_PELIST_2D_TYPE_, allocatable :: gather_data_f(:,:)
+   CFMS_GATHER_TYPE_, allocatable :: array_seg_f(:,:)
+   CFMS_GATHER_TYPE_, allocatable :: gather_data_f(:,:)
    integer :: gather_data_f_shape(2)
 
    allocate(array_seg_f(ie-is+1, je-js+1))
@@ -68,3 +68,25 @@ subroutine CFMS_GATHER_PELIST_2D_(is, ie, js, je, npes, pelist, array_seg, gathe
    deallocate(gather_data_f)
 
 end subroutine CFMS_GATHER_PELIST_2D_
+
+subroutine CFMS_GATHER_V_1D_(npes, sbuf_size, rbuf_size, sbuf, rbuf, rsize, pelist) &
+   bind(C, name=CFMS_GATHER_V_1D_BINDC_)
+
+   implicit none
+   integer, intent(in) :: npes
+   integer, intent(in) :: sbuf_size
+   integer, intent(in) :: rbuf_size
+   CFMS_GATHER_TYPE_, intent(in) :: sbuf(sbuf_size)
+   CFMS_GATHER_TYPE_, intent(inout) :: rbuf(rbuf_size)
+   integer, intent(in) :: rsize(npes)
+   integer, intent(in), optional :: pelist(npes)
+
+   integer:: ssize
+
+   ssize = sbuf_size
+
+   call fms_mpp_gather(sbuf, ssize, rbuf, rsize, pelist)
+
+end subroutine CFMS_GATHER_V_1D_
+
+
