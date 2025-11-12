@@ -47,12 +47,11 @@ subroutine CFMS_GATHER_PELIST_2D_(is, ie, js, je, npes, pelist, array_seg, gathe
    allocate(array_seg_f(ie-is+1, je-js+1))
    call cFMS_pointer_to_array(array_seg, (/ie-is+1, je-js+1/), array_seg_f, convert_cf_order)
 
-   gather_data_f_shape = gather_data_c_shape
-   if(present(convert_cf_order)) then
-      if(.not.convert_cf_order) gather_data_f_shape = gather_data_c_shape(2:1:-1)
-   end if
-
    if(is_root_pe) then
+      gather_data_f_shape = gather_data_c_shape
+      if(present(convert_cf_order)) then
+         if(.not.convert_cf_order) gather_data_f_shape = gather_data_c_shape(2:1:-1)
+      end if
       allocate(gather_data_f(gather_data_f_shape(1), gather_data_f_shape(2)))
       call cfms_pointer_to_array(gather_data, gather_data_f_shape, gather_data_f, convert_cf_order)
    else
