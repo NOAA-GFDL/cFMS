@@ -184,21 +184,13 @@ contains
          call fms_time_manager_set_calendar_type(NOLEAP)
       end if
 
-<<<<<<< HEAD
+      if(module_is_initialized) return
+      
       if(present(ndomain)) then
          allocate(domain(0:ndomain-1))
       else
          allocate(domain(0:0))
       end if
-=======
-    if(module_is_initialized) return
-
-    if(present(ndomain)) then
-       allocate(domain(0:ndomain-1))
-    else
-       allocate(domain(0:0))
-    end if
->>>>>>> origin/main
 
       if(present(nnest_domain)) then
          allocate(nest_domain(0:nnest_domain-1))
@@ -209,13 +201,9 @@ contains
       domain_count = 0
       nest_domain_count = 0
 
-<<<<<<< HEAD
-   end subroutine cfms_init
-=======
     module_is_initialized = .true.
 
   end subroutine cfms_init
->>>>>>> origin/main
 
    !> cFMS_declare_pelist
    subroutine cFMS_declare_pelist(npes, pelist, name, commID) bind(C, name="cFMS_declare_pelist")
