@@ -31,13 +31,13 @@ check_PROGRAMS = test_define_domains \
   test_gather_cfloat \
   test_gather_cdouble \
   test_getset_domains \
-	test_update_domains \
+  test_update_domains \
   test_vector_update_domains \
   test_define_cubic_mosaic
 
 TESTS = test_define_domains.sh \
   test_gather.sh \
-	test_getset_domains.sh \
+  test_getset_domains.sh \
   test_update_domains.sh \
   test_vector_update_domains.sh \
   test_define_cubic_mosaic.sh
@@ -45,22 +45,28 @@ TESTS = test_define_domains.sh \
 test_gather_cint_SOURCES = c_mpp_domains_helper.c test_gather.c
 test_gather_cfloat_SOURCES = c_mpp_domains_helper.c test_gather.c
 test_gather_cdouble_SOURCES = c_mpp_domains_helper.c test_gather.c
-test_define_domains_SOURCES = c_mpp_domains_helper.c test_define_domains.c 
+test_define_domains_SOURCES = c_mpp_domains_helper.c test_define_domains.c
 test_getset_domains_SOURCES = c_mpp_domains_helper.c test_getset_domains.c
 test_update_domains_SOURCES = c_mpp_domains_helper.c test_update_domains.c
-test_vector_update_domains_SOURCES = c_mpp_domains_helper.c test_vector_update_domains.c 
+test_vector_update_domains_SOURCES = c_mpp_domains_helper.c test_vector_update_domains.c
 test_define_cubic_mosaic_SOURCES = c_mpp_domains_helper.c test_define_cubic_mosaic.c
 
 test_gather_cint_CPPFLAGS = -DCFMS_TEST_KIND_=int \
+                            -DCFMS_GATHER_1D_=cFMS_gather_1d_cint \
                             -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cint \
+                            -DCFMS_GATHER_V_1D_=cFMS_gather_v_1d_cint \
                             $(AM_CPPFLAGS)
 
 test_gather_cfloat_CPPFLAGS = -DCFMS_TEST_KIND_=float \
+                              -DCFMS_GATHER_1D_=cFMS_gather_1d_cfloat \
                               -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cfloat \
+                              -DCFMS_GATHER_V_1D_=cFMS_gather_v_1d_cfloat \
                               $(AM_CPPFLAGS)
 
 test_gather_cdouble_CPPFLAGS = -DCFMS_TEST_KIND_=double \
+                               -DCFMS_GATHER_1D_=cFMS_gather_1d_cdouble \
                                -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cdouble \
+                               -DCFMS_GATHER_V_1D_=cFMS_gather_v_1d_cdouble \
                                $(AM_CPPFLAGS)
 
 TEST_EXTENSIONS = .sh
