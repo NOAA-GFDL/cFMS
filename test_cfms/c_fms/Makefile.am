@@ -31,7 +31,7 @@ check_PROGRAMS = test_define_domains \
   test_gather_cfloat \
   test_gather_cdouble \
   test_getset_domains \
-	test_update_domains \
+  test_update_domains \
   test_vector_update_domains \
   test_define_cubic_mosaic
 
@@ -64,7 +64,7 @@ test_gather_cfloat_CPPFLAGS = -DCFMS_TEST_KIND_=float \
                               $(AM_CPPFLAGS)
 
 test_gather_cdouble_CPPFLAGS = -DCFMS_TEST_KIND_=double \
-                							 -DCFMS_GATHER_1D_=cFMS_gather_1d_cdouble\
+                               -DCFMS_GATHER_1D_=cFMS_gather_1d_cdouble \
                                -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cdouble \
                                -DCFMS_GATHER_V_1D_=cFMS_gather_v_1d_cdouble \
                                $(AM_CPPFLAGS)
