@@ -47,6 +47,8 @@ module c_horiz_interp_mod
   type(FmsHorizInterp_type), allocatable, target, public :: interp(:)
   integer :: interp_count = 0
 
+  logical :: module_is_initialized = .false.
+  
 contains
 
   !cFMS_create_xgrid_2dx2d_order1
@@ -93,8 +95,10 @@ contains
     implicit none
     integer, intent(in), optional :: ninterp
 
-    call fms_horiz_interp_init
+    call fms_horiz_interp_init()
 
+    if(module_is_initialized) return
+    
     if(present(ninterp)) then
       allocate(interp(0:ninterp-1))
     else
@@ -102,6 +106,8 @@ contains
    end if
 
    interp_count = 0
+
+   module_is_initialized = .true.
 
   end subroutine cFMS_horiz_interp_init
 
@@ -115,6 +121,8 @@ contains
     end do
     deallocate(interp)
 
+    module_is_initialized = .false.
+    
   end subroutine cFMS_horiz_interp_end
 
   function cFMS_horiz_interp_read_weights_conserve(weight_filename, weight_file_source, &

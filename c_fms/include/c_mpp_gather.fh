@@ -1,28 +1,66 @@
 !int
+#undef CFMS_GATHER_TYPE_
+#define CFMS_GATHER_TYPE_ integer
+
+#undef  CFMS_GATHER_1D_
+#undef  CFMS_GATHER_1D_BINDC_
+#define CFMS_GATHER_1D_ cFMS_gather_1d_cint
+#define CFMS_GATHER_1D_BINDC_ "cFMS_gather_1d_cint"
+
 #undef  CFMS_GATHER_PELIST_2D_
 #undef  CFMS_GATHER_PELIST_2D_BINDC_
-#undef  CFMS_GATHER_PELIST_2D_TYPE_
-#define CFMS_GATHER_PELIST_2D_  cFMS_gather_pelist_2d_cint
-#define CFMS_GATHER_PELIST_2D_BINDC_  "cFMS_gather_pelist_2d_cint"
-#define CFMS_GATHER_PELIST_2D_TYPE_ integer
+#define CFMS_GATHER_PELIST_2D_ cFMS_gather_pelist_2d_cint
+#define CFMS_GATHER_PELIST_2D_BINDC_ "cFMS_gather_pelist_2d_cint"
+
+#undef  CFMS_GATHER_V_1D_
+#undef  CFMS_GATHER_V_1D_BINDC_
+#define CFMS_GATHER_V_1D_ cFMS_gather_v_1d_cint
+#define CFMS_GATHER_V_1D_BINDC_ "cFMS_gather_v_1d_cint"
+
 #include "c_mpp_gather.inc"
+
 
 !float
+#undef CFMS_GATHER_TYPE_
+#define CFMS_GATHER_TYPE_ real(c_float)
+
+#undef  CFMS_GATHER_1D_
+#undef  CFMS_GATHER_1D_BINDC_
+#define CFMS_GATHER_1D_ cFMS_gather_1d_cfloat
+#define CFMS_GATHER_1D_BINDC_ "cFMS_gather_1d_cfloat"
+
 #undef  CFMS_GATHER_PELIST_2D_
 #undef  CFMS_GATHER_PELIST_2D_BINDC_
-#undef  CFMS_GATHER_PELIST_2D_TYPE_
-#define CFMS_GATHER_PELIST_2D_  cFMS_gather_pelist_2d_cfloat
-#define CFMS_GATHER_PELIST_2D_BINDC_  "cFMS_gather_pelist_2d_cfloat"
-#define CFMS_GATHER_PELIST_2D_TYPE_ real(c_float)
+#define CFMS_GATHER_PELIST_2D_ cFMS_gather_pelist_2d_cfloat
+#define CFMS_GATHER_PELIST_2D_BINDC_ "cFMS_gather_pelist_2d_cfloat"
+
+#undef  CFMS_GATHER_V_1D_BINDC_
+#undef  CFMS_GATHER_V_1D_
+#define CFMS_GATHER_V_1D_ cFMS_gather_v_1d_cfloat
+#define CFMS_GATHER_V_1D_BINDC_ "cFMS_gather_v_1d_cfloat"
+
 #include "c_mpp_gather.inc"
+
 
 !double
+#undef CFMS_GATHER_TYPE_
+#define CFMS_GATHER_TYPE_ real(c_double)
+
+#undef  CFMS_GATHER_1D_
+#undef  CFMS_GATHER_1D_BINDC_
+#define CFMS_GATHER_1D_ cFMS_gather_1d_cdouble
+#define CFMS_GATHER_1D_BINDC_  "cFMS_gather_1d_cdouble"
+
 #undef  CFMS_GATHER_PELIST_2D_
 #undef  CFMS_GATHER_PELIST_2D_BINDC_
-#undef  CFMS_GATHER_PELIST_2D_TYPE_
-#define CFMS_GATHER_PELIST_2D_  cFMS_gather_pelist_2d_cdouble
-#define CFMS_GATHER_PELIST_2D_BINDC_  "cFMS_gather_pelist_2d_cdouble"
-#define CFMS_GATHER_PELIST_2D_TYPE_ real(c_double)
+#define CFMS_GATHER_PELIST_2D_ cFMS_gather_pelist_2d_cdouble
+#define CFMS_GATHER_PELIST_2D_BINDC_ "cFMS_gather_pelist_2d_cdouble"
+
+#undef  CFMS_GATHER_V_1D_
+#undef  CFMS_GATHER_V_1D_BINDC_
+#define CFMS_GATHER_V_1D_ cFMS_gather_v_1d_cdouble
+#define CFMS_GATHER_V_1D_BINDC_  "cFMS_gather_v_1d_cdouble"
+
 #include "c_mpp_gather.inc"
 
-  
+

@@ -29,5 +29,6 @@ touch input.nml
 test_expect_success "test_gather int" 'mpirun -n 4 ./test_gather_cint'
 test_expect_success "test_gather float" 'mpirun -n 4 ./test_gather_cfloat'
 test_expect_success "test_gather double" 'mpirun -n 4 ./test_gather_cdouble'
+
 test_done
 

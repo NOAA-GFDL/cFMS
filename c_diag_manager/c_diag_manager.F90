@@ -63,6 +63,8 @@ module c_diag_manager_mod
   integer, public, bind(C, name="DIAG_OCEAN") :: DIAG_OCEAN_C = DIAG_OCEAN
   integer, public, bind(C, name="DIAG_ALL")   :: DIAG_ALL_C   = DIAG_ALL
 
+  logical :: module_is_initialized = .false.
+  
 contains
 
   subroutine cFMS_diag_end() bind(C, name="cFMS_diag_end")
@@ -71,6 +73,8 @@ contains
     call fms_diag_end(cFMS_diag_end_time)
     if(allocated(field_curr_time)) deallocate(field_curr_time)
     if(allocated(field_timestep)) deallocate(field_timestep)
+
+    module_is_initialized = .false.
     
   end subroutine cFMS_diag_end
 
@@ -89,11 +93,15 @@ contains
                        time_init = time_init, &
                        err_msg = err_msg_f)
 
+    if(module_is_initialized) return
+    
     nfields = get_num_unique_fields()
     allocate(field_curr_time(nfields))
     allocate(field_timestep(nfields))
 
     if(present(err_msg) .and. err_msg_f /= '' ) call fms_string_utils_f2c_string(err_msg, err_msg_f)
+
+    module_is_initialized = .true.
     
   end subroutine cFMS_diag_init
 
