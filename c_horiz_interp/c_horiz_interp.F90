@@ -44,6 +44,8 @@ module c_horiz_interp_mod
 
   type(FmsHorizInterp_type), allocatable, target, public :: interp(:)
   integer :: interp_count = 0
+
+  logical :: module_is_initialized = .false.
   
 contains
 
@@ -91,8 +93,10 @@ contains
     implicit none
     integer, intent(in), optional :: ninterp
 
-    call fms_horiz_interp_init
+    call fms_horiz_interp_init()
 
+    if(module_is_initialized) return
+    
     if(present(ninterp)) then
       allocate(interp(0:ninterp-1))
     else
@@ -100,6 +104,8 @@ contains
    end if
 
    interp_count = 0
+
+   module_is_initialized = .true.
 
   end subroutine cFMS_horiz_interp_init
 
@@ -113,6 +119,8 @@ contains
     end do
     deallocate(interp)
 
+    module_is_initialized = .false.
+    
   end subroutine cFMS_horiz_interp_end
 
 #include "c_horiz_interp_int.inc"

@@ -66,6 +66,9 @@ int main()
     int *time_init = NULL;
     char err_msg[NAME_LENGTH] = "None";
     cFMS_diag_init(&diag_model_subset, time_init, err_msg);
+
+    //test module_is_initialized
+    cFMS_diag_init(&diag_model_subset, time_init, err_msg);
   }
   
   cFMS_set_current_domain(&domain_id);
