@@ -12,7 +12,7 @@ subroutine CFMS_GATHER_1D_(sbuf_size, rbuf_size, sbuf, rbuf, pelist, npes) &
    integer, pointer :: pelist_f(:) => NULL()
 
    if(present(npes)) then
-      if(.not.c_associated(pelist)) then
+      if(c_associated(pelist)) then
          allocate(pelist_f(npes))
          call c_f_pointer(pelist, pelist_f, [npes])
       end if
