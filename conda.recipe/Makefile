@@ -10,7 +10,11 @@ CFLAGS := -g
 LDFLAGS := $(addprefix -L, $(LIB_DIRS)) -lcFMS
 INCLUDES := $(addprefix -I, ${INCLUDE_DIRS})
 
-R8_KIND_MACROS := -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cdouble -DCFMS_TEST_KIND_=double
+R8_KIND_MACROS := -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cdouble -DCFMS_TEST_KIND_=double \
+                  -DCFMS_GATHER_1D_=cFMS_gather_1d_cdouble \
+                  -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cdouble \
+                  -DCFMS_GATHER_V_1D_=cFMS_gather_v_1d_cdouble
+
 R4_KIND_MACROS := -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cfloat -DCFMS_TEST_KIND_=float
 
 # find src
