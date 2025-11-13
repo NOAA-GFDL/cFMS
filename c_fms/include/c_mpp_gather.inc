@@ -68,24 +68,21 @@ subroutine CFMS_GATHER_PELIST_2D_(is, ie, js, je, npes, pelist, array_seg, gathe
 
 end subroutine CFMS_GATHER_PELIST_2D_
 
-subroutine CFMS_GATHER_V_1D_(npes, sbuf_size, rbuf_size, sbuf, rbuf, rsize, pelist) &
-   bind(C, name=CFMS_GATHER_V_1D_BINDC_)
+subroutine CFMS_GATHERV_1D_(npes, sbuf_size, rbuf_size, sbuf, ssize, rbuf, rsize, pelist) &
+   bind(C, name=CFMS_GATHERV_1D_BINDC_)
 
    implicit none
    integer, intent(in) :: npes
    integer, intent(in) :: sbuf_size
    integer, intent(in) :: rbuf_size
    CFMS_GATHER_TYPE_, intent(in) :: sbuf(sbuf_size)
+   integer, intent(in) :: ssize
    CFMS_GATHER_TYPE_, intent(inout) :: rbuf(rbuf_size)
    integer, intent(in) :: rsize(npes)
    integer, intent(in), optional :: pelist(npes)
 
-   integer:: ssize
-
-   ssize = sbuf_size
-
    call fms_mpp_gather(sbuf, ssize, rbuf, rsize, pelist)
 
-end subroutine CFMS_GATHER_V_1D_
+end subroutine CFMS_GATHERV_1D_
 
 

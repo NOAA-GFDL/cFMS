@@ -54,19 +54,19 @@ test_define_cubic_mosaic_SOURCES = c_mpp_domains_helper.c test_define_cubic_mosa
 test_gather_cint_CPPFLAGS = -DCFMS_TEST_KIND_=int \
                             -DCFMS_GATHER_1D_=cFMS_gather_1d_cint \
                             -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cint \
-                            -DCFMS_GATHER_V_1D_=cFMS_gather_v_1d_cint \
+                            -DCFMS_GATHERV_1D_=cFMS_gatherv_1d_cint \
                             $(AM_CPPFLAGS)
 
 test_gather_cfloat_CPPFLAGS = -DCFMS_TEST_KIND_=float \
                               -DCFMS_GATHER_1D_=cFMS_gather_1d_cfloat \
                               -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cfloat \
-                              -DCFMS_GATHER_V_1D_=cFMS_gather_v_1d_cfloat \
+                              -DCFMS_GATHERV_1D_=cFMS_gatherv_1d_cfloat \
                               $(AM_CPPFLAGS)
 
 test_gather_cdouble_CPPFLAGS = -DCFMS_TEST_KIND_=double \
                                -DCFMS_GATHER_1D_=cFMS_gather_1d_cdouble \
                                -DCFMS_GATHER_PELIST_2D_=cFMS_gather_pelist_2d_cdouble \
-                               -DCFMS_GATHER_V_1D_=cFMS_gather_v_1d_cdouble \
+                               -DCFMS_GATHERV_1D_=cFMS_gatherv_1d_cdouble \
                                $(AM_CPPFLAGS)
 
 TEST_EXTENSIONS = .sh
