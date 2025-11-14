@@ -1,45 +1,65 @@
 ! cdouble 2d
-# undef CFMS_GET_INTERP_DATA_TYPE_ 
-# undef CFMS_GET_INTERP_OBJ_DATA_TYPE_ 
-# undef CFMS_GET_AREA_FRAC_DST_
-# undef CFMS_GET_IS_ALLOCATED_
-# undef CFMS_GET_AREA_FRAC_DST_BINDC_
-# undef CFMS_GET_IS_ALLOCATED_BINDC_
-# undef CFMS_GET_WTI_
-# undef CFMS_GET_WTI_BINDC_
-# undef CFMS_GET_WTJ_
-# undef CFMS_GET_WTJ_BINDC_
-# define CFMS_GET_AREA_FRAC_DST_ cFMS_get_area_frac_dst_double
-# define CFMS_GET_AREA_FRAC_DST_BINDC_ "cFMS_get_area_frac_dst_cdouble" 
-# define CFMS_GET_IS_ALLOCATED_ cFMS_get_is_allocated_double
-# define CFMS_GET_IS_ALLOCATED_BINDC_ "cFMS_get_is_allocated_cdouble"
-# define CFMS_GET_WTI_ cFMS_get_wti_double
-# define CFMS_GET_WTI_BINDC_ "cFMS_get_wti_cdouble"
-# define CFMS_GET_WTJ_ cFMS_get_wtj_cdouble
-# define CFMS_GET_WTJ_BINDC_ "cFMS_get_wtj_cdouble"
-# define CFMS_GET_INTERP_DATA_TYPE_ real(c_double)
-# define CFMS_GET_INTERP_OBJ_DATA_TYPE_ horizInterpReals8_type
+#undef CFMS_GET_INTERP_DATA_TYPE_
+#undef CFMS_GET_INTERP_OBJ_DATA_TYPE_
+#define CFMS_GET_INTERP_DATA_TYPE_ real(c_double)
+#define CFMS_GET_INTERP_OBJ_DATA_TYPE_ horizInterpReals8_type
+
+#undef CFMS_GET_AREA_FRAC_DST_
+#undef CFMS_GET_AREA_FRAC_DST_BINDC_
+#define CFMS_GET_AREA_FRAC_DST_ cFMS_get_area_frac_dst_cdouble
+#define CFMS_GET_AREA_FRAC_DST_BINDC_ "cFMS_get_area_frac_dst_cdouble"
+
+#undef CFMS_GET_IS_ALLOCATED_
+#undef CFMS_GET_IS_ALLOCATED_BINDC_
+#define CFMS_GET_IS_ALLOCATED_ cFMS_get_is_allocated_cdouble
+#define CFMS_GET_IS_ALLOCATED_BINDC_ "cFMS_get_is_allocated_cdouble"
+
+#undef CFMS_GET_WTI_
+#undef CFMS_GET_WTI_BINDC_
+#define CFMS_GET_WTI_ cFMS_get_wti_cdouble
+#define CFMS_GET_WTI_BINDC_ "cFMS_get_wti_cdouble"
+
+#undef CFMS_GET_WTJ_
+#undef CFMS_GET_WTJ_BINDC_
+#define CFMS_GET_WTJ_ cFMS_get_wtj_cdouble
+#define CFMS_GET_WTJ_BINDC_ "cFMS_get_wtj_cdouble"
+
+#undef CFMS_GET_XGRID_AREA_
+#undef CFMS_GET_XGRID_AREA_BINDC_
+#define CFMS_GET_XGRID_AREA_ cFMS_get_xgrid_area_cdouble
+#define CFMS_GET_XGRID_AREA_BINDC_ "cFMS_get_xgrid_area_cdouble"
+
 #include "c_get_interp.inc"
 
 ! cfloat 2d
-# undef CFMS_GET_INTERP_DATA_TYPE_ 
-# undef CFMS_GET_INTERP_OBJ_DATA_TYPE_ 
-# undef CFMS_GET_AREA_FRAC_DST_
-# undef CFMS_GET_IS_ALLOCATED_
-# undef CFMS_GET_AREA_FRAC_DST_BINDC_
-# undef CFMS_GET_IS_ALLOCATED_BINDC_
-# undef CFMS_GET_WTI_
-# undef CFMS_GET_WTI_BINDC_
-# undef CFMS_GET_WTJ_
-# undef CFMS_GET_WTJ_BINDC_
-# define CFMS_GET_AREA_FRAC_DST_ cFMS_get_area_frac_dst_float
-# define CFMS_GET_AREA_FRAC_DST_BINDC_ "cFMS_get_area_frac_dst_cfloat" 
-# define CFMS_GET_IS_ALLOCATED_ cFMS_get_is_allocated_float
-# define CFMS_GET_IS_ALLOCATED_BINDC_ "cFMS_get_is_allocated_cfloat"
-# define CFMS_GET_WTI_ cFMS_get_wti_float
-# define CFMS_GET_WTI_BINDC_ "cFMS_get_wti_cfloat"
-# define CFMS_GET_WTJ_ cFMS_get_wtj_cfloat
-# define CFMS_GET_WTJ_BINDC_ "cFMS_get_wtj_cfloat"
-# define CFMS_GET_INTERP_DATA_TYPE_ real(c_float)
-# define CFMS_GET_INTERP_OBJ_DATA_TYPE_ horizInterpReals4_type
+#undef CFMS_GET_INTERP_DATA_TYPE_
+#undef CFMS_GET_INTERP_OBJ_DATA_TYPE_
+#define CFMS_GET_INTERP_DATA_TYPE_ real(c_float)
+#define CFMS_GET_INTERP_OBJ_DATA_TYPE_ horizInterpReals4_type
+
+#undef CFMS_GET_AREA_FRAC_DST_
+#undef CFMS_GET_AREA_FRAC_DST_BINDC_
+#define CFMS_GET_AREA_FRAC_DST_ cFMS_get_area_frac_dst_cfloat
+#define CFMS_GET_AREA_FRAC_DST_BINDC_ "cFMS_get_area_frac_dst_cfloat"
+
+#undef CFMS_GET_IS_ALLOCATED_
+#undef CFMS_GET_IS_ALLOCATED_BINDC_
+#define CFMS_GET_IS_ALLOCATED_ cFMS_get_is_allocated_cfloat
+#define CFMS_GET_IS_ALLOCATED_BINDC_ "cFMS_get_is_allocated_cfloat"
+
+#undef CFMS_GET_WTI_
+#undef CFMS_GET_WTI_BINDC_
+#define CFMS_GET_WTI_ cFMS_get_wti_cfloat
+#define CFMS_GET_WTI_BINDC_ "cFMS_get_wti_cfloat"
+
+#undef CFMS_GET_WTJ_
+#undef CFMS_GET_WTJ_BINDC_
+#define CFMS_GET_WTJ_ cFMS_get_wtj_cfloat
+#define CFMS_GET_WTJ_BINDC_ "cFMS_get_wtj_cfloat"
+
+#undef CFMS_GET_XGRID_AREA_
+#undef CFMS_GET_XGRID_AREA_BINDC_
+#define CFMS_GET_XGRID_AREA_ cFMS_get_xgrid_area_cfloat
+#define CFMS_GET_XGRID_AREA_BINDC_ "cFMS_get_xgrid_area_cfloat"
+
 #include "c_get_interp.inc"
