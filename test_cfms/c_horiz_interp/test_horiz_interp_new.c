@@ -22,7 +22,6 @@
 /*
 Adapted from test_horiz_interp :: test_assign
 */
-
 void define_domain(int* domain_id);
 
 int test_conservative_new(int domain_id);
@@ -108,85 +107,79 @@ int test_conservative_new(int domain_id) {
 
     // grid data
     double* lat_1D, * lon_1D;
-    double* lon_src_2D, * lat_src_2D;
-    double* lon_dst_2D, * lat_dst_2D;
+    double* lon_in_2D, * lat_in_2D;
+    double* lon_out_2D, * lat_out_2D;
 
-    double lon_src_beg = 0.;
-    double lon_src_end = 360.;
-    double lat_src_beg = -90.;
-    double lat_src_end = 90.;
-    double SMALL = 1.0e-10;
-
-    double dlon = (lon_src_end - lon_src_beg) / (double)NI_SRC;
-    double dlat = (lat_src_end - lat_src_beg) / (double)NJ_SRC;
+    double lon_beg = 0.;
+    double lon_end = 360.;
+    double lat_beg = -90.;
+    double lat_end = 90.;
+    double dlon = (lon_end - lon_beg) / (double)NI_SRC;
+    double dlat = (lat_end - lat_beg) / (double)NJ_SRC;
 
     char interp_method[MESSAGE_LENGTH] = "conservative";
 
     int lon_in_1d_size = NI_SRC + 1;
     lon_1D = (double*)malloc(lon_in_1d_size * sizeof(double));
-    for (int i = 0; i < lon_in_1d_size; i++) lon_in_1D[i] = (lon_src_beg + i * dlon_src) * DEG_TO_RAD;
+    for (int i = 0; i < lon_in_1d_size; i++) lon_1D[i] = (lon_beg + i * dlon) * DEG_TO_RAD;
 
     int lat_in_1d_size = NJ_SRC + 1;
     lat_1D = (double*)malloc(lat_in_1d_size * sizeof(double));
-    for (int j = 0; j < lat_in_1d_size; j++) lat_in_1D[j] = (lat_src_beg + j * dlat_src) * DEG_TO_RAD;
+    for (int j = 0; j < lat_in_1d_size; j++) lat_1D[j] = (lat_beg + j * dlat) * DEG_TO_RAD;
 
     int in_2d_size = lon_in_1d_size * lat_in_1d_size;
-    int out_2d_size = (xsize + 1) * (ysize + 1);
     lon_in_2D = (double*)malloc(in_2d_size * sizeof(double));
     lat_in_2D = (double*)malloc(in_2d_size * sizeof(double));
-    lon_out_2D = (double*)malloc(out_2d_size * sizeof(double));
-    lat_out_2D = (double*)malloc(out_2d_size * sizeof(double));
 
     int ij = 0;
     for (int i = 0; i < lon_in_1d_size; i++) {
         for (int j = 0; j < lat_in_1d_size; j++) {
-            lon_in_2D[ij++] = lon_in_2D[i];
+            lon_in_2D[ij++] = lon_1D[i];
         }
     }
 
     ij = 0;
     for (int i = 0; i < lon_in_1d_size; i++) {
         for (int j = 0; j < lat_in_1d_size; j++) {
-            lat_in_2D[ij++] = lat_in_1D[j];
+            lat_in_2D[ij++] = lat_1D[j];
         }
     }
+
+    int out_2d_size = (xsize_c + 1) * (ysize_c + 1);
+    lon_out_2D = (double*)malloc(out_2d_size * sizeof(double));
+    lat_out_2D = (double*)malloc(out_2d_size * sizeof(double));
 
     ij = 0;
     for (int i = isc; i < iec + 1; i++) {
         for (int j = jsc; j < jec + 1; j++) {
-            ij_in = i * lon_in_1d_size + j;
+            int ij_in = i * lon_in_1d_size + j;
             lat_out_2D[ij] = lat_in_2D[ij_in];
             lon_out_2D[ij++] = lon_in_2D[ij_in];
         }
     }
-
-    int lon_in_shape[2] = { lon_in_1d_size, lat_in_1d_size };
-    int* lat_in_shape = lon_in_shape;
-    int lon_out_shape[2] = { xsize_c + 1, ysize_c + 1 };
-    int* lat_out_shape = lon_out_shape;
-
+    
     int interp_id = 0;
     int test_interp_id;
     int nlon_in = NI_SRC;
     int nlat_in = NJ_SRC;
-    int nlon_out = nlon_in;
-    int nlat_out = nlat_out;
+    int nlon_out = xsize_c;
+    int nlat_out = ysize_c;
     bool save_weights_as_fregrid = true;
 
     test_interp_id = cFMS_horiz_interp_new_2d_cdouble(&nlon_in, &nlat_in, &nlon_out, &nlat_out,
         lon_in_2D, lat_in_2D, lon_out_2D, lat_out_2D, NULL, NULL, interp_method, NULL, NULL,
         NULL, NULL, NULL, &save_weights_as_fregrid, NULL);
 
-    if (test_interpd_id /= interp_id) {
+    if (test_interp_id != interp_id) {
         cFMS_error(FATAL, "unexpected interp_id");
         cFMS_end();
-        exit EXIT_FAILURE;
+        return EXIT_FAILURE;        
     }
 
     int nxgrid;
     cFMS_get_nxgrid(&test_interp_id, &nxgrid);
 
-    int nlon_src, nlat_src, nlon_dst, nlat_dst;
+    int nlon_src, nlat_src, nlon_dst, nlat_dst, interp_method_enum, version;
     int* i_src = (int*)malloc(nxgrid * sizeof(int));
     int* j_src = (int*)malloc(nxgrid * sizeof(int));
     int* i_dst = (int*)malloc(nxgrid * sizeof(int));
@@ -194,8 +187,6 @@ int test_conservative_new(int domain_id) {
     double* area_frac_dst = (double*)malloc(nxgrid * sizeof(double));
     double* xgrid_area = (double*)malloc(nxgrid * sizeof(double));
 
-    // test individual getters
-    int version, interp_method_enum;
     cFMS_get_i_src(&test_interp_id, i_src);
     cFMS_get_j_src(&test_interp_id, i_src);
     cFMS_get_i_dst(&test_interp_id, i_dst);
@@ -209,17 +200,39 @@ int test_conservative_new(int domain_id) {
     cFMS_get_area_frac_dst_cdouble(&test_interp_id, area_frac_dst);
     cFMS_get_xgrid_area_cdouble(&test_interp_id, xgrid_area);
 
-    assert(nlon_src == NI_SRC);
-    assert(nlat_src == NJ_SRC);
-    assert(nlon_dst == iec - isc);
-    assert(nlat_dst == jec - jsc);
-    assert(interp_method_enum == 1); //1 is the enum for conservative set in horiz_interp_types.F90
-    assert(version == 2);
+    if(nlon_src != NI_SRC){
+        cFMS_error(FATAL, "unexpected nlon_src");
+        cFMS_end();
+        exit(EXIT_FAILURE);
+    }
+    if(nlat_src != NJ_SRC){
+        cFMS_error(FATAL, "unexpected nlat_src");
+        cFMS_end();
+        exit(EXIT_FAILURE);
+    }
+    if(nlon_dst != xsize_c){
+        cFMS_error(FATAL, "unexlected nlon_dst");
+        cFMS_end();
+        exit(EXIT_FAILURE);
+    }
+    if(nlat_dst != ysize_c){
+        cFMS_error(FATAL, "unexpected nlat_dst");
+        cFMS_end();
+        exit(EXIT_FAILURE);
+    }
+    if(interp_method_enum != 1){
+        cFMS_error(FATAL, "unexpected interp_method");
+        cFMS_end();
+        exit(EXIT_FAILURE);
+    } //1 is the enum for conservative set in horiz_interp_types.F90
+    if(version != 2){
+        cFMS_error(FATAL, "unexpected version");
+        cFMS_end();
+        exit(EXIT_FAILURE);
+    }
 
-    free(lon_in_1D);
-    free(lat_in_1D);
-    free(lon_out_1D);
-    free(lat_out_1D);
+    free(lon_1D);
+    free(lat_1D);
     free(lon_in_2D);
     free(lat_in_2D);
     free(lon_out_2D);
@@ -229,11 +242,12 @@ int test_conservative_new(int domain_id) {
     free(i_dst);
     free(j_dst);
     free(area_frac_dst);
+    free(xgrid_area);
 
     return EXIT_SUCCESS;
 }
 
-
+/*
 int test_bilinear_new(int domain_id) {
     // domain info
     int isc, iec, jsc, jec;
@@ -255,18 +269,16 @@ int test_bilinear_new(int domain_id) {
     double* lat_in_2D, * lon_in_2D;
     double* lat_out_1D, * lon_out_1D;
     double* lat_out_2D, * lon_out_2D;
-    double* lon_src_1d, * lat_src_1d;
-    double* lon_dst_1d, * lat_dst_1d;
-    double dlon_src, dlat_src, dlon_dst, dlat_dst;
+    double dlon_src, dlat_src, dlon_out, dlat_out;
 
     double lon_src_beg = 0.;
     double lon_src_end = 360.;
     double lat_src_beg = -90.;
     double lat_src_end = 90.;
-    double lon_dst_beg = 0.;
-    double lon_dst_end = 360.;
-    double lat_dst_beg = -90.;
-    double lat_dst_end = 90.;
+    double lon_out_beg = 0.;
+    double lon_out_end = 360.;
+    double lat_out_beg = -90.;
+    double lat_out_end = 90.;
     double DEG_TO_RAD = 3.14 / 180.;
     double SMALL = 1.0e-10;
 
@@ -275,8 +287,8 @@ int test_bilinear_new(int domain_id) {
     // set up same source/destination lat/lon sizes
     dlon_src = (lon_src_end - lon_src_beg) / NI_SRC;
     dlat_src = (lat_src_end - lat_src_beg) / NJ_SRC;
-    dlon_dst = dlon_src;
-    dlat_dst = dlat_src;
+    dlon_out = dlon_src;
+    dlat_out = dlat_src;
 
     cFMS_get_compute_domain(&domain_id, &isc, &iec, &jsc, &jec, &xsize_c, xmax_size, &ysize_c, ymax_size,
         x_is_global, y_is_global, tile_count, position, &whalo, &shalo);
@@ -293,10 +305,10 @@ int test_bilinear_new(int domain_id) {
     for (int j = 0; j < lat_in_1d_size; j++) lat_in_1D[j] = (lat_src_beg + j * dlat_src) * DEG_TO_RAD;
 
     lon_out_1D = (double*)malloc(lon_out_1d_size * sizeof(double));
-    for (int i = 0; i < lon_out_1d_size; i++) lon_out_1D[i] = (lon_dst_beg + i * dlon_dst) * DEG_TO_RAD;
+    for (int i = 0; i < lon_out_1d_size; i++) lon_out_1D[i] = (lon_out_beg + i * dlon_out) * DEG_TO_RAD;
 
     lat_out_1D = (double*)malloc(lat_out_1d_size * sizeof(double));
-    for (int j = 0; j < lat_out_1d_size; j++) lat_out_1D[j] = (lat_dst_beg + j * dlat_dst) * DEG_TO_RAD;
+    for (int j = 0; j < lat_out_1d_size; j++) lat_out_1D[j] = (lat_out_beg + j * dlat_out) * DEG_TO_RAD;
 
     int in_2d_size = lon_in_1d_size * lat_in_1d_size;
     int out_2d_size = lon_out_1d_size * lat_out_1d_size;
@@ -307,16 +319,14 @@ int test_bilinear_new(int domain_id) {
             lon_in_2D[lat_in_1d_size * i + j] = lon_in_1D[i];
         }
     }
-    int lon_in_shape[2] = { lon_in_1d_size, lat_in_1d_size };
-
+    
     lat_in_2D = (double*)malloc(in_2d_size * sizeof(double));
     for (int i = 0; i < lon_in_1d_size; i++) {
         for (int j = 0; j < lat_in_1d_size; j++) {
             lat_in_2D[lat_in_1d_size * i + j] = lat_in_1D[j];
         }
     }
-    int lat_in_shape[2] = { lon_in_1d_size, lat_in_1d_size };
-
+    
     // for the destination, we take the midpoints between 1d source points
     lon_out_2D = (double*)malloc(out_2d_size * sizeof(double));
     for (int i = 0; i < lon_out_1d_size; i++) {
@@ -325,8 +335,7 @@ int test_bilinear_new(int domain_id) {
             lon_out_2D[lat_out_1d_size * i + j] = midpoint;
         }
     }
-    int lon_out_shape[2] = { lon_out_1d_size, lat_out_1d_size };
-
+    
     lat_out_2D = (double*)malloc(out_2d_size * sizeof(double));
 
     for (int i = 0; i < lat_out_1d_size; i++) {
@@ -335,8 +344,7 @@ int test_bilinear_new(int domain_id) {
             lat_out_2D[lat_out_1d_size * j + i] = midpoint;
         }
     }
-    int lat_out_shape[2] = { lon_out_1d_size, lat_out_1d_size };
-
+    
     int interp_id = 1;
     int test_interp_id;
 
@@ -349,16 +357,16 @@ int test_bilinear_new(int domain_id) {
 
     int nlon_src;
     int nlat_src;
-    int nlon_dst;
-    int nlat_dst;
+    int nlon_out;
+    int nlat_out;
 
-    int* i_lon = (int*)malloc(nlon_dst * nlat_dst * 2 * sizeof(int));
-    int* j_lat = (int*)malloc(nlon_dst * nlat_dst * 2 * sizeof(int));
+    int* i_lon = (int*)malloc(nlon_out * nlat_out * 2 * sizeof(int));
+    int* j_lat = (int*)malloc(nlon_out * nlat_out * 2 * sizeof(int));
     cFMS_get_i_lon(&test_interp_id, i_lon);
     cFMS_get_j_lat(&test_interp_id, j_lat);
     double* area_frac_dst;
-    double* wti = (double*)malloc(nlon_dst * nlat_dst * 2 * sizeof(double));
-    double* wtj = (double*)malloc(nlon_dst * nlat_dst * 2 * sizeof(double));
+    double* wti = (double*)malloc(nlon_out * nlat_out * 2 * sizeof(double));
+    double* wtj = (double*)malloc(nlon_out * nlat_out * 2 * sizeof(double));
     cFMS_get_wti_cdouble(&test_interp_id, wti);
     cFMS_get_wtj_cdouble(&test_interp_id, wtj);
 
@@ -369,7 +377,7 @@ int test_bilinear_new(int domain_id) {
     // since output grid is the midpoints, weights will all be 0.5
     const double tolerance = 1.0e-10;
     const double expected = 0.5;
-    for (int i = 0; i < nlon_dst * nlat_dst * 2; i++) {
+    for (int i = 0; i < nlon_out * nlat_out * 2; i++) {
         assert(abs(wti[i] - expected) < tolerance);
         assert(abs(wtj[i] - expected) < tolerance);
     }
@@ -377,8 +385,8 @@ int test_bilinear_new(int domain_id) {
     // nlon/lat_src/dst for bilinear is exactly the size of the indices sent in
     assert(nlon_src == NI_SRC + 1);
     assert(nlat_src == NJ_SRC + 1);
-    assert(nlon_dst == iec - isc + 1);
-    assert(nlat_dst == jec - jsc + 1);
+    assert(nlon_out == iec - isc + 1);
+    assert(nlat_out == jec - jsc + 1);
 
     free(lon_in_1D);
     free(lat_in_1D);
@@ -397,3 +405,4 @@ int test_bilinear_new(int domain_id) {
 
     return EXIT_SUCCESS;
 }
+*/

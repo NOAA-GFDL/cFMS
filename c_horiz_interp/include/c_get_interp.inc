@@ -31,7 +31,7 @@ subroutine CFMS_GET_XGRID_AREA_(interp_id, xgrid_area) bind(C, name=CFMS_GET_XGR
    CFMS_GET_INTERP_DATA_TYPE_, intent(out) :: xgrid_area(interp(interp_id)%nxgrid)
 
    if(kind(xgrid_area) == c_float) then
-      call mpp_error(WARNING, "xgrid_area  is saved as c_double kind.  Reducing precision to c_float")
+      call fms_mpp_error(WARNING, "xgrid_area  is saved as c_double kind.  Reducing precision to c_float")
       xgrid_area = real(interp(interp_id)%xgrid_area, c_float)
    else
       xgrid_area = interp(interp_id)%xgrid_area
