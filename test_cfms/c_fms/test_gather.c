@@ -156,7 +156,7 @@ void test_1d_v() {
     if (pe == cFMS_root_pe())
         rbuf = (CFMS_TEST_KIND_*)malloc(rbuf_size * sizeof(CFMS_TEST_KIND_));
 
-    CFMS_GATHER_V_1D_(&npes, &ssize, &rbuf_size, sbuf, rbuf, rsize, NULL);
+    CFMS_GATHERV_1D_(&npes, &ssize, &rbuf_size, sbuf, &ssize, rbuf, rsize, NULL);
 
     CFMS_TEST_KIND_* answers;
     for (int i = 0; i < rbuf_size; i++) {

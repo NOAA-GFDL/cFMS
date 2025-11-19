@@ -66,9 +66,9 @@ module c_fms_mod
    public :: cFMS_gather_1d_cint
    public :: CFMS_gather_1d_cfloat
    public :: CFMS_gather_1d_cdouble
-   public :: cFMS_gather_v_1d_cint
-   public :: cFMS_gather_v_1d_cfloat
-   public :: cFMS_gather_v_1d_cdouble
+   public :: cFMS_gatherv_1d_cint
+   public :: cFMS_gatherv_1d_cfloat
+   public :: cFMS_gatherv_1d_cdouble
    public :: cFMS_gather_pelist_2d_cint
    public :: cFMS_gather_pelist_2d_cfloat
    public :: cFMS_gather_pelist_2d_cdouble
@@ -131,7 +131,7 @@ module c_fms_mod
    type(FmsMppDomainsNestDomain_type), pointer :: current_nest_domain
    integer :: nest_domain_count
 
-  logical :: module_is_initialized = .false.
+   logical :: module_is_initialized = .false.
 
 contains
 
@@ -145,7 +145,7 @@ contains
 
       module_is_initialized = .false.
 
-    end subroutine cFMS_end
+   end subroutine cFMS_end
 
    !> cFMS_get_domain_count
    function cFMS_get_domain_count() bind(C, name="cFMS_get_domain_count")
@@ -185,7 +185,7 @@ contains
       end if
 
       if(module_is_initialized) return
-      
+
       if(present(ndomain)) then
          allocate(domain(0:ndomain-1))
       else
@@ -201,9 +201,9 @@ contains
       domain_count = 0
       nest_domain_count = 0
 
-    module_is_initialized = .true.
+      module_is_initialized = .true.
 
-  end subroutine cfms_init
+   end subroutine cfms_init
 
    !> cFMS_declare_pelist
    subroutine cFMS_declare_pelist(npes, pelist, name, commID) bind(C, name="cFMS_declare_pelist")
