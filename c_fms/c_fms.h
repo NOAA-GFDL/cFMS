@@ -47,6 +47,8 @@ extern void cFMS_end();
 
 extern void cFMS_error(int errortype, char* errormsg);
 
+extern bool c_fms_is_initialized();
+
 extern int cFMS_get_domain_count();
 
 extern int cFMS_get_nest_domain_count();

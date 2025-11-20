@@ -14,6 +14,8 @@ extern void cFMS_horiz_interp_init(int *ninterp);
 
 extern void cFMS_horiz_interp_end();
 
+extern bool c_horiz_interp_is_initialized();
+
 extern int cFMS_horiz_interp_new_2d_cfloat(int *nlon_in, int *nlat_in, int *nlon_out, int *nlat_out,
                                            float *lon_in_ptr,float *lat_in_ptr, float *lon_out_ptr,
                                            float *lat_out_ptr, float *mask_in_ptr, float *mask_out_ptr,

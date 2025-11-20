@@ -56,6 +56,7 @@ module c_fms_mod
 
    public :: cFMS_init
    public :: cFMS_end, cFMS_error
+   public :: c_fms_is_initialized
    public :: cFMS_get_domain_count, cFMS_get_nest_domain_count
    public :: cFMS_declare_pelist, cFMS_get_current_pelist, cFMS_npes, cFMS_pe, cFMS_set_current_pelist
    public :: cFMS_define_domains
@@ -134,7 +135,7 @@ module c_fms_mod
    logical :: module_is_initialized = .false.
 
 contains
-
+  
    !> cFMS_end
    subroutine cFMS_end() bind(C, name="cFMS_end")
       implicit none
@@ -205,6 +206,15 @@ contains
 
    end subroutine cfms_init
 
+   function c_fms_is_initialized() bind(C, name="c_fms_is_initialized")
+
+     implicit none
+     logical(c_bool) :: c_fms_is_initialized
+
+     c_fms_is_initialized = logical(module_is_initialized, c_bool)
+
+   end function c_fms_is_initialized
+   
    !> cFMS_declare_pelist
    subroutine cFMS_declare_pelist(npes, pelist, name, commID) bind(C, name="cFMS_declare_pelist")
 

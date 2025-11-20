@@ -53,6 +53,8 @@ module c_diag_manager_mod
   public :: cFMS_diag_send_data_2d_cdouble
   public :: cFMS_diag_send_data_3d_cdouble
   public :: cFMS_diag_send_data_4d_cdouble
+
+  public :: c_diag_manager_is_initialized
   
   type(FmsTime_type) :: field_init_time
   type(FmsTime_type) :: cFMS_diag_end_time
@@ -105,6 +107,15 @@ contains
     
   end subroutine cFMS_diag_init
 
+  !c_diag_manager_is_initialized
+  function c_diag_manager_is_initialized() bind(C, name="c_diag_manager_is_initialized")
+
+    implicit none
+    logical(c_bool) :: c_diag_manager_is_initialized
+
+    c_diag_manager_is_initialized = logical(module_is_initialized, kind=c_bool)
+    
+  end function c_diag_manager_is_initialized
 
   !cFMS_diag_send_complete
   subroutine cFMS_diag_send_complete(diag_field_id, err_msg) bind(C, name="cFMS_diag_send_complete")
