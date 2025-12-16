@@ -7,7 +7,7 @@ module c_horiz_interp_mod
    use FMS, only : fms_string_utils_c2f_string
    use FMS, only : fms_mpp_error, WARNING
 
-   use c_fms_utils_mod, only : cFMS_pointer_to_array, cFMS_array_to_pointer
+   use c_fms_utils_mod, only : cFMS_pointer_to_array, cFMS_array_to_pointer, clogical_f
    use c_fms_mod, only : NAME_LENGTH, MESSAGE_LENGTH
 
    use iso_c_binding

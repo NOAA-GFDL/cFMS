@@ -6,6 +6,7 @@ module c_fms_utils_mod
   private
   public :: cFMS_pointer_to_array
   public :: cFMS_array_to_pointer
+  public :: clogical_f, clogical_t, clogical
   
   interface cFMS_pointer_to_array
      module procedure cFMS_pointer_to_array_2d_int
@@ -47,6 +48,7 @@ module c_fms_utils_mod
   
 contains
 
+#include "clogical.inc"
 #include "pointer_to_array.fh"
 #include "array_to_pointer.fh"
   

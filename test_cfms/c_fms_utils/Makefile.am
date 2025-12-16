@@ -26,11 +26,12 @@ AM_LDFLAGS = $(LIBFMS_LIBS)
 # Link to the FMS library.
 LDADD = ${abs_top_builddir}/libcFMS/libcFMS.la
 
-check_PROGRAMS = test_utils
+check_PROGRAMS = test_utils test_clogical
 
-TESTS = test_utils.sh
+TESTS = test_utils.sh test_clogical.sh
 
-test_utils_SOURCES = test_utils.F90 test_utils_c.c 
+test_utils_SOURCES = test_utils.F90 test_utils_c.c
+test_clogical_SOURCES = test_clogical.F90
 
 test_utils_c.o : test_utils_c.c
 	$(CC) -c $(CFLAGS) $(LDFLAGS) $(AM_CPPFLAGS) test_utils_c.c -o test_utils_c.o

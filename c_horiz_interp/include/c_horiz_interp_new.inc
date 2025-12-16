@@ -1,7 +1,7 @@
 function CFMS_HORIZ_INTERP_NEW_2D_(nlon_in, nlat_in, nlon_out, nlat_out, &
    lon_in_ptr, lat_in_ptr, lon_out_ptr, lat_out_ptr, mask_in_ptr, mask_out_ptr, &
-   interp_method, verbose, max_dist, src_modulo, is_latlon_in, is_latlon_out, save_weights_as_fregrid, &
-   convert_cf_order) bind(C, name=CFMS_HORIZ_INTERP_NEW_2D_BINDC_)
+   interp_method, verbose, max_dist, src_modulo, is_latlon_in, is_latlon_out, save_xgrid_area, & 
+   as_fregrid, convert_cf_order) bind(C, name=CFMS_HORIZ_INTERP_NEW_2D_BINDC_)
 
    implicit none
 
@@ -18,15 +18,12 @@ function CFMS_HORIZ_INTERP_NEW_2D_(nlon_in, nlat_in, nlon_out, nlat_out, &
    logical(c_bool), intent(in), optional :: src_modulo
    logical(c_bool), intent(in), optional :: is_latlon_in
    logical(c_bool), intent(in), optional :: is_latlon_out
-   logical(c_bool), intent(in), optional :: save_weights_as_fregrid
+   logical(c_bool), intent(in), optional :: save_xgrid_area
+   logical(c_bool), intent(in), optional :: as_fregrid
    logical(c_bool), intent(in), optional :: convert_cf_order
 
    integer :: CFMS_HORIZ_INTERP_NEW_2D_
    character(MESSAGE_LENGTH-1) :: interp_method_f
-   logical :: src_modulo_f
-   logical :: is_latlon_in_f
-   logical :: is_latlon_out_f
-   logical :: save_weights_as_fregrid_f
 
    integer :: in_shape(2), out_shape(2)
 
@@ -64,37 +61,15 @@ function CFMS_HORIZ_INTERP_NEW_2D_(nlon_in, nlat_in, nlon_out, nlat_out, &
       interp_method_f = fms_string_utils_c2f_string(interp_method)
    endif
 
-   if(present(src_modulo)) then
-      src_modulo_f = logical(src_modulo)
-   else
-      src_modulo_f = .false.
-   end if
-   if(present(is_latlon_in)) then
-      is_latlon_in_f = logical(is_latlon_in)
-   else
-      is_latlon_in_f = .false.
-   end if
-   if(present(is_latlon_out)) then
-      is_latlon_out_f = logical(is_latlon_out)
-   else
-      is_latlon_out_f = .false.
-   end if
-
-   save_weights_as_fregrid_f = .false.
-   if(present(save_weights_as_fregrid)) then
-      save_weights_as_fregrid_f = logical(save_weights_as_fregrid)
-   end if
-
-
    CFMS_HORIZ_INTERP_NEW_2D_ = interp_count
 
    call fms_horiz_interp_new(Interp=interp(interp_count), lon_in=lon_in, lat_in=lat_in, &
       lon_out=lon_out, lat_out=lat_out, verbose=verbose, &
       interp_method=interp_method_f, max_dist=max_dist, &
-      src_modulo=src_modulo_f, mask_in=mask_in, &
-      mask_out=mask_out, is_latlon_in=is_latlon_in_f, &
-      is_latlon_out=is_latlon_out_f, &
-      save_weights_as_fregrid=save_weights_as_fregrid_f)
+      src_modulo=clogical_f(src_modulo), mask_in=mask_in, &
+      mask_out=mask_out, is_latlon_in=clogical_f(is_latlon_in), &
+      is_latlon_out=clogical_f(is_latlon_out), save_xgrid_area=clogical_f(save_xgrid_area), &
+      as_fregrid=clogical_f(as_fregrid))
 
    interp_count = interp_count + 1
 
