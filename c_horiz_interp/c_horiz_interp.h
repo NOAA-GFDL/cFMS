@@ -18,13 +18,13 @@ extern int cFMS_horiz_interp_new_2d_cfloat(int* nlon_in, int* nlat_in, int* nlon
     float* lon_in_ptr, float* lat_in_ptr, float* lon_out_ptr,
     float* lat_out_ptr, float* mask_in_ptr, float* mask_out_ptr,
     char* interp_method, int* verbose, float* max_dist, bool* src_modulo,
-    bool* is_latlon_in, bool* is_latlon_out, bool* save_weights_as_fregrid, bool* convert_cf_order);
+    bool* is_latlon_in, bool* is_latlon_out, bool* save_xgrid_area, bool *as_fregrid, bool* convert_cf_order);
 
 extern int cFMS_horiz_interp_new_2d_cdouble(int* nlon_in, int* nlat_in, int* nlon_out, int* nlat_out,
     double* lon_in_ptr, double* lat_in_ptr, double* lon_out_ptr,
     double* lat_out_ptr, double* mask_in_ptr, double* mask_out_ptr,
     char* interp_method, int* verbose, double* max_dist, bool* src_modulo,
-    bool* is_latlon_in, bool* is_latlon_out, bool* save_weights_as_fregrid, bool* convert_cf_order);
+    bool* is_latlon_in, bool* is_latlon_out, bool* save_xgrid_area, bool *as_fregrid, bool* convert_cf_order);
 
 extern void cFMS_horiz_interp_base_2d_cfloat(int* interp_id, float* data_in_ptr, float* data_out_ptr,
     float* mask_in_ptr, float* mask_out_ptr, int* verbose,

@@ -10,7 +10,6 @@ void set_grid(double* lon_in, double* lat_in, double* lon_out, double* lat_out, 
 void set_data(double* data_in, char order);
 
 int nin = 5, nout = 5;
-double din = 0.5, dout = 0.5;
 
 int main() {
 
@@ -30,14 +29,13 @@ int main() {
     int* verbose = NULL;
     double* max_dist = NULL;
     bool* src_modulo = NULL;
-    double* mask_in = NULL;
-    double* mask_out = NULL;
-    bool* is_latlon_in = NULL;
-    bool* is_latlon_out = NULL;
+    double* mask = NULL;
+    bool* is_latlon = NULL;
     double* missing_value = NULL;
     int* missing_permit = NULL;
     bool* new_missing_handle = NULL;
-    bool* save_weights_as_fregrid = NULL;
+    bool* save_xgrid_area= NULL;
+    bool as_fregrid = true;
 
     cFMS_init(NULL, NULL, NULL, NULL, NULL);
     int two = 2; cFMS_horiz_interp_init(&two);
@@ -51,13 +49,12 @@ int main() {
     {
         set_grid(lon_in, lat_in, lon_out, lat_out, 'C');
         int interp = cFMS_horiz_interp_new_2d_cdouble(&nin, &nin, &nout, &nout,
-            lon_in, lat_in, lon_out, lat_out,
-            mask_in, mask_out, interp_method,
-            verbose, max_dist, src_modulo,
-            is_latlon_in, is_latlon_out, save_weights_as_fregrid, &convert_cf_order);
+            lon_in, lat_in, lon_out, lat_out, mask, mask, interp_method,
+            verbose, max_dist, src_modulo, is_latlon, is_latlon, 
+            save_xgrid_area, &as_fregrid, &convert_cf_order);
 
         set_data(data_in, 'C');
-        cFMS_horiz_interp_base_2d_cdouble(&interp, data_in, data_out, mask_in, mask_out, verbose, missing_value,
+        cFMS_horiz_interp_base_2d_cdouble(&interp, data_in, data_out, mask, mask, verbose, missing_value,
             missing_permit, new_missing_handle, &convert_cf_order);
 
         int ij = 0;
@@ -72,13 +69,12 @@ int main() {
     {
         set_grid(lon_in, lat_in, lon_out, lat_out, 'F');
         int interp = cFMS_horiz_interp_new_2d_cdouble(&nin, &nin, &nout, &nout,
-            lon_in, lat_in, lon_out, lat_out,
-            mask_in, mask_out, interp_method,
-            verbose, max_dist, src_modulo,
-            is_latlon_in, is_latlon_out, save_weights_as_fregrid, &convert_cf_order);
+            lon_in, lat_in, lon_out, lat_out, mask, mask, interp_method,
+            verbose, max_dist, src_modulo, is_latlon, is_latlon, 
+            save_xgrid_area, &as_fregrid, &convert_cf_order);
 
         set_data(data_in, 'F');
-        cFMS_horiz_interp_base_2d_cdouble(&interp, data_in, data_out, mask_in, mask_out, verbose, missing_value,
+        cFMS_horiz_interp_base_2d_cdouble(&interp, data_in, data_out, mask, mask, verbose, missing_value,
             missing_permit, new_missing_handle, &convert_cf_order);
 
         int ij = 0;
@@ -99,20 +95,22 @@ int main() {
 void set_grid(double* lon_in, double* lat_in, double* lon_out, double* lat_out, char order) {
 
     char C = 'C';
+    double din = 0.5 * DEG_TO_RAD;
+    double dout = 0.5 * DEG_TO_RAD;
 
     if (order == C) {
         for (int i = 0; i < nin + 1; i++) {
             for (int j = 0; j < nin + 1; j++) {
                 int ij = i * (nin + 1) + j;
-                lon_in[ij] = (double)i * din * DEG_TO_RAD;
-                lat_in[ij] = (double)j * din * DEG_TO_RAD;
+                lon_in[ij] = (double)i * din;
+                lat_in[ij] = (double)j * din;
             }
         }
         for (int i = 0; i < nout + 1; i++) {
             for (int j = 0; j < nout + 1; j++) {
                 int ij = i * (nout + 1) + j;
-                lon_out[ij] = (double)i * dout * DEG_TO_RAD;
-                lat_out[ij] = (double)j * dout * DEG_TO_RAD;
+                lon_out[ij] = (double)i * dout;
+                lat_out[ij] = (double)j * dout;
             }
         }
     }
@@ -120,15 +118,15 @@ void set_grid(double* lon_in, double* lat_in, double* lon_out, double* lat_out, 
         for (int j = 0; j < nin + 1; j++) {
             for (int i = 0; i < nin + 1; i++) {
                 int ij = j * (nin + 1) + i;
-                lon_in[ij] = (double)i * din * DEG_TO_RAD;
-                lat_in[ij] = (double)j * din * DEG_TO_RAD;
+                lon_in[ij] = (double)i * din;
+                lat_in[ij] = (double)j * din;
             }
         }
         for (int j = 0; j < nout + 1; j++) {
             for (int i = 0; i < nout + 1; i++) {
                 int ij = j * (nout + 1) + i;
-                lon_out[ij] = (double)i * dout * DEG_TO_RAD;
-                lat_out[ij] = (double)j * dout * DEG_TO_RAD;
+                lon_out[ij] = (double)i * dout;
+                lat_out[ij] = (double)j * dout;
             }
         }
     }//if
