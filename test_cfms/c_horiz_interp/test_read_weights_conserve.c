@@ -73,10 +73,10 @@ int main() {
 
     // read weights
     char weight_file_src[NAME_LENGTH] = "fregrid";
-    bool save_weights_as_fregrid = true;
+    bool save_xgrid_area = true;
     int src_tile = 1;
     int interp_id = cFMS_horiz_interp_read_weights_conserve(weight_filename, weight_file_src,
-        &nlon_src, &nlat_src, &xsize, &ysize, &isc, &iec, &jsc, &jec, &src_tile, &save_weights_as_fregrid);
+        &nlon_src, &nlat_src, &xsize, &ysize, &isc, &iec, &jsc, &jec, &src_tile, &save_xgrid_area);
 
     // remap
     bool convert_cf_order = false;

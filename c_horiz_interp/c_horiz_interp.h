@@ -14,6 +14,8 @@ extern void cFMS_horiz_interp_init(int* ninterp);
 
 extern void cFMS_horiz_interp_end();
 
+extern bool c_horiz_interp_is_initialized();
+
 extern int cFMS_horiz_interp_new_2d_cfloat(int* nlon_in, int* nlat_in, int* nlon_out, int* nlat_out,
     float* lon_in_ptr, float* lat_in_ptr, float* lon_out_ptr,
     float* lat_out_ptr, float* mask_in_ptr, float* mask_out_ptr,
@@ -38,7 +40,7 @@ extern void cFMS_horiz_interp_base_2d_cdouble(int* interp_id, double* data_in_pt
 
 extern int cFMS_horiz_interp_read_weights_conserve(char* weight_filename, char* weight_file_source,
     int* nlon_src, int* nlat_src, int* nlon_dst, int* nlat_dst,
-    int* isw, int* iew, int* jsw, int* jew, int* src_tile, bool* save_weights_as_fregrid);
+    int* isw, int* iew, int* jsw, int* jew, int* src_tile, bool* save_xgrid_area);
 
 // Integer pointer getters
 extern void cFMS_get_i_src(int* interp_id, int* i_src);
