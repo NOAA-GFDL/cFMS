@@ -57,6 +57,7 @@ module c_fms_mod
 
    public :: cFMS_init
    public :: cFMS_end, cFMS_error
+   public :: c_fms_is_initialized
    public :: cFMS_get_domain_count, cFMS_get_nest_domain_count
    public :: cFMS_declare_pelist, cFMS_get_current_pelist, cFMS_npes, cFMS_pe, cFMS_set_current_pelist
    public :: cFMS_define_domains
@@ -67,9 +68,9 @@ module c_fms_mod
    public :: cFMS_gather_1d_cint
    public :: CFMS_gather_1d_cfloat
    public :: CFMS_gather_1d_cdouble
-   public :: cFMS_gather_v_1d_cint
-   public :: cFMS_gather_v_1d_cfloat
-   public :: cFMS_gather_v_1d_cdouble
+   public :: cFMS_gatherv_1d_cint
+   public :: cFMS_gatherv_1d_cfloat
+   public :: cFMS_gatherv_1d_cdouble
    public :: cFMS_gather_pelist_2d_cint
    public :: cFMS_gather_pelist_2d_cfloat
    public :: cFMS_gather_pelist_2d_cdouble
@@ -132,10 +133,10 @@ module c_fms_mod
    type(FmsMppDomainsNestDomain_type), pointer :: current_nest_domain
    integer :: nest_domain_count
 
-  logical :: module_is_initialized = .false.
+   logical :: module_is_initialized = .false.
 
 contains
-
+  
    !> cFMS_end
    subroutine cFMS_end() bind(C, name="cFMS_end")
       implicit none
@@ -146,7 +147,7 @@ contains
 
       module_is_initialized = .false.
 
-    end subroutine cFMS_end
+   end subroutine cFMS_end
 
    !> cFMS_get_domain_count
    function cFMS_get_domain_count() bind(C, name="cFMS_get_domain_count")
@@ -186,7 +187,7 @@ contains
       end if
 
       if(module_is_initialized) return
-      
+
       if(present(ndomain)) then
          allocate(domain(0:ndomain-1))
       else
@@ -202,10 +203,19 @@ contains
       domain_count = 0
       nest_domain_count = 0
 
-    module_is_initialized = .true.
+      module_is_initialized = .true.
 
-  end subroutine cfms_init
+   end subroutine cfms_init
 
+   function c_fms_is_initialized() bind(C, name="c_fms_is_initialized")
+
+     implicit none
+     logical(c_bool) :: c_fms_is_initialized
+
+     c_fms_is_initialized = logical(module_is_initialized, c_bool)
+
+   end function c_fms_is_initialized
+   
    !> cFMS_declare_pelist
    subroutine cFMS_declare_pelist(npes, pelist, name, commID) bind(C, name="cFMS_declare_pelist")
 

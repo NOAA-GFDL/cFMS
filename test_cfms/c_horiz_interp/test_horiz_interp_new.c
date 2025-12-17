@@ -36,6 +36,12 @@ int main() {
 
   cFMS_horiz_interp_init(&ninterp);
 
+  bool module_is_initialized = c_horiz_interp_is_initialized();
+  if(!module_is_initialized) {
+    cFMS_error(FATAL, "module is not initialized\n");
+    exit(EXIT_FAILURE);
+  }
+  
   printf("starting conservative test...\n");
   test_conserve = test_conservative_new(domain_id);
 

@@ -43,6 +43,12 @@ int main() {
     //test module_is_initialized
     cFMS_horiz_interp_init(&two);
 
+    bool module_is_initialized = c_horiz_interp_is_initialized();
+    if(!module_is_initialized){
+      cFMS_error(FATAL, "module_is_initialized");
+      exit(EXIT_FAILURE);
+    }
+    
     bool convert_cf_order;
 
     convert_cf_order = true;

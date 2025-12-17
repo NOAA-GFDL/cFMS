@@ -20,7 +20,8 @@ module c_horiz_interp_mod
    public :: cFMS_get_maxxgrid
    public :: cFMS_horiz_interp_init
    public :: cFMS_horiz_interp_end
-
+   public :: c_horiz_interp_is_initialized
+   
    public :: cFMS_horiz_interp_new_2d_cdouble
    public :: cFMS_horiz_interp_new_2d_cfloat
 
@@ -165,6 +166,17 @@ contains
       interp_count = interp_count + 1
 
    end function cFMS_horiz_interp_read_weights_conserve
+
+  !c_horiz_interp_is_initialized
+  function c_horiz_interp_is_initialized() bind(C, name="c_horiz_interp_is_initialized")
+
+    implicit none
+    logical(c_bool) :: c_horiz_interp_is_initialized
+
+    c_horiz_interp_is_initialized = logical(module_is_initialized, kind=c_bool)
+
+  end function c_horiz_interp_is_initialized
+
 
 #include "c_horiz_interp_int.inc"
 #include "c_horiz_interp_new.fh"

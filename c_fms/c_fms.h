@@ -47,6 +47,8 @@ extern void cFMS_end();
 
 extern void cFMS_error(int errortype, char* errormsg);
 
+extern bool c_fms_is_initialized();
+
 extern int cFMS_get_domain_count();
 
 extern int cFMS_get_nest_domain_count();
@@ -85,14 +87,14 @@ extern void cFMS_gather_1d_cfloat(int* sbuf_size, int* rbuf_size, float* sbuf, f
 
 extern void cFMS_gather_1d_cdouble(int* sbuf_size, int* rbuf_size, double* sbuf, double* rbuf, int* pelist, int* npes);
 
-extern void cFMS_gather_v_1d_cint(int *npes, int *sbuf_size, int *rbuf_size, int *sbuf,
-                                  int *rbuf, int *rsize, int *pelist);
+extern void cFMS_gatherv_1d_cint(int* npes, int* sbuf_size, int* rbuf_size, int* sbuf, int* ssize,
+    int* rbuf, int* rsize, int* pelist);
 
-extern void cFMS_gather_v_1d_cfloat(int *npes, int *sbuf_size, int *rbuf_size, float *sbuf,
-                                    float *rbuf, int *rsize, int *pelist);
+extern void cFMS_gatherv_1d_cfloat(int* npes, int* sbuf_size, int* rbuf_size, float* sbuf, int* ssize,
+    float* rbuf, int* rsize, int* pelist);
 
-extern void cFMS_gather_v_1d_cdouble(int *npes, int *sbuf_size, int *rbuf_size, double *sbuf,
-                                     double *rbuf, int *rsize, int *pelist);
+extern void cFMS_gatherv_1d_cdouble(int* npes, int* sbuf_size, int* rbuf_size, double* sbuf, int* ssize,
+    double* rbuf, int* rsize, int* pelist);
 
 extern void cFMS_gather_pelist_2d_cint(int* is, int* ie, int* js, int* je, int* npes, int* pelist,
     int* array_seg, int* gather_data_c_shape, int* gather_data,

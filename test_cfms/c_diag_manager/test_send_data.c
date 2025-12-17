@@ -45,7 +45,7 @@ int main()
     }
   }    
   
-  cFMS_init(NULL, NULL, NULL, NULL, &calendar_type);  
+  cFMS_init(NULL, NULL, NULL, NULL, &calendar_type);
 
   // define domain
   {
@@ -69,6 +69,12 @@ int main()
 
     //test module_is_initialized
     cFMS_diag_init(&diag_model_subset, time_init, err_msg);
+  }
+
+  bool module_is_initialized = c_diag_manager_is_initialized();
+  if(!module_is_initialized){
+    cFMS_error(FATAL, "module is not initialized");
+    exit(EXIT_FAILURE);
   }
   
   cFMS_set_current_domain(&domain_id);

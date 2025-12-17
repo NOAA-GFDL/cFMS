@@ -19,6 +19,8 @@ extern int cFMS_diag_axis_init_cdouble(char *name, int *naxis_data, double *axis
 
 extern void cFMS_diag_end();
 
+extern bool c_diag_manager_is_initialized();
+
 extern void cFMS_diag_send_complete(int *diag_field_id, char *err_msg);
 
 extern void cFMS_diag_set_field_init_time(int *year, int *month, int *day, int *hour, int *minute, int *second,
