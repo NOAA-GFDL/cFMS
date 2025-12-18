@@ -35,7 +35,7 @@ int main()
     domain.layout = (int *)malloc(2*sizeof(int));    
     cFMS_define_layout(global_indices, &ndivs, domain.layout);
     
-    domain.domain_id = &domain_id;
+    //domain.domain_id = &domain_id;
     domain.global_indices = global_indices;
     domain.ehalo = &ehalo;
     domain.whalo = &whalo;

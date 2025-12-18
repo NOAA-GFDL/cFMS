@@ -35,11 +35,21 @@ requirements:
     - {{ compiler('fortran') }}
     - autoconf
     - automake
-    - libtool 
+    - libtool
     - mpich
     - hdf5
     - libnetcdf
     - netcdf-fortran
     - yaml
-    
 
+# copy the tests, compile them, then run one
+test:
+  source_files:
+    - test_cfms/
+    - conda.recipe/Makefile
+    - conda.recipe/run_tests.sh
+  commands:
+    - cd conda.recipe
+    - mv ../test_cfms/ ./
+    - make
+    - ./run_tests.sh
