@@ -26,6 +26,7 @@ module c_fms_mod
    use FMS, only : fms_mpp_declare_pelist, fms_mpp_error, fms_mpp_get_current_pelist
    use FMS, only : fms_mpp_npes, fms_mpp_pe, fms_mpp_root_pe, fms_mpp_set_current_pelist
 
+   use FMS, only : fms_mpp_sync
    use FMS, only : fms_mpp_gather
 
    use FMS, only : fms_mpp_domains_define_domains, fms_mpp_domains_define_io_domain, fms_mpp_domains_define_layout
@@ -915,8 +916,14 @@ contains
       domain_count = domain_count + 1
 
    end function cFMS_define_cubic_mosaic
-
-!> cFMS_update_domains
+   
+   subroutine cFMS_sync() bind(C, name="cFMS_sync")
+     
+     implicit none
+     call fms_mpp_sync()
+     
+   end subroutine cFMS_sync
+  
 #include "c_mpp_gather.fh"
 #include "c_update_domains.fh"
 #include "c_vector_update_domains.fh"

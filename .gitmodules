@@ -1,4 +1,4 @@
 [submodule "FMS"]
-  branch = main
+  branch = horiz_interp_dev
   path = FMS
 	url = https://github.com/NOAA-GFDL/FMS.git
