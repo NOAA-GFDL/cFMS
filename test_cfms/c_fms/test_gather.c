@@ -161,7 +161,7 @@ void test_1d_v() {
     rbuf = (CFMS_TEST_KIND_*)malloc(rbuf_size * sizeof(CFMS_TEST_KIND_));
   }
 
-  CFMS_GATHERV_1D_(&npes, &ssize, sbuf, &ssize, rbuf, rsize, NULL);
+  CFMS_GATHERV_1D_(&ssize, sbuf, &ssize, rbuf, rsize, NULL, &npes);
 
   CFMS_TEST_KIND_* answers;
   for (int i = 0; i < rbuf_size; i++) {
@@ -209,11 +209,11 @@ void test_1d_v_pelist() {
   int rsize[2] = { nsize, nsize };
   int rbuf_size = nsize * 2;
 
-  CFMS_TEST_KIND_* rbuf;
+  CFMS_TEST_KIND_* rbuf = NULL;
   if (pe == cFMS_root_pe())
     rbuf = (CFMS_TEST_KIND_*)malloc(rbuf_size * sizeof(CFMS_TEST_KIND_));
 
-  CFMS_GATHERV_1D_(&npes, &ssize, sbuf, &ssize, rbuf, rsize, pelist);
+  CFMS_GATHERV_1D_(&ssize, sbuf, &ssize, rbuf, rsize, pelist, &npes);
 
   CFMS_TEST_KIND_* answers;
   answers = (CFMS_TEST_KIND_*)malloc(rbuf_size * sizeof(CFMS_TEST_KIND_));

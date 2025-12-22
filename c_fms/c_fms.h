@@ -87,14 +87,14 @@ extern void cFMS_gather_1d_cfloat(int* sbuf_size, float* sbuf, float* rbuf, int*
 
 extern void cFMS_gather_1d_cdouble(int* sbuf_size, double* sbuf, double* rbuf, int* pelist, int* rbuf_size, int* npes);
 
-extern void cFMS_gatherv_1d_cint(int* npes, int* sbuf_size, int* sbuf, int* ssize,
-  int* rbuf, int* rsize, int* pelist);
+extern void cFMS_gatherv_1d_cint(int* sbuf_size, int* sbuf, int* ssize,
+  int* rbuf, int* rsize, int* pelist, int* npes);
 
-extern void cFMS_gatherv_1d_cfloat(int* npes, int* sbuf_size, float* sbuf, int* ssize,
-  float* rbuf, int* rsize, int* pelist);
+extern void cFMS_gatherv_1d_cfloat(int* sbuf_size, float* sbuf, int* ssize,
+  float* rbuf, int* rsize, int* pelist, int* npes);
 
-extern void cFMS_gatherv_1d_cdouble(int* npes, int* sbuf_size, double* sbuf, int* ssize,
-  double* rbuf, int* rsize, int* pelist);
+extern void cFMS_gatherv_1d_cdouble(int* sbuf_size, double* sbuf, int* ssize,
+  double* rbuf, int* rsize, int* pelist, int* npes);
 
 extern void cFMS_gather_pelist_2d_cint(int* is, int* ie, int* js, int* je, int* npes, int* pelist,
   int* array_seg, int* gather_data, bool* is_root_pe,

@@ -74,34 +74,42 @@ subroutine CFMS_GATHER_PELIST_2D_(is, ie, js, je, npes, pelist, array_seg, gathe
 end subroutine CFMS_GATHER_PELIST_2D_
 
 
-subroutine CFMS_GATHERV_1D_(npes, sbuf_size, sbuf, ssize, rbuf, rsize, pelist) &
+subroutine CFMS_GATHERV_1D_(sbuf_size, sbuf, ssize, rbuf, rsize, pelist, npes) &
    bind(C, name=CFMS_GATHERV_1D_BINDC_)
 
    implicit none
-   integer, intent(in) :: npes
    integer, intent(in) :: sbuf_size
    CFMS_GATHER_TYPE_, intent(in) :: sbuf(sbuf_size)
    integer, intent(in) :: ssize
-   type(c_ptr), value :: rbuf
-   type(c_ptr), value :: rsize
-   integer, intent(in), optional :: pelist(npes)
+   type(c_ptr), intent(in), value :: rbuf
+   type(c_ptr), intent(in), value :: rsize
+   type(c_ptr), intent(in), value :: pelist
+   integer, intent(in), optional :: npes
 
    CFMS_GATHER_TYPE_, pointer :: rbuf_f(:) => NULL()
    integer, pointer :: rsize_f(:) => NULL()
+   integer, pointer :: pelist_f(:) => NULL()
+   logical :: npes_defined
 
-   if(c_associated(rsize)) then
-      call c_f_pointer(rsize, rsize_f, [npes])
-   end if
-
+   npes_defined = present(npes)
+   
    if(c_associated(rbuf)) then
-      if(.not.associated(rsize_f)) call fms_mpp_error(FATAL, "must specify receiving sizes for receiving pe")
+      if(.not.c_associated(rsize)) call fms_mpp_error(FATAL, "must specify receiving sizes for receiving pe")
+      if(.not.npes_defined) call fms_mpp_error(FATAL, "must specify number of receiving/sending pe's")
+      call c_f_pointer(rsize, rsize_f, [npes])
       call c_f_pointer(rbuf, rbuf_f, [sum(rsize_f)])
    end if
 
-   call fms_mpp_gather(sbuf, ssize, rbuf_f, rsize_f, pelist)
+   if(c_associated(pelist)) then
+      if(.not.npes_defined) call fms_mpp_error(FATAL, "must specify the number of pe's when specifying pelist")
+      call c_f_pointer(pelist, pelist_f, [npes])
+   end if
+   
+   call fms_mpp_gather(sbuf, ssize, rbuf_f, rsize_f, pelist_f)
 
    nullify(rbuf_f)
    nullify(rsize_f)
+   nullify(pelist_f)
 
 end subroutine CFMS_GATHERV_1D_
 
