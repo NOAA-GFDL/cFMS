@@ -7,11 +7,11 @@ subroutine CFMS_GATHER_1D_(sbuf_size, sbuf, rbuf, pelist, rbuf_size, npes) &
    type(c_ptr), intent(in), value :: rbuf
    type(c_ptr), intent(in), value :: pelist
    integer, intent(in), optional :: rbuf_size
-   integer, intent(in), optional :: npes   
+   integer, intent(in), optional :: npes
 
    integer, pointer :: pelist_f(:) => NULL()
    CFMS_GATHER_TYPE_, pointer :: rbuf_f(:) => NULL()
-   
+
    if(c_associated(rbuf)) then
       if(present(rbuf_size)) then
          call c_f_pointer(rbuf, rbuf_f, [rbuf_size])
@@ -74,20 +74,34 @@ subroutine CFMS_GATHER_PELIST_2D_(is, ie, js, je, npes, pelist, array_seg, gathe
 end subroutine CFMS_GATHER_PELIST_2D_
 
 
-subroutine CFMS_GATHERV_1D_(npes, sbuf_size, rbuf_size, sbuf, ssize, rbuf, rsize, pelist) &
+subroutine CFMS_GATHERV_1D_(npes, sbuf_size, sbuf, ssize, rbuf, rsize, pelist) &
    bind(C, name=CFMS_GATHERV_1D_BINDC_)
 
    implicit none
    integer, intent(in) :: npes
    integer, intent(in) :: sbuf_size
-   integer, intent(in) :: rbuf_size
    CFMS_GATHER_TYPE_, intent(in) :: sbuf(sbuf_size)
    integer, intent(in) :: ssize
-   CFMS_GATHER_TYPE_, intent(inout) :: rbuf(rbuf_size)
-   integer, intent(in) :: rsize(npes)
+   type(c_ptr), value :: rbuf
+   type(c_ptr), value :: rsize
    integer, intent(in), optional :: pelist(npes)
 
-   call fms_mpp_gather(sbuf, ssize, rbuf, rsize, pelist)
+   CFMS_GATHER_TYPE_, pointer :: rbuf_f(:) => NULL()
+   integer, pointer :: rsize_f(:) => NULL()
+
+   if(c_associated(rsize)) then
+      call c_f_pointer(rsize, rsize_f, [npes])
+   end if
+
+   if(c_associated(rbuf)) then
+      if(.not.associated(rsize_f)) call fms_mpp_error(FATAL, "must specify receiving sizes for receiving pe")
+      call c_f_pointer(rbuf, rbuf_f, [sum(rsize_f)])
+   end if
+
+   call fms_mpp_gather(sbuf, ssize, rbuf_f, rsize_f, pelist)
+
+   nullify(rbuf_f)
+   nullify(rsize_f)
 
 end subroutine CFMS_GATHERV_1D_
 
