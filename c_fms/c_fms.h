@@ -97,16 +97,16 @@ extern void cFMS_gatherv_1d_cdouble(int* npes, int* sbuf_size, int* rbuf_size, d
     double* rbuf, int* rsize, int* pelist);
 
 extern void cFMS_gather_pelist_2d_cint(int* is, int* ie, int* js, int* je, int* npes, int* pelist,
-    int* array_seg, int* gather_data_c_shape, int* gather_data,
-    bool* is_root_pe, int* ishift, int* jshift, bool* convert_cf_order);
+                                       int* array_seg, int* gather_data, bool* is_root_pe, 
+                                       int *gather_data_c_shape, int* ishift, int* jshift, bool* convert_cf_order);
 
 extern void cFMS_gather_pelist_2d_cfloat(int* is, int* ie, int* js, int* je, int* npes, int* pelist,
-    float* array_seg, int* gather_data_c_shape, float* gather_data,
-    bool* is_root_pe, int* ishift, int* jshift, bool* convert_cf_order);
+                                         float* array_seg, float* gather_data, bool *is_root_pe,
+                                         int* gather_data_c_shape, int* ishift, int* jshift, bool* convert_cf_order);
 
 extern void cFMS_gather_pelist_2d_cdouble(int* is, int* ie, int* js, int* je, int* npes, int* pelist,
-    double* array_seg, int* gather_data_c_shape, double* gather_data,
-    bool* is_root_pe, int* ishift, int* jshift, bool* convert_cf_order);
+                                          double* array_seg, double* gather_data, bool* is_root_pe,
+                                           int* gather_data_c_shape, int* ishift, int* jshift, bool* convert_cf_order);
 
 extern void cFMS_get_compute_domain(int* domain_id, int* xbegin, int* xend, int* ybegin, int* yend,
     int* xsize, int* xmax_size, int* ysize, int* ymax_size,

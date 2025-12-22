@@ -32,12 +32,11 @@ int main() {
     // set domain
     int domain_id = cFMS_define_domains_easy(domain);
 
-
     printf("testing cFMS_gather_1d %d\n", sizeof(kind));
     test_1d();
 
-    /* printf("testing cFMS_gather_2d_pelist %d\n", sizeof(kind)); */
-    /* test_2d(domain_id); */
+    printf("testing cFMS_gather_2d_pelist %d\n", sizeof(kind));
+    test_2d(domain_id);
 
     /* printf("testing cFMS_gather_v_1d %d\n", sizeof(kind)); */
     /* test_1d_v(); */
@@ -75,17 +74,16 @@ void test_2d(int domain_id) {
 
     // set data to receive
     CFMS_TEST_KIND_* gather;
-    int gather_shape[2] = { 1, 1 };
+    int *gather_shape = NULL;
     if (is_root_pe) {
-        gather_shape[0] = NX;
-        gather_shape[1] = NY;
-        gather = (CFMS_TEST_KIND_*)calloc(NX * NY, sizeof(CFMS_TEST_KIND_));
+      gather_shape = (int *)malloc(2*sizeof(int));
+      gather_shape[0] = NX;
+      gather_shape[1] = NY;
+      gather = (CFMS_TEST_KIND_*)calloc(NX * NY, sizeof(CFMS_TEST_KIND_));
     }
-    else
-        gather = (CFMS_TEST_KIND_*)malloc(1 * sizeof(CFMS_TEST_KIND_));
 
     CFMS_GATHER_PELIST_2D_(&isc, &iec, &jsc, &jec, &ndivs, pelist,
-        send, gather_shape, gather, &is_root_pe, NULL, NULL, NULL);
+                           send, gather, &is_root_pe, gather_shape, NULL, NULL, NULL);
 
     if (is_root_pe) {
         int ij = 0;
