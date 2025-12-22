@@ -1,31 +1,38 @@
-subroutine CFMS_GATHER_1D_(sbuf_size, rbuf_size, sbuf, rbuf, pelist, npes) &
+subroutine CFMS_GATHER_1D_(sbuf_size, sbuf, rbuf, pelist, rbuf_size, npes) &
    bind(C, name=CFMS_GATHER_1D_BINDC_)
 
    implicit none
    integer, intent(in) :: sbuf_size
-   integer, intent(in) :: rbuf_size
    CFMS_GATHER_TYPE_, intent(in) :: sbuf(sbuf_size)
-   CFMS_GATHER_TYPE_, intent(inout) :: rbuf(rbuf_size)
+   type(c_ptr), intent(in), value :: rbuf
    type(c_ptr), intent(in), value :: pelist
-   integer, intent(in), optional :: npes
+   integer, intent(in), optional :: rbuf_size
+   integer, intent(in), optional :: npes   
 
    integer, pointer :: pelist_f(:) => NULL()
+   CFMS_GATHER_TYPE_, pointer :: rbuf_f(:) => NULL()
+   
+   if(c_associated(rbuf)) then
+      if(present(rbuf_size)) then
+         call c_f_pointer(rbuf, rbuf_f, [rbuf_size])
+      end if
+   end if
 
-   if(present(npes)) then
-      if(c_associated(pelist)) then
-         allocate(pelist_f(npes))
+   if(c_associated(pelist)) then
+      if(present(npes)) then
          call c_f_pointer(pelist, pelist_f, [npes])
       end if
    end if
 
-   call fms_mpp_gather(sbuf, rbuf, pelist=pelist_f)
+   call fms_mpp_gather(sbuf, rbuf_f, pelist=pelist_f)
 
    nullify(pelist_f)
+   nullify(rbuf_f)
 
 end subroutine CFMS_GATHER_1D_
 
 
-subroutine CFMS_GATHER_PELIST_2D_(is, ie, js, je, npes, pelist, array_seg, gather_data_c_shape, gather_data, &
+subroutine CFMS_GATHER_PELIST_2D_(is, ie, js, je, npes, pelist, array_seg, gather_data_shape, gather_data, &
    is_root_pe, ishift, jshift, convert_cf_order) bind(C, name=CFMS_GATHER_PELIST_2D_BINDC_)
 
    implicit none

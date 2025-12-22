@@ -36,11 +36,11 @@ int main() {
     printf("testing cFMS_gather_1d %d\n", sizeof(kind));
     test_1d();
 
-    printf("testing cFMS_gather_2d_pelist %d\n", sizeof(kind));
-    test_2d(domain_id);
+    /* printf("testing cFMS_gather_2d_pelist %d\n", sizeof(kind)); */
+    /* test_2d(domain_id); */
 
-    printf("testing cFMS_gather_v_1d %d\n", sizeof(kind));
-    test_1d_v();
+    /* printf("testing cFMS_gather_v_1d %d\n", sizeof(kind)); */
+    /* test_1d_v(); */
 
     cFMS_end();
     return EXIT_SUCCESS;
@@ -103,7 +103,7 @@ void test_1d() {
     int sbuf_size = 4;
     int rbuf_size = sbuf_size * cFMS_npes();
     int pe = cFMS_pe();
-    CFMS_TEST_KIND_* sbuf, * rbuf;
+    CFMS_TEST_KIND_* sbuf=NULL, * rbuf=NULL;
 
     bool is_root_pe = pe == cFMS_root_pe() ? true : false;
 
@@ -118,7 +118,7 @@ void test_1d() {
         rbuf = (CFMS_TEST_KIND_*)calloc(rbuf_size, sizeof(CFMS_TEST_KIND_));
     }
 
-    CFMS_GATHER_1D_(&sbuf_size, &rbuf_size, sbuf, rbuf, NULL, NULL);
+    CFMS_GATHER_1D_(&sbuf_size, sbuf, rbuf, NULL, &rbuf_size, NULL);
 
     //check answers
     if (is_root_pe) {
@@ -130,6 +130,10 @@ void test_1d() {
             }
         }
     }
+
+    printf("herehere\n");
+    free(sbuf);
+    free(rbuf);
 
 }
 

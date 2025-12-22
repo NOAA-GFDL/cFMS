@@ -81,11 +81,11 @@ extern int cFMS_define_nest_domains(int* num_nest, int* ntiles, int* nest_level,
 
 extern bool cFMS_domain_is_initialized(int* domain_id);
 
-extern void cFMS_gather_1d_cint(int* sbuf_size, int* rbuf_size, int* sbuf, int* rbuf, int* pelist, int* npes);
+extern void cFMS_gather_1d_cint(int* sbuf_size, int* sbuf, int* rbuf, int* pelist, int *rbuf_size, int* npes);
 
-extern void cFMS_gather_1d_cfloat(int* sbuf_size, int* rbuf_size, float* sbuf, float* rbuf, int* pelist, int* npes);
+extern void cFMS_gather_1d_cfloat(int* sbuf_size, float* sbuf, float* rbuf, int* pelist, int *rbuf_size, int* npes);
 
-extern void cFMS_gather_1d_cdouble(int* sbuf_size, int* rbuf_size, double* sbuf, double* rbuf, int* pelist, int* npes);
+extern void cFMS_gather_1d_cdouble(int* sbuf_size, double* sbuf, double* rbuf, int* pelist, int *rbuf_size, int* npes);
 
 extern void cFMS_gatherv_1d_cint(int* npes, int* sbuf_size, int* rbuf_size, int* sbuf, int* ssize,
     int* rbuf, int* rsize, int* pelist);
