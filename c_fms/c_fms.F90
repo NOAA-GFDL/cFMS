@@ -222,7 +222,7 @@ contains
       integer, intent(in) :: npes
       integer, intent(in) :: pelist(npes)
       character(c_char), intent(in), optional :: name(NAME_LENGTH)
-      integer, intent(out), optional :: commID
+      integer, intent(out) :: commID
 
       character(len=NAME_LENGTH) :: name_f=" " !mpp default
 
@@ -252,7 +252,7 @@ contains
       integer, intent(in) :: npes
       integer, intent(out) :: pelist(npes)
       character(c_char), intent(out), optional :: name(NAME_LENGTH)
-      integer, intent(out), optional :: commID
+      integer, intent(out) :: commID
 
       character(len=NAME_LENGTH) :: name_f=" " !mpp default
 

@@ -90,15 +90,17 @@ int main() {
   //get global pelist
   {
   int npes = cFMS_npes();
+  int comm_id;
   global_pelist = (int *)malloc(npes*sizeof(int));
-  cFMS_get_current_pelist(&npes, global_pelist, NULL, NULL);
+  cFMS_get_current_pelist(&npes, global_pelist, NULL, &comm_id);
   }
   
   //set coarse domain as tile=0
   {
     for(int i=0 ; i<coarse_npes; i++) coarse_pelist[i] = global_pelist[i];
     char name_coarse[NAME_LENGTH] = "test coarse pelist";
-    cFMS_declare_pelist(&coarse_npes, coarse_pelist, name_coarse, NULL);
+    int comm_id;
+    cFMS_declare_pelist(&coarse_npes, coarse_pelist, name_coarse, &comm_id);
 
     if(any(coarse_npes, coarse_pelist, cFMS_pe())) {
 
@@ -155,8 +157,9 @@ int main() {
   //set fine domain as tile=1
   {
     char name_fine[NAME_LENGTH] = "test fine pelist";
+    int comm_id;
     for(int i=0; i<fine_npes; i++) fine_pelist[i] = global_pelist[COARSE_NPES+i];
-    cFMS_declare_pelist(&fine_npes, fine_pelist, name_fine, NULL);
+    cFMS_declare_pelist(&fine_npes, fine_pelist, name_fine, &comm_id);
     
     if(any(FINE_NPES, fine_pelist, cFMS_pe())) {
       

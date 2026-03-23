@@ -1,0 +1,30 @@
+name: Build libcFMS test with CMake
+
+on: [push, pull_request]
+
+# cancel running jobs if theres a newer push
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
+jobs:
+  cmake_install:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/noaa-gfdl/fms/fms-ci-rocky-gnu:13.2.0
+      env:
+        PKG_CONFIG_PATH: "/opt/views/view/lib64/pkgconfig:/opt/views/view/lib/pkgconfig:/opt/views/view/share/pkgconfig"
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+    - name: Generate makefiles with CMake
+      run: |
+        cmake -B build -DCFMS_TESTS=on -DNetCDF_ROOT=/opt/view -DLIBYAML_ROOT=/opt/view
+    - name: Build library and tests
+      run: make -C build
+    - name: Run tests
+      run: cd build && ctest --output-on-failure
+        
