@@ -33,13 +33,13 @@ project(cFMS
     HOMEPAGE_URL "https://github.com/NOAA-GFDL/cFMS"
     LANGUAGES C Fortran)
 
-if(NOT CMAKE_C_COMPILER_ID MATCHES "^(Intel|GNU|Clang|IntelLLVM)$")
+if(NOT CMAKE_C_COMPILER_ID MATCHES "^(Intel|GNU|Clang|IntelLLVM|NVHPC)$")
     message(
-        WARNING "Compiler not officially supported: ${CMAKE_C_COMPILER_ID)}"
+        WARNING "Compiler not officially supported: ${CMAKE_C_COMPILER_ID}"
     )
 endif()
 
-if(NOT CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|GNU|IntelLLVM)$")
+if(NOT CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|GNU|IntelLLVM|NVHPC)$")
     message(
         WARNING "Compiler not officially supported: ${CMAKE_Fortran_COMPILER_ID}"
     )
