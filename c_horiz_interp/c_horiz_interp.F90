@@ -42,8 +42,8 @@ module c_horiz_interp_mod
   public :: cFMS_get_area_frac_dst_float
   public :: cFMS_get_is_allocated_double
   public :: cFMS_get_is_allocated_float
-  public :: cFMS_get_wti_double
-  public :: cFMS_get_wti_float
+  public :: cFMS_get_wti_cdouble
+  public :: cFMS_get_wti_cfloat
   public :: cFMS_get_wtj_cdouble
   public :: cFMS_get_wtj_cfloat
 
