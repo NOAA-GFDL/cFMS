@@ -52,7 +52,7 @@ test_getset_domains_SOURCES = c_mpp_domains_helper.c test_getset_domains.c
 test_update_domains_SOURCES = c_mpp_domains_helper.c test_update_domains.c
 test_vector_update_domains_SOURCES = c_mpp_domains_helper.c test_vector_update_domains.c
 test_define_cubic_mosaic_SOURCES = c_mpp_domains_helper.c test_define_cubic_mosaic.c
-test_fms_SOURCES = test_fms.c
+test_cfms_SOURCES = test_cfms.c
 
 test_gather_cint_CPPFLAGS = -DCFMS_TEST_KIND_=int \
                             -DCFMS_GATHER_1D_=cFMS_gather_1d_cint \
