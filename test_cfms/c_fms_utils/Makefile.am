@@ -32,12 +32,6 @@ TESTS = test_utils.sh
 
 test_utils_SOURCES = test_utils.F90 test_utils_c.c 
 
-test_utils_c.o : test_utils_c.c
-	$(CC) -c $(CFLAGS) $(LDFLAGS) $(AM_CPPFLAGS) test_utils_c.c -o test_utils_c.o
-
-test_utils.o : test_utils.F90
-	$(FC) -c $(FCFLAGS) $(LDFLAGS) $(AM_CPPFLAGS) test_utils.F90 -o test_utils.o
-
 TEST_EXTENSIONS = .sh
 SH_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \
                   $(abs_top_srcdir)/test_cfms/tap-driver.sh

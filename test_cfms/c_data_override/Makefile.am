@@ -30,7 +30,8 @@ LDADD = ${top_builddir}/libcFMS/libcFMS.la
 
 check_PROGRAMS = test_data_override_scalar \
                  test_data_override_2d     \
-                 test_data_override_3d
+                 test_data_override_3d     \
+                 test_data_override_ongrid
 
 TESTS = test_data_override_scalar.sh \
         test_data_override_2d.sh \
@@ -39,9 +40,10 @@ TESTS = test_data_override_scalar.sh \
 test_data_override_scalar_SOURCES = ../c_fms/c_mpp_domains_helper.c test_data_override_scalar.c
 test_data_override_2d_SOURCES = ../c_fms/c_mpp_domains_helper.c test_data_override_2d.c
 test_data_override_3d_SOURCES = ../c_fms/c_mpp_domains_helper.c test_data_override_3d.c
+test_data_override_ongrid_SOURCES = test_data_override_ongrid.F90
 
-test_data_override_ongrid : test_data_override_ongrid.F90
-	$(FC) $(FCFLAGS) $(LDFLAGS) $(LIBFMS_FCFLAGS) $(LIBFMS_LIBS) test_data_override_ongrid.F90 -o test_data_override_ongrid
+#test_data_override_ongrid : test_data_override_ongrid.F90
+#	$(FC) $(FCFLAGS) $(LDFLAGS) $(LIBFMS_FCFLAGS) $(LIBFMS_LIBS) test_data_override_ongrid.F90 -o test_data_override_ongrid
 
 
 TEST_EXTENSIONS = .sh

@@ -24,14 +24,14 @@
 . ../test-lib.sh
 
 if [ -f "input.nml" ] ; then rm -f input.nml ; fi
-cat <<EOF > input.nml
+cat <<_EOF > input.nml
 &diag_manager_nml
     use_modern_diag = .true.
 /
-EOF
+_EOF
 
 #from test_fms/test_diag_manager2.sh
-cat <<EOF > diag_table.yaml
+cat <<_EOF > diag_table.yaml
 title: test_diag_manager
 base_date: 2 1 1 1 1 1
 diag_files:
@@ -50,10 +50,11 @@ diag_files:
     reduction: average
     kind: r4
     output_name: var2_avg
-EOF
+_EOF
 
 test_expect_success "c_diag_manager basic diagnostics functionality with 1 pe" 'mpirun -n 1  ./test_send_data'
 
 test_expect_success "c_diag_manager basic diagnostics functionality with 4 pes" 'mpirun -n 4  ./test_send_data'
+
 test_done
 
